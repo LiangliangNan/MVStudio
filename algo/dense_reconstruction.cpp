@@ -82,6 +82,8 @@ bool DenseReconstruction::convert_bundler_to_pmvs() {
 	//undistort images
 	const std::string& visualize_path = project_->pmvs_visualize_dir;
 	int count = 0;
+
+	ProgressLogger progress(images.size());
 	for (int i = 0; i < images.size(); i++) {
 		if (cameras[i].f == 0.0)
 			continue;
@@ -92,6 +94,7 @@ bool DenseReconstruction::convert_bundler_to_pmvs() {
 		sfm::undistort_image(images[i], cameras[i], out);
 
 		++ count;
+		progress.next();
 	}
 
 	return true;

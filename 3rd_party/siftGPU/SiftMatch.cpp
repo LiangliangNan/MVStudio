@@ -515,6 +515,10 @@ int  SiftMatchGL::GetSiftMatch(int max_match, int match_buffer[][2], float distm
 	if(_initialized ==0) return 0;
 	if(dw <= 0 || dh <=0) return 0;
 
+	// Liangliang: SiftGPU used the existing OpenGL context and may change the viewport.
+	int viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+
 	FrameBufferObject fbo;
 	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
 	_texDot.SetImageSize(dw, dh);
@@ -542,7 +546,11 @@ int  SiftMatchGL::GetSiftMatch(int max_match, int match_buffer[][2], float distm
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GlobalUtil::_texTarget, 0);
 
-	return GetBestMatch(max_match, match_buffer, distmax, ratiomax, mbm);
+	int result = GetBestMatch(max_match, match_buffer, distmax, ratiomax, mbm);
+
+	// Liangliang: restore the OpenGL viewport
+	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+	return result;
 }
 
 

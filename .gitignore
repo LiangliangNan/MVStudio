@@ -45,8 +45,7 @@
 
 #folders
 .vs
-3rd_QGLViewer/GeneratedFiles
-MVStudio/GeneratedFiles
-MVStudio/x64
+GeneratedFiles
+x64
 *.swp
 .gitignore~

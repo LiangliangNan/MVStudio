@@ -20,7 +20,7 @@ struct SfmOption
 
 	// Should we fix the focal length for all cameras (set to init_focal_length)?
 	bool		fixed_focal_length;		
-	double	init_focal_length;
+	double		init_focal_length;
 
 	// Should we use camera constraints?
 	bool		use_camera_constraints;  
@@ -29,14 +29,14 @@ struct SfmOption
 	// Should we add soft constraint on focal lengths to stay near their estimated values
 	bool		constrain_focal;		
 	// The weight for the focal length constraint
-	double	constrain_focal_weight;
+	double		constrain_focal_weight;
 
 	// Should we estimate radial distortion parameters (2 coefficients) for each camera?
 	bool		estimate_distortion;
 
 	/* Point constraint fields */
 	bool		use_point_constraints;
-	double	point_constraint_weight;
+	double		point_constraint_weight;
 	std::string	point_constraint_file;
 
 	// Skip full optimization stages
