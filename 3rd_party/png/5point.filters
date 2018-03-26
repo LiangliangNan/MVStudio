@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="cmvs\bundle.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cmvs\graclus.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="image\camera.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="image\image.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="image\photo.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="image\photoSetS.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="numeric\mylapack.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\detectFeatures.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\detector.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\dog.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\expand.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\filter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\findMatch.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\harris.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\optim.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\option.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\patch.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\patchOrganizerS.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\point.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pmvs\seed.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cmvs\bundle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cmvs\graclus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="image\camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="image\image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="image\photo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="image\photoSetS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\mat2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\mat3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\mat4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\mylapack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\vec2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\vec3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="numeric\vec4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\detectFeatures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\detector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\dog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\expand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\filter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\findMatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\harris.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\optim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\option.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\patch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\patchOrganizerS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\point.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pmvs\seed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

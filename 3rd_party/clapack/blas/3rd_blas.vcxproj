@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>3rd_blas</ProjectName>
+    <ProjectGuid>{ABF3484A-3DB6-4114-A5C6-020659289E86}</ProjectGuid>
+    <RootNamespace>3rd_numeric_blas</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>..\..\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>X64</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <DllDataFileName />
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;_WINDOWS;_DEBUG;USE_CLOCK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling />
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4244;4554;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;NO_ISATTY;MSDOS;USE_CLOCK;NO_BLAS_WRAP;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>..\..\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>X64</TargetEnvironment>
+      <GenerateStublessProxies>true</GenerateStublessProxies>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <OutputDirectory>$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <DllDataFileName />
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions> /Zm1000 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>..\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;WIN64;_WINDOWS;NDEBUG;USE_CLOCK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling />
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4244;4554;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;NO_ISATTY;MSDOS;USE_CLOCK;NO_BLAS_WRAP;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\INCLUDE;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\f2c.h" />
+    <ClInclude Include="..\include\f2c_types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="caxpy.c" />
+    <ClCompile Include="cblas_dgemm.c" />
+    <ClCompile Include="cblas_globals.c" />
+    <ClCompile Include="cblas_xerbla.c" />
+    <ClCompile Include="ccopy.c" />
+    <ClCompile Include="cdotc.c" />
+    <ClCompile Include="cdotu.c" />
+    <ClCompile Include="cgbmv.c" />
+    <ClCompile Include="cgemm.c" />
+    <ClCompile Include="cgemv.c" />
+    <ClCompile Include="cgerc.c" />
+    <ClCompile Include="cgeru.c" />
+    <ClCompile Include="chbmv.c" />
+    <ClCompile Include="chemm.c" />
+    <ClCompile Include="chemv.c" />
+    <ClCompile Include="cher.c" />
+    <ClCompile Include="cher2.c" />
+    <ClCompile Include="cher2k.c" />
+    <ClCompile Include="cherk.c" />
+    <ClCompile Include="chpmv.c" />
+    <ClCompile Include="chpr.c" />
+    <ClCompile Include="chpr2.c" />
+    <ClCompile Include="crotg.c" />
+    <ClCompile Include="cscal.c" />
+    <ClCompile Include="csrot.c" />
+    <ClCompile Include="csscal.c" />
+    <ClCompile Include="cswap.c" />
+    <ClCompile Include="csymm.c" />
+    <ClCompile Include="csyr2k.c" />
+    <ClCompile Include="csyrk.c" />
+    <ClCompile Include="ctbmv.c" />
+    <ClCompile Include="ctbsv.c" />
+    <ClCompile Include="ctpmv.c" />
+    <ClCompile Include="ctpsv.c" />
+    <ClCompile Include="ctrmm.c" />
+    <ClCompile Include="ctrmv.c" />
+    <ClCompile Include="ctrsm.c" />
+    <ClCompile Include="ctrsv.c" />
+    <ClCompile Include="dasum.c" />
+    <ClCompile Include="daxpy.c" />
+    <ClCompile Include="dcabs1.c" />
+    <ClCompile Include="dcopy.c" />
+    <ClCompile Include="ddot.c" />
+    <ClCompile Include="dgbmv.c" />
+    <ClCompile Include="dgemm.c" />
+    <ClCompile Include="dgemv.c" />
+    <ClCompile Include="dger.c" />
+    <ClCompile Include="dnrm2.c" />
+    <ClCompile Include="drot.c" />
+    <ClCompile Include="drotg.c" />
+    <ClCompile Include="drotm.c" />
+    <ClCompile Include="drotmg.c" />
+    <ClCompile Include="dsbmv.c" />
+    <ClCompile Include="dscal.c" />
+    <ClCompile Include="dsdot.c" />
+    <ClCompile Include="dspmv.c" />
+    <ClCompile Include="dspr.c" />
+    <ClCompile Include="dspr2.c" />
+    <ClCompile Include="dswap.c" />
+    <ClCompile Include="dsymm.c" />
+    <ClCompile Include="dsymv.c" />
+    <ClCompile Include="dsyr.c" />
+    <ClCompile Include="dsyr2.c" />
+    <ClCompile Include="dsyr2k.c" />
+    <ClCompile Include="dsyrk.c" />
+    <ClCompile Include="dtbmv.c" />
+    <ClCompile Include="dtbsv.c" />
+    <ClCompile Include="dtpmv.c" />
+    <ClCompile Include="dtpsv.c" />
+    <ClCompile Include="dtrmm.c" />
+    <ClCompile Include="dtrmv.c" />
+    <ClCompile Include="dtrsm.c" />
+    <ClCompile Include="dtrsv.c" />
+    <ClCompile Include="dzasum.c" />
+    <ClCompile Include="dznrm2.c" />
+    <ClCompile Include="icamax.c" />
+    <ClCompile Include="idamax.c" />
+    <ClCompile Include="isamax.c" />
+    <ClCompile Include="izamax.c" />
+    <ClCompile Include="lsame.c" />
+    <ClCompile Include="sasum.c" />
+    <ClCompile Include="saxpy.c" />
+    <ClCompile Include="scabs1.c" />
+    <ClCompile Include="scasum.c" />
+    <ClCompile Include="scnrm2.c" />
+    <ClCompile Include="scopy.c" />
+    <ClCompile Include="sdot.c" />
+    <ClCompile Include="sdsdot.c" />
+    <ClCompile Include="sgbmv.c" />
+    <ClCompile Include="sgemm.c" />
+    <ClCompile Include="sgemv.c" />
+    <ClCompile Include="sger.c" />
+    <ClCompile Include="snrm2.c" />
+    <ClCompile Include="srot.c" />
+    <ClCompile Include="srotg.c" />
+    <ClCompile Include="srotm.c" />
+    <ClCompile Include="srotmg.c" />
+    <ClCompile Include="ssbmv.c" />
+    <ClCompile Include="sscal.c" />
+    <ClCompile Include="sspmv.c" />
+    <ClCompile Include="sspr.c" />
+    <ClCompile Include="sspr2.c" />
+    <ClCompile Include="sswap.c" />
+    <ClCompile Include="ssymm.c" />
+    <ClCompile Include="ssymv.c" />
+    <ClCompile Include="ssyr.c" />
+    <ClCompile Include="ssyr2.c" />
+    <ClCompile Include="ssyr2k.c" />
+    <ClCompile Include="ssyrk.c" />
+    <ClCompile Include="stbmv.c" />
+    <ClCompile Include="stbsv.c" />
+    <ClCompile Include="stpmv.c" />
+    <ClCompile Include="stpsv.c" />
+    <ClCompile Include="strmm.c" />
+    <ClCompile Include="strmv.c" />
+    <ClCompile Include="strsm.c" />
+    <ClCompile Include="strsv.c" />
+    <ClCompile Include="xerbla.c" />
+    <ClCompile Include="xerbla_array.c" />
+    <ClCompile Include="zaxpy.c" />
+    <ClCompile Include="zcopy.c" />
+    <ClCompile Include="zdotc.c" />
+    <ClCompile Include="zdotu.c" />
+    <ClCompile Include="zdrot.c" />
+    <ClCompile Include="zdscal.c" />
+    <ClCompile Include="zgbmv.c" />
+    <ClCompile Include="zgemm.c" />
+    <ClCompile Include="zgemv.c" />
+    <ClCompile Include="zgerc.c" />
+    <ClCompile Include="zgeru.c" />
+    <ClCompile Include="zhbmv.c" />
+    <ClCompile Include="zhemm.c" />
+    <ClCompile Include="zhemv.c" />
+    <ClCompile Include="zher.c" />
+    <ClCompile Include="zher2.c" />
+    <ClCompile Include="zher2k.c" />
+    <ClCompile Include="zherk.c" />
+    <ClCompile Include="zhpmv.c" />
+    <ClCompile Include="zhpr.c" />
+    <ClCompile Include="zhpr2.c" />
+    <ClCompile Include="zrotg.c" />
+    <ClCompile Include="zscal.c" />
+    <ClCompile Include="zswap.c" />
+    <ClCompile Include="zsymm.c" />
+    <ClCompile Include="zsyr2k.c" />
+    <ClCompile Include="zsyrk.c" />
+    <ClCompile Include="ztbmv.c" />
+    <ClCompile Include="ztbsv.c" />
+    <ClCompile Include="ztpmv.c" />
+    <ClCompile Include="ztpsv.c" />
+    <ClCompile Include="ztrmm.c" />
+    <ClCompile Include="ztrmv.c" />
+    <ClCompile Include="ztrsm.c" />
+    <ClCompile Include="ztrsv.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
