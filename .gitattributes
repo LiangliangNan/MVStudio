@@ -1,2 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+3rd_QGLViewer/* linguist-vendored
+*.h linguist-language=C++
+*.c linguist-language=C
