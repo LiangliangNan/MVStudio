@@ -12,7 +12,6 @@
 class QLabel;
 class PaintCanvas;
 class QProgressBar;
-class DlgOptions;
 
 class MainWindow 
 	: public QMainWindow
@@ -69,7 +68,6 @@ public Q_SLOTS:
 
 	//////////////////////////////////////////////////////////////////////////
 
-	void setOptions();
 	void combinePointCloudFiles();
 
 private:
@@ -117,10 +115,6 @@ private:
 	enum { MaxRecentFiles = 5 };
 	QAction *actionsRecentFile[MaxRecentFiles],
 		*actionSeparator;
-
-	//////////////////////////////////////////////////////////////////////////
-
-	DlgOptions*	dlgOptions_;
 };
 
 #endif // TESTQGLVIEWER_H

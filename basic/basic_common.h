@@ -14,6 +14,22 @@
 // Disable a warning message about dll. This is a temporary solution
 // http://support.microsoft.com/default.aspx?scid=kb;EN-US;168958
 #   pragma warning( disable : 4251 )
+
+#pragma warning( disable : 4013 )
+#pragma warning( disable : 4251 )
+#pragma warning( disable : 4305 )
+#pragma warning( disable : 4312 )
+#pragma warning( disable : 4996 )  
+#pragma warning( disable : 4267 ) 
+#pragma warning( disable : 4091 ) 
+#pragma warning( disable : 4098 ) 
+#pragma warning( disable : 4005 ) 
+#pragma warning( disable : 4244 ) 
+#pragma warning( disable : 4101 ) 
+#pragma warning( disable : 4700 ) 
+#pragma warning( disable : 4723 ) 
+#pragma warning( disable : 4819 ) 
+#pragma warning( disable : 4838 ) 
 #endif
 
 

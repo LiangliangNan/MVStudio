@@ -95,12 +95,6 @@
     <CustomBuild Include="Resources\MVStudio.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="dlg\dlg_options.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="dlg\dlg_options.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="main_window.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -130,18 +124,6 @@
   <ItemGroup>
     <ClCompile Include="GeneratedFiles\qrc_MVStudio.cpp">
       <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dlg\dlg_options.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\ReleaseWithDebugInfo\moc_dlg_options.cpp">
-      <Filter>Generated Files\ReleaseWithDebugInfo</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_dlg_options.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_dlg_options.cpp">
-      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\ReleaseWithDebugInfo\moc_main_window.cpp">
       <Filter>Generated Files\ReleaseWithDebugInfo</Filter>
@@ -184,9 +166,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_dlg_options.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="image_item.h">
       <Filter>Header Files</Filter>
     </ClInclude>

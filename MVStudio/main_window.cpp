@@ -9,11 +9,10 @@
 #include <QColorDialog>
 #include <QProgressBar>
 #include <QMimeData>
+#include <QPushButton>
 
 #include "main_window.h"
 #include "paint_canvas.h"
-
-#include "dlg/dlg_options.h"
 
 #include "../basic/logger.h"
 #include "../basic/file_utils.h"
@@ -24,14 +23,13 @@
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 : QMainWindow(parent, flags)
 , workingDirectory_(".")
-, dlgOptions_(nil)
 {	
 	setupUi(this);
 	listWidgetImages->setMainWindow(this);
 
 	//////////////////////////////////////////////////////////////////////////
 
-	Logger::instance()->set_value(Logger::LOG_FILE_NAME, "Mapple.log");
+	Logger::instance()->set_value(Logger::LOG_FILE_NAME, "MVStudio.log");
 	Logger::instance()->register_client(this);
 	Progress::instance()->set_client(this);
 
@@ -62,11 +60,6 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 MainWindow::~MainWindow()
 {
-	if (dlgOptions_)		
-		delete dlgOptions_;
-
-	//////////////////////////////////////////////////////////////////////////
-
 	Progress::instance()->set_client(nil) ;
 	Logger::instance()->unregister_client(this);
 	Logger::terminate();
@@ -649,15 +642,6 @@ void MainWindow::updateRecentFileActions()
 QString MainWindow::strippedName(const QString &fullFileName)
 {
 	return QFileInfo(fullFileName).fileName();
-}
-
-void MainWindow::setOptions() {
-	if (!dlgOptions_) 
-		dlgOptions_ = new DlgOptions(mainCanvas_, this);
-
-	dlgOptions_->show();
-	dlgOptions_->raise();
-	dlgOptions_->activateWindow();
 }
 
 
