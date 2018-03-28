@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <float.h>
 
-#include "../3rd_party/cminpack-1.3.4/cminpack.h"
+#include "../3rd_party/cminpack/cminpack.h"
 #include "../3rd_party/clapack/include/f2c.h"
 #include "../3rd_party/clapack/include/clapack.h"
 

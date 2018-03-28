@@ -1106,7 +1106,7 @@
     <ResourceCompile Include="Resources\MVStudio.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\3rd_QGLViewer\3rd_qglviewer.vcxproj">
+    <ProjectReference Include="..\3rd_party\QGLViewer\qglviewer-2.6.3.vcxproj">
       <Project>{944083fe-23c5-3ede-a305-0c342d1af872}</Project>
     </ProjectReference>
     <ProjectReference Include="..\algo\algo.vcxproj">

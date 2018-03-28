@@ -14,7 +14,7 @@
     <ProjectGUID>{ECFC7713-7832-4847-840E-F1A039162B53}</ProjectGUID>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
-    <ProjectName>tinycthread</ProjectName>
+    <ProjectName>3rd_tinycthread</ProjectName>
     <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

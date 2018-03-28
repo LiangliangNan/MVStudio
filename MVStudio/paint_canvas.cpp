@@ -1,6 +1,6 @@
 #include "paint_canvas.h"
 #include "main_window.h"
-#include "../3rd_QGLViewer/manipulatedCameraFrame.h"
+#include "../3rd_party/QGLViewer/manipulatedCameraFrame.h"
 #include "../basic/file_utils.h"
 #include "../pointset/point_set.h"
 #include "../pointset/point_set_io.h"

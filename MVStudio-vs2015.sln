@@ -59,9 +59,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "image", "image\image.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mvglib", "mvglib\mvglib.vcxproj", "{92C33A56-2525-483E-A35B-16A6FBCC8884}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3rd_cminpack", "3rd_party\cminpack-1.3.4\3rd_cminpack.vcxproj", "{2AA3D83B-1812-3CD4-A364-AC3B426CEADC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3rd_cminpack", "3rd_party\cminpack\cminpack-1.3.4.vcxproj", "{2AA3D83B-1812-3CD4-A364-AC3B426CEADC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3rd_qglviewer", "3rd_QGLViewer\3rd_qglviewer.vcxproj", "{944083FE-23C5-3EDE-A305-0C342D1AF872}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3rd_qglviewer", "3rd_party\QGLViewer\qglviewer-2.6.3.vcxproj", "{944083FE-23C5-3EDE-A305-0C342D1AF872}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3rd_siftGPU", "3rd_party\siftGPU\siftGPU.vcxproj", "{9252E247-4FE2-4929-BD5D-C2FA16EFD656}"
 EndProject

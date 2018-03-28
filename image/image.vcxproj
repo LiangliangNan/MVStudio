@@ -250,9 +250,6 @@
     <ClInclude Include="image_store.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\3rd_party\jpeg\jpeg.vcxproj">
       <Project>{c92a84cb-9d10-4049-8c24-280331fdb39f}</Project>
     </ProjectReference>

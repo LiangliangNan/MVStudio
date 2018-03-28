@@ -2,7 +2,7 @@
 #define PAINTCANVAS_H
 
 #include "../opengl/glew.h"
-#include "../3rd_QGLViewer/qglviewer.h"
+#include "../3rd_party/QGLViewer/qglviewer.h"
 #include "../math/math_types.h"
 #include "../algo/sparse_reconstruction.h"
 #include "../algo/project.h"

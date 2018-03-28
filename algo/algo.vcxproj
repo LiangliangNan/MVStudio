@@ -273,9 +273,6 @@
     <ClInclude Include="sparse_reconstruction.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="dense_reconstruction.cpp" />
     <ClCompile Include="image_matching.cpp" />
     <ClCompile Include="project.cpp" />
