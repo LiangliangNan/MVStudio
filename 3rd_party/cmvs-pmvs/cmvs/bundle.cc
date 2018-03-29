@@ -750,9 +750,9 @@ void Cbundle::mergeSfMP(void) {
     for (int i = 0; i < (int)m_coords.size(); ++i)
       ppoints[i] = &(m_coords[i][0]);
 
-	std::cout << "Liangliang: weird." << std::endl;
-//     m_ptree =
-//       new sfcnn<const float*, 3, float>(&ppoints[0], (int)ppoints.size());
+	//std::cout << "Liangliang: weird. This doesn't compile with vs2017" << std::endl;
+     m_ptree =
+       new sfcnn<const float*, 3, float>(&ppoints[0], (int)ppoints.size());
     
     m_merged.resize((int)m_coords.size(), 0);
     m_jobs.clear();
