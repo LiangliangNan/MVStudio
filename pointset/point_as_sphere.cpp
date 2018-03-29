@@ -29,7 +29,7 @@ void PointAsSphere::set_points_as_spheres(bool x) {
 void PointAsSphere::activate_points_shaders() {
 	if (has_points_shaders_) {
 		if(points_vertex_shader_.is_nil()) {
-			std::string dir = FileUtils::MVStudio_resource_directory() + "/gpu/";
+			std::string dir = FileUtils::MVStudio_resource_directory() + "/shaders/";
 
 			std::string vertex_source = dir + "sphere.vs";
 			points_vertex_shader_ = ShaderFactory::create_vertex_shader_from_file(vertex_source);
@@ -43,7 +43,7 @@ void PointAsSphere::activate_points_shaders() {
 		}
 
 		if (points_fragment_shader_.is_nil()) {
-			std::string dir = FileUtils::MVStudio_resource_directory() + "/gpu/";
+			std::string dir = FileUtils::MVStudio_resource_directory() + "/shaders/";
 
 			std::string pixel_source  = dir + "sphere.fs";
 			points_fragment_shader_ = ShaderFactory::create_fragment_shader_from_file(pixel_source);

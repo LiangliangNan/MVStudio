@@ -5,10 +5,6 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="ReleaseWithDebugInfo|x64">
-      <Configuration>ReleaseWithDebugInfo</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
@@ -19,26 +15,17 @@
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
     <ProjectName>3rd_nlopt</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -106,34 +93,6 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>.;./api;./util;./praxis;./cdirect;./luksan;./crs;./mlsl;./mma;./cobyla;./newuoa;./neldermead;./auglag;./bobyqa;./isres;./esch;./slsqp</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsCpp</CompileAs>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <Optimization>MaxSpeed</Optimization>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\image;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\numeric;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\pmvs;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\graclus1.2\metisLib;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\api;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\cimg;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\tinycthread;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\Eigen;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\miniBoost;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\jpeg;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\stogo;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\util;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\direct;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\cdirect;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\praxis;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\luksan;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\crs;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\mlsl;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\mma;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\cobyla;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\newuoa;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\neldermead;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\auglag;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\bobyqa;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\isres;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\slsqp;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\esch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\image;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\numeric;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\pmvs;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\graclus1.2\metisLib;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\api;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\cimg;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\tinycthread;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\Eigen;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\miniBoost;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\jpeg;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\stogo;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\util;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\direct;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\cdirect;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\praxis;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\luksan;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\crs;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\mlsl;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\mma;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\cobyla;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\newuoa;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\neldermead;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\auglag;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\bobyqa;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\isres;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\slsqp;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\esch;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <OutputDirectory>$(IntDir)</OutputDirectory>
-      <HeaderFileName>%(Filename).h</HeaderFileName>
-      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
-    </Midl>
-  </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="direct\direct-internal.h" />
     <ClInclude Include="direct\direct.h" />
@@ -169,190 +128,152 @@
     <ClCompile Include="direct\DIRect.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="direct\direct_wrap.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="direct\DIRserial.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="direct\DIRsubrout.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="cdirect\cdirect.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="cdirect\hybrid.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="praxis\praxis.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="luksan\plis.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="luksan\plip.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="luksan\pnet.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="luksan\mssubs.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="luksan\pssubs.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="crs\crs.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="mlsl\mlsl.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="mma\mma.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="mma\ccsa_quadratic.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="cobyla\cobyla.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MinSpace</Optimization>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">MinSpace</Optimization>
     </ClCompile>
     <ClCompile Include="newuoa\newuoa.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="neldermead\nldrmd.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="neldermead\sbplx.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="auglag\auglag.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="bobyqa\bobyqa.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="isres\isres.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="slsqp\slsqp.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="esch\esch.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="api\general.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="api\options.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="api\optimize.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="api\deprecated.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="api\f77api.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="util\mt19937ar.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="util\sobolseq.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="util\timer.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="util\stop.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="util\redblack.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="util\qsort_r.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="util\rescale.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
-      <CompileAs Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">CompileAsC</CompileAs>
     </ClCompile>
     <ClCompile Include="stogo\global.cc" />
     <ClCompile Include="stogo\linalg.cc" />

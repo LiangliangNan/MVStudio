@@ -1,7 +1,7 @@
 
 #include "image_serializer_png.h"
 #include "image.h"
-#include "../3rd_party/png/png.h"
+#include "../3rd_party/png-1.6.29/png.h"
 #include "../basic/logger.h"
 
 Image* ImageSerializer_png::serialize_read(const std::string& file_name) {

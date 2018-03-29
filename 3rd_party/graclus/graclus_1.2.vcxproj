@@ -5,10 +5,6 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="ReleaseWithDebugInfo|x64">
-      <Configuration>ReleaseWithDebugInfo</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
@@ -19,26 +15,17 @@
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
     <ProjectName>3rd_graclus</ProjectName>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v140</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseOfMfc>false</UseOfMfc>
-    <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -79,34 +66,6 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <AdditionalIncludeDirectories>./metisLib</AdditionalIncludeDirectories>
-      <CompileAs>CompileAsC</CompileAs>
-      <ExceptionHandling>
-      </ExceptionHandling>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <Optimization>MaxSpeed</Optimization>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;NUMBITS=64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ClCompile>
-    <ResourceCompile>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;NUMBITS=64;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\image;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\numeric;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\pmvs;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\graclus1.2\metisLib;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\api;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\cimg;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\tinycthread;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\Eigen;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\miniBoost;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\jpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <Midl>
-      <AdditionalIncludeDirectories>G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\image;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\numeric;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\program\base\pmvs;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\graclus1.2\metisLib;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\nlopt-2.4.2\api;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\cimg;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\tinycthread;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\Eigen;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\miniBoost;G:\projects\to_do\SfM_MVS\CMVS-PMVS\CMVS-PMVS-master\program\thirdParty\jpeg;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <OutputDirectory>$(IntDir)</OutputDirectory>
-      <HeaderFileName>%(Filename).h</HeaderFileName>
-      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
-      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
-      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
-    </Midl>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithDebugInfo|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>./metisLib</AdditionalIncludeDirectories>
       <CompileAs>CompileAsC</CompileAs>

@@ -5,7 +5,7 @@
 
 #include <stdio.h>
 extern "C" {
-#include "../3rd_party/jpeg/jpeglib.h"
+#include "../3rd_party/jpeg-6b/jpeglib.h"
 }
 
 #include <setjmp.h>
