@@ -38,6 +38,10 @@ int main(int argc, char **argv)
 {
 	srand(time(0));
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+
 	{
 		QGLFormat format = QGLFormat::defaultFormat();
 		format.setVersion(1, 2);

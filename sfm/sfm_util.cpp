@@ -5,6 +5,7 @@
 #include <iomanip>
 
 #include "../basic/basic_types.h"
+#include "../basic/logger.h"
 #include "../image/image.h"
 #include "../image/image_io.h"
 #include "../math/matrix_driver.h"
@@ -361,7 +362,8 @@ namespace sfm {
 		const camera_params_t &camera,
 		const std::string &out)
 	{
-		printf("Undistorting image %s\n", in.c_str());
+		//printf("Undistorting image %s\n", in.c_str());
+		Logger::out("SfM") << "Undistorting image " << in << std::endl;
 		fflush(stdout);
 
 		Image* img = ImageIO::read(in);

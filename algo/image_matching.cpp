@@ -71,9 +71,9 @@ void ImageMatching::extract_key_points() {
 	//Create a context for computation, and SiftGPU will be initialized automatically 
 	//The same context can be used by SiftMatchGPU.
 	// Liangliang: I already have a OpenGL context. Just use it.
-	//if (sift->CreateContextGL() != SiftGPU::SIFTGPU_FULL_SUPPORTED) {
-	//	Logger::err(title()) << "SiftGPU is not supported}" << std::endl;
-	//	return;
+	//if (sift->CreateContextGL() == SiftGPU::SIFTGPU_NOT_SUPPORTED) {
+	//	Logger::err(title()) << "SiftGPU not supported" << std::endl;
+	//	break;
 	//}
 
 	char * argv[] = { "-fo", "-1", "-v", "0", "-tc2", "7680", "-b", "-nomc" };//
@@ -107,7 +107,10 @@ void ImageMatching::extract_key_points() {
 		//Create a context for computation, and SiftGPU will be initialized automatically 
 		//The same context can be used by SiftMatchGPU.
 		// Liangliang: I already have a OpenGL context. Just use it.
-		sift->VerifyContextGL();
+		if (sift->CreateContextGL() == SiftGPU::SIFTGPU_NOT_SUPPORTED) {
+			Logger::err(title()) << "SiftGPU not supported" << std::endl;
+			break;
+		}
 
 		const std::string& name = project_->images[i].file;
 		if (!sift->RunSIFT(name.c_str())) {
@@ -202,7 +205,10 @@ void ImageMatching::match_key_points() {
 			// If you already have an OpenGL Context, call matcher->VerifyContextGL() instead
 			//matcher->CreateContextGL();
 			// Liangliang: I already have a OpenGL context. Just use it.
-			matcher->VerifyContextGL();
+			if (matcher->VerifyContextGL() == SiftGPU::SIFTGPU_NOT_SUPPORTED) {
+				Logger::err(title()) << "SiftGPU not supported" << std::endl;
+				break;
+			}
 
 			//Set descriptors to match, the first argument must be either 0 or 1
 			//if you want to use more than 4096 or less than 4096
