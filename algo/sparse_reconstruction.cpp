@@ -5,8 +5,7 @@
 #include "../basic/file_utils.h"
 #include "../basic/progress.h"
 #include "../basic/logger.h"
-
-
+#include "../basic/stop_watch.h"
 
 
 
@@ -44,7 +43,7 @@ bool SparseReconstruction::apply(PointSet* pset /* = nil */) {
 		}
 	}
 
-	Logger::out(title()) << "running SfM..." << std::endl;
+	StopWatch w;
 	run_sfm(pset);
 
 	return true;

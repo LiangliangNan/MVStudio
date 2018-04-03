@@ -5,6 +5,8 @@
 #include "../basic/file_utils.h"
 #include "../basic/progress.h"
 #include "../basic/logger.h"
+#include "../basic/stop_watch.h"
+#include "../pointset/point_set_io.h"
 #include "../sfm/sfm_util.h"
 #include "../3rd_party/cmvs-pmvs/pmvs/findMatch.h"
 #include "../3rd_party/cmvs-pmvs/pmvs/option.h"
@@ -79,7 +81,11 @@ bool DenseReconstruction::convert_bundler_to_pmvs() {
 	write_vis_file(vis_file, cameras, points);
 
 	//////////////////////////////////////////////////////////////////////////
+
 	//undistort images
+
+	Logger::out(title()) << "undistorting images..." << std::endl;
+
 	const std::string& visualize_path = project_->pmvs_visualize_dir;
 	int count = 0;
 
@@ -96,6 +102,8 @@ bool DenseReconstruction::convert_bundler_to_pmvs() {
 		++ count;
 		progress.next();
 	}
+
+	Logger::out(title()) << "undistorting images done" << std::endl;
 
 	return true;
 }
@@ -115,7 +123,6 @@ bool DenseReconstruction::run_pmvs(PointSet* pset) {
 		return false;
 	}
 
-	Logger::out(title()) << "preparing PMVS files..." << std::endl;
 	bool ready = false;
 	if (project_->sfm_method() == SFM_BUNDLER)
 		ready = convert_bundler_to_pmvs();
@@ -124,6 +131,7 @@ bool DenseReconstruction::run_pmvs(PointSet* pset) {
 
 	if (ready) {
 		Logger::out(title()) << "running PMVS..." << std::endl;
+		StopWatch w;
 
 		PMVS3::Soption option;
 		option.init_from_file(project_->pmvs_dir, project_->pmvs_option_file);
@@ -132,12 +140,22 @@ bool DenseReconstruction::run_pmvs(PointSet* pset) {
 		findMatch.init(option);
 		findMatch.run();
 
+		Logger::out(title()) << "PMVS done. Time: " << w.elapsed() << std::endl;
+
+		Logger::out(title()) << "saving results..." << std::endl;
+		w.start();
 		//const std::vector<Ppatch>& patches = findMatch.m_pos.m_ppatches;
 
-		bool export_ply = true;
-		bool export_patch = false;
-		bool export_pSet = false;
-		findMatch.write(pset, project_->pmvs_models_dir, export_ply, export_patch, export_pSet);
+		findMatch.fillPointSet(pset);
+
+		//Liangliang: change if you want to save intermediate results 
+		//bool export_patch = false;
+		//bool export_pSet = false;
+		//findMatch.write(project_->pmvs_models_dir, export_patch, export_pSet);
+		
+		std::string ply_file = project_->pmvs_models_dir + "/dense.ply";
+		PointSetIO::save(ply_file, pset);
+		Logger::out(title()) << "saving results done. Time: " << w.elapsed() << std::endl;
 	}
 
 	return true;

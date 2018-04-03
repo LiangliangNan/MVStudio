@@ -78,15 +78,8 @@ void CpatchOrganizerS::init(void) {
 	}
 }
 
-void CpatchOrganizerS::writePatches2(PointSet* pset, const std::string prefix, bool bExportPLY, bool bExportPatch, bool bExportPSet) {
+void CpatchOrganizerS::writePatches2(const std::string prefix, bool bExportPatch, bool bExportPSet) {
 	collectPatches(1);
-
-	if (bExportPLY)
-	{
-		char buffer[1024];
-		sprintf(buffer, "%s/dense.ply", prefix.c_str());
-		writePLY(pset, m_ppatches, buffer);
-	}
 
 	if (bExportPatch)
 	{
@@ -832,4 +825,81 @@ void CpatchOrganizerS::writePLY(const std::vector<Ppatch>& patches,
 		++colorb;
 	}
 	ofstr.close();
+}
+
+void CpatchOrganizerS::fillPointSet(PointSet* pset) {
+	collectPatches(1);
+
+	int num = (int)m_ppatches.size();
+	std::vector<vec3f>& pts = pset->points();	pts.resize(num);
+	std::vector<vec3f>& nms = pset->normals();	nms.resize(num);
+	std::vector<vec3f>& cls = pset->colors();	cls.resize(num);
+
+	vector<Ppatch>::const_iterator bpatch = m_ppatches.begin();
+	vector<Ppatch>::const_iterator bend = m_ppatches.end();
+
+	int idx = 0;
+	while (bpatch != bend) {
+		// Get color
+		Vec3i color;
+
+		const int mode = 0;
+		// 0: color from images
+		// 1: fix
+		// 2: angle
+		if (mode == 0) {
+			int denom = 0;
+			Vec3f colorf;
+			for (int i = 0; i < (int)(*bpatch)->m_images.size(); ++i) {
+				const int image = (*bpatch)->m_images[i];
+				colorf += m_fm.m_pss.getColor((*bpatch)->m_coord, image, m_fm.m_level);
+				denom++;
+			}
+			colorf /= denom;
+			color[0] = min(255, (int)floor(colorf[0] + 0.5f));
+			color[1] = min(255, (int)floor(colorf[1] + 0.5f));
+			color[2] = min(255, (int)floor(colorf[2] + 0.5f));
+		}
+		else if (mode == 1) {
+			if ((*bpatch)->m_tmp == 1.0f) {
+				color[0] = 255;
+				color[1] = 0;
+				color[2] = 0;
+			}
+			else {
+				color[0] = 255;
+				color[1] = 255;
+				color[2] = 255;
+			}
+		}
+		else if (mode == 2) {
+			float angle = 0.0f;
+			vector<int>::iterator bimage = (*bpatch)->m_images.begin();
+			vector<int>::iterator eimage = (*bpatch)->m_images.end();
+
+			while (bimage != eimage) {
+				const int index = *bimage;
+				Vec4f ray = m_fm.m_pss.m_photos[index].m_center - (*bpatch)->m_coord;
+				ray[3] = 0.0f;
+				unitize(ray);
+
+				angle += acos(ray * (*bpatch)->m_normal);
+				++bimage;
+			}
+
+			angle = angle / (M_PI / 2.0f);
+			float r, g, b;
+			image::Cimage::gray2rgb(angle, r, g, b);
+			color[0] = (int)(r * 255.0f);
+			color[1] = (int)(g * 255.0f);
+			color[2] = (int)(b * 255.0f);
+		}
+
+		pts[idx] = vec3f((*bpatch)->m_coord[0], (*bpatch)->m_coord[1], (*bpatch)->m_coord[2]);
+		nms[idx] = vec3f((*bpatch)->m_normal[0], (*bpatch)->m_normal[1], (*bpatch)->m_normal[2]);
+		cls[idx] = vec3f(color[0] / 255.0f, color[1] / 255.0f, color[2] / 255.0f);
+		++idx;
+
+		++bpatch;
+	}
 }

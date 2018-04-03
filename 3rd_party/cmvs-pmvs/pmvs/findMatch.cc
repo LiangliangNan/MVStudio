@@ -228,6 +228,10 @@ void CfindMatch::run(void) {
 	cerr << "---- Total: " << (tv - curtime) / CLOCKS_PER_SEC << " secs ----" << endl;
 }
 
-void CfindMatch::write(PointSet* pset, const std::string prefix, bool bExportPLY, bool bExportPatch, bool bExportPSet) {
-	m_pos.writePatches2(pset, prefix, bExportPLY, bExportPatch, bExportPSet);
+void CfindMatch::write(const std::string prefix, bool bExportPatch, bool bExportPSet) {
+	m_pos.writePatches2(prefix, bExportPatch, bExportPSet);
+}
+
+void CfindMatch::fillPointSet(PointSet* pset) {
+	m_pos.fillPointSet(pset);
 }

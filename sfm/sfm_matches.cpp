@@ -241,8 +241,6 @@ namespace sfm {
 
 	/* Use the bundle-adjusted points to create a new set of matches */
 	void SfM::set_matches_from_points(int threshold) {
-		Logger::out(title()) << "setting up matches from bundle-adjusted points" << std::endl;
-
 		/* Clear all matches */
 		remove_all_matches();
 

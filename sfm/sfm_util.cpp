@@ -3,13 +3,14 @@
 #include <cassert>
 #include <iostream>
 #include <iomanip>
+#include <thread>
 
 #include "../basic/basic_types.h"
 #include "../basic/logger.h"
+#include "../basic/file_utils.h"
 #include "../image/image.h"
 #include "../image/image_io.h"
 #include "../math/matrix_driver.h"
-
 
 
 namespace sfm {
@@ -285,7 +286,8 @@ namespace sfm {
 				<< "threshold 0.7" << std::endl
 				<< "wsize 7" << std::endl
 				<< "minImageNum 3" << std::endl
-				<< "CPU 8" << std::endl
+				//<< "CPU 8" << std::endl // Liangliang: make full use of the CPU
+				<< "CPU " << std::thread::hardware_concurrency() << std::endl
 				<< "setEdge 0" << std::endl
 				<< "useBound 0" << std::endl
 				<< "useVisData 1" << std::endl
@@ -363,7 +365,7 @@ namespace sfm {
 		const std::string &out)
 	{
 		//printf("Undistorting image %s\n", in.c_str());
-		Logger::out("SfM") << "Undistorting image " << in << std::endl;
+		Logger::out("SfM") << "Undistorting image " << FileUtils::simple_name(in) << std::endl;
 		fflush(stdout);
 
 		Image* img = ImageIO::read(in);

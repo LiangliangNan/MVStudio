@@ -33,8 +33,10 @@ class CfindMatch {
   void init(const PMVS3::Soption& option);
   void run(void);
 
-  // fill pset if it is not NULL
-  void write(PointSet* pset, const std::string prefix, bool bExportPLY, bool bExportPatch, bool bExportPSet);
+  // fill pset with the points/normals/colors
+  void fillPointSet(PointSet* pset);
+
+  void write(const std::string prefix, bool bExportPatch, bool bExportPSet);
   
   int insideBimages(const Vec4f& coord) const;
 

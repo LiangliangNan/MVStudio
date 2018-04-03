@@ -19,6 +19,7 @@
 namespace sfm {
 
 	void SfM::run_sfm(PointSet* pset) {
+		Logger::out(title()) << "running SfM..." << std::endl;
 		StopWatch w;
 
 		/* Set track pointers to -1 */
@@ -254,12 +255,15 @@ namespace sfm {
 
 		}
 
-		Logger::out(title()) << "bundle adjustment took " << w.elapsed() << " seconds" << std::endl;
+		double sfm_time = w.elapsed();
 
 		/* Dump output */
+		Logger::out(title()) << "saving results..." << std::endl;
+		w.start();
 		dump_output_file(option_.bundle_output_file,
 			num_images, curr_num_cameras, curr_num_pts,
 			added_order, cameras, points, colors, pt_views);
+		Logger::out(title()) << "saving results done. Time: " << w.elapsed() << std::endl;
 
 		/* Save the camera parameters and points */
 
@@ -312,14 +316,17 @@ namespace sfm {
 		delete[] points;
 		delete[] colors;
 
+		Logger::out(title()) << "setting up matches from bundle-adjusted points..." << std::endl;
 		set_matches_from_points();
 
-		// 		for (int i = 0; i < num_images; i++) {
-		// 			if (image_data_[i].camera.adjusted)
-		// 				image_data_[i] was used during bundle adjustment
-		// 			else
-		// 				image_data_[i] was NOT used during bundle adjustment
-		// 		}
+		//for (int i = 0; i < num_images; i++) {
+		//	if (image_data_[i].camera.adjusted)
+		//		image_data_[i] was used during bundle adjustment
+		//	else
+		//		image_data_[i] was NOT used during bundle adjustment
+		//}
+
+		Logger::out(title()) << "SfM done: " << sfm_time << " seconds" << std::endl;
 	}
 
 
@@ -419,7 +426,7 @@ namespace sfm {
 				point_constraints_, option_.point_constraint_weight,
 				fix_points ? 1 : 0, eps2, V, S, U, W);
 
-			Logger::out(title()) << "run_bundle_adjustment took " << w.elapsed() << " seconds" << std::endl;
+			Logger::out(title()) << "bundle adjustment took " << w.elapsed() << " seconds" << std::endl;
 
 			/* Check for outliers */
 

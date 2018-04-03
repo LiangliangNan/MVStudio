@@ -1,11 +1,12 @@
+#include "option.h"
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "option.h"
 #include <algorithm>
-
+#include <thread>
 
 using namespace std;
 using namespace PMVS3;
@@ -13,7 +14,7 @@ using namespace PMVS3;
 Soption::Soption(void) {
 	m_level = 1;          m_csize = 2;
 	m_threshold = 0.7;    m_wsize = 7;
-	m_minImageNum = 3;    m_CPU = 4;
+	m_minImageNum = 3;    m_CPU = std::thread::hardware_concurrency();
 	m_setEdge = 0.0f;     m_useBound = 0;
 	m_useVisData = 0;     m_sequence = -1;
 	m_tflag = -10;
