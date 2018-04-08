@@ -21,7 +21,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
@@ -57,9 +56,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <OpenMPSupport>true</OpenMPSupport>
       <PrecompiledHeader />
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>../3rd_party/include;../3rd_party/matrix;../3rd_party/zlib;../3rd_party/ann/include;../3rd_party/include/miniBoost;../3rd_party/imagelib;../3rd_party/tinycthread</AdditionalIncludeDirectories>
     </ClCompile>
@@ -83,9 +80,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <OpenMPSupport>true</OpenMPSupport>
       <PrecompiledHeader />
-      <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalIncludeDirectories>../3rd_party/include;../3rd_party/matrix;../3rd_party/zlib;../3rd_party/ann/include;../3rd_party/include/miniBoost;../3rd_party/imagelib;../3rd_party/tinycthread</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
