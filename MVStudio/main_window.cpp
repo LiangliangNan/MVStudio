@@ -102,6 +102,8 @@ void MainWindow::createActionsForFileMenu() {
 	connect(actionSaveProject, SIGNAL(triggered()), this, SLOT(saveProject()));
 	connect(actionSaveProjectAs, SIGNAL(triggered()), this, SLOT(saveProjectAs()));
 	
+	connect(actionAddImages, SIGNAL(triggered()), listWidgetImages, SLOT(addImages()));
+
 	connect(actionOpenPointCloud, SIGNAL(triggered()), this, SLOT(openPointCloud()));
 	connect(actionSavePointCloud, SIGNAL(triggered()), this, SLOT(savePointCloud()));
 

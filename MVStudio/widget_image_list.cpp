@@ -100,7 +100,7 @@ void WidgetImageList::addImages() {
 	}
 
 	QString imageDir = QFileDialog::getExistingDirectory(this,
-		tr("Choose a image folder"), QString::fromStdString(project->project_dir)
+		tr("Choose the folder containing the images"), QString::fromStdString(project->project_dir)
 		);
 
 	if (imageDir.isEmpty())
