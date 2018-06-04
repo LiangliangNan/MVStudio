@@ -1,4 +1,2 @@
-pass the point cloud pointer to pmvs, so they will fill the point cloud with the new computed points
-
-
-show cameras uing OpenGL
+- pass the point cloud pointer to pmvs (it fills the point cloud with the new computed points);
+- visualizes the cameras

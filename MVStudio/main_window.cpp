@@ -462,7 +462,7 @@ bool MainWindow::newProject() {
 		return false;
 
 	QString fileName = QFileDialog::getSaveFileName(this,
-		tr("Please specify the project file"), workingDirectory_,
+		tr("Please specify where to save your project file"), workingDirectory_,
 		tr("Project file (*.mvsproj)")
 		);
 
