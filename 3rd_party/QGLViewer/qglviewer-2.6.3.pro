@@ -315,20 +315,7 @@ win32 {
 }
 
 
-## Liangliang: there must be a better way to do this. Please let me know. liangliang.nan@gmail.com
+#Specify which sdk to use in your .pro file as follows:
 #macx {
-#    MAC_SDK  = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk
-#    if( !exists( $$MAC_SDK) ) {
-#        MAC_SDK  = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
-#        if( !exists( $$MAC_SDK) ) {
-#            MAC_SDK  = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk
-#            if( !exists( $$MAC_SDK) ) {
-#                MAC_SDK  = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
-#                if( !exists( $$MAC_SDK) ) {
-#                    error("The selected Mac OSX SDK does not exist at $$MAC_SDK!")
-#                }
-#            }
-#        }
-#    }
-#    macx:QMAKE_MAC_SDK = $$MAC_SDK
+#    QMAKE_MAC_SDK = macosx10.9
 #}
