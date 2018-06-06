@@ -67,6 +67,9 @@
     <ProjectReference Include="..\mvglib\mvglib.vcxproj">
       <Project>{92c33a56-2525-483e-a35b-16a6fbcc8884}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\pointset\pointset.vcxproj">
+      <Project>{206aec20-3f2a-42c8-a0d7-20407748ffad}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DBB350EB-B7E7-49AB-A9C1-6AB91B0D0409}</ProjectGuid>

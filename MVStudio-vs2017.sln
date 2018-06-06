@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Info", "Info", "{657BF238-F228-4F09-A1E0-47C40046EEF1}"
 	ProjectSection(SolutionItems) = preProject
@@ -195,8 +195,8 @@ Global
 		{2AA3D83B-1812-3CD4-A364-AC3B426CEADC} = {184BAC2A-E06D-4667-AF9A-1DBDDCEAFCE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {123CE8DF-5B93-42D4-9C9B-8EE5FA614A99}
 		QtVersion = 4.8.0
+		SolutionGuid = {123CE8DF-5B93-42D4-9C9B-8EE5FA614A99}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
