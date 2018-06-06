@@ -44,6 +44,9 @@
     <ClInclude Include="sfm_util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sfm_export.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sfm.cpp">

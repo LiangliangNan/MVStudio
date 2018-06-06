@@ -11,9 +11,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cmvs\bundle.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="cmvs\graclus.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -73,9 +70,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cmvs\bundle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cmvs\graclus.h">
       <Filter>Header Files</Filter>
     </ClInclude>

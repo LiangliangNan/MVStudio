@@ -73,7 +73,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cmvs\bundle.cc" />
     <ClCompile Include="cmvs\graclus.cc" />
     <ClCompile Include="image\camera.cc" />
     <ClCompile Include="image\image.cc" />
@@ -95,7 +94,6 @@
     <ClCompile Include="pmvs\seed.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="cmvs\bundle.h" />
     <ClInclude Include="cmvs\graclus.h" />
     <ClInclude Include="image\camera.h" />
     <ClInclude Include="image\image.h" />

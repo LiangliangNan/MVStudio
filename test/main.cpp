@@ -10,10 +10,6 @@
 
 int main(int argc, char* argv[]) {
 
-	Logger::initialize();
-	Logger::instance()->set_value(Logger::LOG_REGISTER_FEATURES, "*"); // log everything
-
-
 	//std::string project_file = "../../data/ET/ET(small).mvsproj";
 	std::string project_file = "../../data/building/building.mvsproj";
 	Project* project_ = new Project;

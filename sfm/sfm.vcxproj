@@ -19,6 +19,7 @@
     <ClInclude Include="match_table.h" />
     <ClInclude Include="register.h" />
     <ClInclude Include="sfm.h" />
+    <ClInclude Include="sfm_export.h" />
     <ClInclude Include="sfm_option.h" />
     <ClInclude Include="bundle_adjustment.h" />
     <ClInclude Include="sfm_util.h" />
@@ -41,6 +42,32 @@
     <ClCompile Include="bundle_adjustment.cpp" />
     <ClCompile Include="sfm_util.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\3rd_party\clapack\blas\3rd_blas.vcxproj">
+      <Project>{abf3484a-3db6-4114-a5c6-020659289e86}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\clapack\lapack\3rd_clapack.vcxproj">
+      <Project>{2a945f21-edfd-42be-a4a3-b1eae2f446bc}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\clapack\libf2c\3rd_libf2c.vcxproj">
+      <Project>{ba4bf8a6-154c-4375-808f-63194676d022}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\sba\sba-1.5.vcxproj">
+      <Project>{e52566b9-8fba-414d-a93d-9b184e2361e1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\basic\basic.vcxproj">
+      <Project>{b83a04f9-4270-4440-9d1a-80dcaab009c4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\image\image.vcxproj">
+      <Project>{715278a4-b2ff-4ae1-91fd-e6175f6b2a89}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\math\math.vcxproj">
+      <Project>{de0a5c55-3bd4-4cc3-aa21-a57c577f4584}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\mvglib\mvglib.vcxproj">
+      <Project>{92c33a56-2525-483e-a35b-16a6fbcc8884}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DBB350EB-B7E7-49AB-A9C1-6AB91B0D0409}</ProjectGuid>
     <RootNamespace>test</RootNamespace>
@@ -50,11 +77,11 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -82,7 +109,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;__USE_ANN__</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;WIN64;SFM_EXPORTS;_DEBUG;_CONSOLE;__USE_ANN__</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader />
@@ -104,7 +131,7 @@
     </Midl>
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_CONSOLE;__USE_ANN__</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;WIN64;SFM_EXPORTS;NDEBUG;_CONSOLE;__USE_ANN__</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader />
       <AdditionalIncludeDirectories>

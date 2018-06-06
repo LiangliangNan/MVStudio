@@ -90,9 +90,6 @@
     <ProjectReference Include="..\3rd_party\cmvs-pmvs\pmvs.vcxproj">
       <Project>{b0cd1851-48f8-42ca-8f6b-c9ee0a83c8a1}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\3rd_party\sba\sba-1.5.vcxproj">
-      <Project>{e52566b9-8fba-414d-a93d-9b184e2361e1}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\algo\algo.vcxproj">
       <Project>{7b5ccf91-c18e-4d34-b6a3-4b9f171bb7cb}</Project>
     </ProjectReference>

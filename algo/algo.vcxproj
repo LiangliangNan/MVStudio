@@ -114,14 +114,8 @@
     <ProjectReference Include="..\3rd_party\clapack\libf2c\3rd_libf2c.vcxproj">
       <Project>{ba4bf8a6-154c-4375-808f-63194676d022}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\3rd_party\cminpack\cminpack-1.3.4.vcxproj">
-      <Project>{2aa3d83b-1812-3cd4-a364-ac3b426ceadc}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\3rd_party\cmvs-pmvs\pmvs.vcxproj">
       <Project>{b0cd1851-48f8-42ca-8f6b-c9ee0a83c8a1}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\3rd_party\graclus\graclus_1.2.vcxproj">
-      <Project>{daf625fa-fc4d-4c9d-ad96-caae7f50787e}</Project>
     </ProjectReference>
     <ProjectReference Include="..\3rd_party\jpeg-6b\3rd_jpeg.vcxproj">
       <Project>{706bae66-45ba-4e92-826d-3ff679777e9a}</Project>
@@ -129,14 +123,8 @@
     <ProjectReference Include="..\3rd_party\nlopt\nlopt_2.4.2.vcxproj">
       <Project>{81d5c2c2-d8e0-4a02-a97f-e1784b308d87}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\3rd_party\pba\pba.vcxproj">
-      <Project>{d8b8f2d4-f5c5-4486-aa05-0c7117466777}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\3rd_party\png-1.6.29\3rd_png.vcxproj">
       <Project>{5332ee6d-1aa7-4ed9-894e-eda342aa6146}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\3rd_party\sba\sba-1.5.vcxproj">
-      <Project>{e52566b9-8fba-414d-a93d-9b184e2361e1}</Project>
     </ProjectReference>
     <ProjectReference Include="..\3rd_party\siftGPU\SiftGPU.vcxproj">
       <Project>{9252e247-4fe2-4929-bd5d-c2fa16efd656}</Project>
@@ -149,12 +137,6 @@
     </ProjectReference>
     <ProjectReference Include="..\image\image.vcxproj">
       <Project>{715278a4-b2ff-4ae1-91fd-e6175f6b2a89}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\math\math.vcxproj">
-      <Project>{de0a5c55-3bd4-4cc3-aa21-a57c577f4584}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\mvglib\mvglib.vcxproj">
-      <Project>{92c33a56-2525-483e-a35b-16a6fbcc8884}</Project>
     </ProjectReference>
     <ProjectReference Include="..\opengl\opengl.vcxproj">
       <Project>{2f82d905-594b-44f4-b8ff-cf2ba286be09}</Project>
