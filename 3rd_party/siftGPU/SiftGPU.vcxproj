@@ -62,7 +62,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9252E247-4FE2-4929-BD5D-C2FA16EFD656}</ProjectGuid>
     <RootNamespace>pbaGPU</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
     <ProjectName>3rd_siftGPU</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
