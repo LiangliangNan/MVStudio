@@ -49,3 +49,5 @@ GeneratedFiles
 x64
 *.swp
 .gitignore~
+*.user
+*.log
