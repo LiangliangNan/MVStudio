@@ -47,7 +47,13 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	createStatusBar();
 
 	readSettings();
-	setWindowTitle("MVStudio");
+
+#ifndef NDEBUG
+    setWindowTitle("MVStudio (Debug Version)");
+#else
+    setWindowTitle("MVStudio");
+#endif
+
 	setAcceptDrops(true);
 
 	setContextMenuPolicy(Qt::CustomContextMenu);
@@ -406,7 +412,11 @@ void MainWindow::setCurrentFile(const QString &fileName)
 		updateRecentFileActions();
 	}
 
-	setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("MVStudio")));
+#ifndef NDEBUG
+    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("MVStudio (Debug Version)")));
+#else
+    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("MVStudio")));
+#endif
 }
 
 void MainWindow::openRecentFile()
