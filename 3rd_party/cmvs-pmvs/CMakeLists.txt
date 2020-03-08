@@ -24,7 +24,7 @@ set(METIS_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/graclus/metisLib)
 set(JPEG_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/jpeg ${MVSTUDIO_BUILD_DIR}/3rd_party/jpeg)
 set(MINIBOOST_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/miniBoost)
 set(TINYCTHREAD_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/tinycthread)
-set(NLOPT_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/nlopt/api)
+set(NLOPT_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/nlopt/src/api ${MVSTUDIO_BUILD_DIR}/3rd_party/nlopt/src/api)
 
 target_include_directories(cmvs-pmvs PRIVATE
         ${METIS_INCLUDE_DIR}
