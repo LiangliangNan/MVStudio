@@ -5,10 +5,8 @@
 
 #include "minpack.h"
 #include <math.h>
-#define real __minpack_real__
+#include "minpackP.h"
 
-#define min(a,b) ((a) <= (b) ? (a) : (b))
-#define max(a,b) ((a) >= (b) ? (a) : (b))
 
 __minpack_attr__
 void __minpack_func__(qrfac)(const int *m, const int *n, real *a, const int *

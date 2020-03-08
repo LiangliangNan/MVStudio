@@ -72,21 +72,21 @@ class Frame;
   }
   \endcode
 
-  The keyFrames are defined by a Frame and a time, expressed in seconds. The Frame can be provided
+  The keyFrames are defined by a Frame and a time, expressed in sec. The Frame can be provided
   as a const reference or as a pointer to a Frame (see the addKeyFrame() methods). In the latter
   case, the path will automatically be updated when the Frame is modified (using the
   Frame::modified() signal).
 
   The time has to be monotonously increasing over keyFrames. When interpolationSpeed() equals 1.0
-  (default value), these times correspond to actual user's seconds during interpolation (provided
+  (default value), these times correspond to actual user's sec during interpolation (provided
   that your main loop is fast enough). The interpolation is then real-time: the keyFrames will be
   reached at their keyFrameTime().
 
   <h3>Interpolation details</h3>
 
   When the user startInterpolation(), a timer is started which will update the frame()'s position
-  and orientation every interpolationPeriod() milliseconds. This update increases the
-  interpolationTime() by interpolationPeriod() * interpolationSpeed() milliseconds.
+  and orientation every interpolationPeriod() millisec. This update increases the
+  interpolationTime() by interpolationPeriod() * interpolationSpeed() millisec.
 
   Note that this mechanism ensures that the number of interpolation steps is constant and equal to
   the total path duration() divided by the interpolationPeriod() * interpolationSpeed(). This is
@@ -114,7 +114,7 @@ class Frame;
   KeyFrameInterpolator kfi( new Frame() );
   // calls to kfi.addKeyFrame() to define the path.
 
-  const qreal deltaTime = 0.04; // output a position every deltaTime seconds
+  const qreal deltaTime = 0.04; // output a position every deltaTime sec
   for (qreal time=kfi.firstTime(); time<=kfi.lastTime(); time += deltaTime)
   {
 	kfi.interpolateAtTime(time);
@@ -198,7 +198,7 @@ public:
 	/*! @name Interpolation parameters */
 	//@{
 public:
-	/*! Returns the current interpolation time (in seconds) along the KeyFrameInterpolator path.
+	/*! Returns the current interpolation time (in sec) along the KeyFrameInterpolator path.
 
 	This time is regularly updated when interpolationIsStarted(). Can be set directly with
 	setInterpolationTime() or interpolateAtTime(). */
@@ -211,14 +211,14 @@ public:
 	A negative value will result in a reverse interpolation of the keyFrames. See also
 	interpolationPeriod(). */
 	qreal interpolationSpeed() const { return interpolationSpeed_; }
-	/*! Returns the current interpolation period, expressed in milliseconds.
+	/*! Returns the current interpolation period, expressed in millisec.
 
 	The update of the frame() state will be done by a timer at this period when
 	interpolationIsStarted().
 
 	This period (multiplied by interpolationSpeed()) is added to the interpolationTime() at each
 	update, and the frame() state is modified accordingly (see interpolateAtTime()). Default value
-	is 40 milliseconds. */
+	is 40 millisec. */
 	int interpolationPeriod() const { return period_; }
 	/*! Returns \c true when the interpolation is played in an infinite loop.
 

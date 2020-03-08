@@ -2,7 +2,7 @@
 #ifndef _MATH_GEOMETRY_LINE_H_
 #define _MATH_GEOMETRY_LINE_H_
 
-#include "math_common.h"
+
 #include "vecg.h"
 
 

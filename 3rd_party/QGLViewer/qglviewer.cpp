@@ -93,7 +93,7 @@ void QGLViewer::defaultConstructor()
 	fpsTime_.start();
 	fpsCounter_     = 0;
 	f_p_s_          = 0.0;
-	fpsString_      = tr("%1Hz", "Frames per seconds, in Hertz").arg("?");
+	fpsString_      = tr("%1Hz", "Frames per sec, in Hertz").arg("?");
 	visualHint_     = 0;
 	previousPathId_	= 0;
 	// prevPos_ is not initialized since pos() is not meaningful here.
@@ -380,7 +380,7 @@ void QGLViewer::postDraw()
 	if (++fpsCounter_ == maxCounter)
 	{
 		f_p_s_ = 1000.0 * maxCounter / fpsTime_.restart();
-		fpsString_ = tr("%1Hz", "Frames per seconds, in Hertz").arg(f_p_s_, 0, 'f', ((f_p_s_ < 10.0)?1:0));
+		fpsString_ = tr("%1Hz", "Frames per sec, in Hertz").arg(f_p_s_, 0, 'f', ((f_p_s_ < 10.0)?1:0));
 		fpsCounter_ = 0;
 	}
 
@@ -753,7 +753,7 @@ void QGLViewer::drawText(int x, int y, const QString& text, const QFont& fnt)
 /*! Briefly displays a message in the lower left corner of the widget. Convenient to provide
 feedback to the user.
 
-\p message is displayed during \p delay milliseconds (default is 2 seconds) using drawText().
+\p message is displayed during \p delay millisec (default is 2 sec) using drawText().
 
 This method should not be called in draw(). If you want to display a text in each draw(), use
 drawText() instead.
@@ -790,7 +790,7 @@ When FPSIsDisplayed() is \c true (default is \c false), this method is called by
 display the currentFPS(). Use QApplication::setFont() to define the font (see drawText()). */
 void QGLViewer::displayFPS()
 {
-	drawText(10, int(1.5*((QApplication::font().pixelSize()>0)?QApplication::font().pixelSize():QApplication::font().pointSize())), fpsString_);
+	drawText(20, int(1.5*((QApplication::font().pixelSize() > 0) ? QApplication::font().pixelSize() : QApplication::font().pointSize())), fpsString_);
 }
 
 /*! Modify the projection matrix so that drawing can be done directly with 2D screen coordinates.
@@ -3177,14 +3177,14 @@ void QGLViewer::drawVisualHints()
 
 /*! Defines the mask that will be used to drawVisualHints(). The only available mask is currently 1,
 corresponding to the display of the qglviewer::Camera::pivotPoint(). resetVisualHints() is
-automatically called after \p delay milliseconds (default is 2 seconds). */
+automatically called after \p delay millisec (default is 2 sec). */
 void QGLViewer::setVisualHintsMask(int mask, int delay)
 {
 	visualHint_ = visualHint_ | mask;
 	QTimer::singleShot(delay, this, SLOT(resetVisualHints()));
 }
 
-/*! Reset the mask used by drawVisualHints(). Called by setVisualHintsMask() after 2 seconds to reset the display. */
+/*! Reset the mask used by drawVisualHints(). Called by setVisualHintsMask() after 2 sec to reset the display. */
 void QGLViewer::resetVisualHints()
 {
 	visualHint_ = 0;

@@ -1,7 +1,7 @@
 #ifndef _MATH_QUATERNION_H_
 #define _MATH_QUATERNION_H_
 
-#include "math_common.h"
+
 #include "math_types.h"
 
 /*The Quaternion class represents 3D rotations and orientations.
@@ -26,7 +26,7 @@ Note that certain implementations place the cosine term in first position (inste
 The Quaternion is always normalized, so that its inverse() is actually its conjugate.
 */
 
-class MATH_API Quaternion
+class Quaternion
 {
 public:
 	/* Defining a Quaternion */

@@ -76,7 +76,7 @@ void ImageMatching::extract_key_points() {
 	//	break;
 	//}
 
-	char * argv[] = { "-fo", "-1", "-v", "0", "-tc2", "7680", "-b", "-nomc" };//
+	const char * argv[] = { "-fo", "-1", "-v", "0", "-tc2", "7680", "-b", "-nomc" };//
 	//-fo -1    staring from -1 octave 
 	//-v 1      only print out # feature and overall time
 	//-tc <num> set a soft limit to number of detected features
@@ -217,7 +217,7 @@ void ImageMatching::match_key_points() {
 			matcher->SetDescriptors(1, num2, &descriptors2[0]); //image 2
 
 			//match and get result.    
-			int(*match_buf)[2] = new int[num1][2];
+			uint32_t(*match_buf)[2] = new uint32_t[num1][2];
 			//use the default thresholds. Check the declaration in SiftGPU.h
 			int num_match = matcher->GetSiftMatch(num1, match_buf);
 			output << i << "   " << j << std::endl << num_match << std::endl;

@@ -13,10 +13,10 @@
 //	documentation for educational, research and non-profit purposes, without
 //	fee, and without a written agreement is hereby granted, provided that the
 //	above copyright notice and the following paragraph appear in all copies.
-//	
+//
 //	The University of North Carolina at Chapel Hill make no representations
 //	about the suitability of this software for any purpose. It is provided
-//	'as is' without express or implied warranty. 
+//	'as is' without express or implied warranty.
 //
 //	Please send BUG REPORTS to ccwu@cs.unc.edu
 //
@@ -36,7 +36,7 @@ class ProgramGLSL:public ProgramGPU
 		GLuint		_shaderID;
 		int			_type;
 		int			_compiled;
-		static int ReadShaderFile(const char * source,  char *& code);	
+		static int ReadShaderFile(const char * source,  char *& code);
 		void CheckCompileLog();
 	public:
 		void PrintCompileLog(ostream & os  );
@@ -44,14 +44,14 @@ class ProgramGLSL:public ProgramGPU
 		int IsValidVertexShader();
 		int IsValidFragmentShader();
 		GLuint GetShaderID(){return _shaderID;}
-		~ShaderObject(); 
+		~ShaderObject();
 		ShaderObject(int shadertype,  const char * source, int filesource =0);
 	};
 
 protected:
 	int			_linked;
 	GLint		_TextureParam0;
-	GLuint		_programID; 
+	GLuint		_programID;
 private:
 	void AttachShaderObject(ShaderObject& shader);
 	void DetachShaderObject(ShaderObject& shader);
@@ -87,7 +87,7 @@ public:
     FilterGLSL(float sigma) ;
 };
 
-class SiftParam; 
+class SiftParam;
 
 /////////////////////////////////////////////////////////////////////////////////
 //class ShaderBag
@@ -165,9 +165,9 @@ public:
 public:
     void CreateGaussianFilters(SiftParam&param);
     void SelectInitialSmoothingFilter(int octave_min, SiftParam&param);
-    void LoadDynamicShaders(SiftParam& param); 
+    void LoadDynamicShaders(SiftParam& param);
 	ShaderBag();
-	virtual ~ShaderBag(); 
+	virtual ~ShaderBag();
 };
 
 
@@ -194,7 +194,7 @@ public:
 	void LoadDescriptorShaderF2();
 	virtual void LoadDescriptorShader();
 	virtual void SetFeatureOrientationParam(int gtex, int width, int height, float sigma, int stex = 0, float step = 1.0f);
-	virtual void SetFeatureDescirptorParam(int gtex, int otex, float dwidth, float fwidth, float width, float height, float sigma);	
+	virtual void SetFeatureDescirptorParam(int gtex, int otex, float dwidth, float fwidth, float width, float height, float sigma);
 	static void  WriteOrientationCodeToStream(ostream& out);
 	static ProgramGLSL* LoadGenListStepShader(int start, int step);
 	virtual void SetGenListInitParam(int w, int h);
@@ -228,13 +228,13 @@ private:
 	GLint	_param_orientation_gtex;
 	GLint	_param_orientation_otex;
 	GLint	_param_orientation_size;
-	GLint	_param_descriptor_gtex; 
+	GLint	_param_descriptor_gtex;
 	GLint	_param_descriptor_otex;
-	GLint	_param_descriptor_size; 
+	GLint	_param_descriptor_size;
 	GLint	_param_descriptor_dsize;
 
     //
-    ProgramGLSL* s_rect_description; 
+    ProgramGLSL* s_rect_description;
 public:
     ShaderBagPKSL () {s_rect_description = NULL; }
 	virtual ~ShaderBagPKSL() {if(s_rect_description) delete s_rect_description; }

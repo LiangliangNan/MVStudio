@@ -178,7 +178,7 @@ bool ManipulatedFrame::isManipulated() const
 
 /*! Starts the spinning of the ManipulatedFrame.
 
-This method starts a timer that will call spin() every \p updateInterval milliseconds. The
+This method starts a timer that will call spin() every \p updateInterval millisec. The
 ManipulatedFrame isSpinning() until you call stopSpinning(). */
 void ManipulatedFrame::startSpinning(int updateInterval)
 {
@@ -236,7 +236,7 @@ void ManipulatedFrame::startAction(int ma, bool withConstraint)
 	}
 }
 
-/*! Updates mouse speed, measured in pixels/milliseconds. Should be called by any method which wants to
+/*! Updates mouse speed, measured in pixels/millisec. Should be called by any method which wants to
 use mouse speed. Currently used to trigger spinning in mouseReleaseEvent(). */
 void ManipulatedFrame::computeMouseSpeed(const QMouseEvent* const e)
 {

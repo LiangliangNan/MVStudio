@@ -9,7 +9,7 @@
 #include <queue>
 #include "patch.h"
 #include <boost/shared_ptr.hpp>
-#include "tinycthread.h"
+
 #include "rwmutex.h"
 
 #include "../image/photoSetS.h"

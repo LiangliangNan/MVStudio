@@ -114,13 +114,6 @@ void QGLViewer::initializeSnapshotFormats()
 	// Unused formats: XPM XBM PBM PGM
 	QStringList QtText, MenuText, Ext;
 	QtText += "PNG";	MenuText += "PNG (*.png)";      Ext += "png";
-	QtText += "JPEG";	MenuText += "JPEG (*.jpg)";		Ext += "jpg";
-	QtText += "EPS";	MenuText += "Encapsulated Postscript (*.eps)";	Ext += "eps";
-	QtText += "PS";	    MenuText += "Postscript (*.ps)"; Ext += "ps";
-	QtText += "PPM";	MenuText += "24bit RGB Bitmap (*.ppm)";	Ext += "ppm";
-	QtText += "BMP";	MenuText += "Windows Bitmap (*.bmp)";	Ext += "bmp";
-	QtText += "XFIG";	MenuText += "XFig (*.fig)";		Ext += "fig";
-
 	QStringList::iterator itText = QtText.begin();
 	QStringList::iterator itMenu = MenuText.begin();
 	QStringList::iterator itExt  = Ext.begin();

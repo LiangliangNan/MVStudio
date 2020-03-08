@@ -6,6 +6,7 @@
 /* The default floating-point type is "double" for C/C++ and "float" for CUDA,
    but you can change this by defining one of the following symbols when
    compiling the library, and before including cminpack.h when using it:
+   __cminpack_long_double__ for long double (requires compiler support)
    __cminpack_double__ for double
    __cminpack_float__ for float
    __cminpack_half__ for half from the OpenEXR library (in this case, you must
@@ -13,6 +14,10 @@
 */
 #ifdef __cminpack_double__
 #define __minpack_func__(func) func ## _
+#endif
+
+#ifdef __cminpack_long_double__
+#define __minpack_func__(func) ld ## func ## _
 #endif
 
 #ifdef __cminpack_float__

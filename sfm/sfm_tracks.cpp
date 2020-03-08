@@ -233,11 +233,7 @@ namespace sfm {
 	/* Return the intersection of two int vectors */
 	static std::vector<int> vector_intersection(const std::vector<int> &v1, const std::vector<int> &v2)
 	{
-#ifndef WIN32
-		__gnu_cxx::hash_set<int> seen;
-#else
 		std::unordered_set<int> seen;
-#endif
 
 		int v1_size = (int)v1.size();
 		int v2_size = (int)v2.size();

@@ -2,7 +2,7 @@
 #ifndef _MATH_GEOMETRY_PLANE__
 #define _MATH_GEOMETRY_PLANE__
 
-#include "math_common.h"
+
 #include "vecg.h"
 
 

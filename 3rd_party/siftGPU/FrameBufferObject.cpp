@@ -22,7 +22,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 
-#include "../../opengl/glew.h"
+#include "GL/glew.h"
 #include <stdlib.h>
 #include "GlobalUtil.h"
 #include "FrameBufferObject.h"

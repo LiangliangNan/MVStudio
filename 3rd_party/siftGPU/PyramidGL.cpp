@@ -20,7 +20,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#include "../../opengl/glew.h"
+#include "GL/glew.h"
 #include <iostream>
 #include <iomanip>
 #include <vector>

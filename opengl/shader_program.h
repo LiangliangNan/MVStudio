@@ -2,7 +2,7 @@
 #ifndef _OPENGL_SHADER_PROGRAM_H_
 #define _OPENGL_SHADER_PROGRAM_H_
 
-#include "opengl_common.h"
+
 
 #include <string>
 #include "../basic/smart_pointer.h"
@@ -23,7 +23,7 @@ typedef		GeometricTypes::Matrix4_float32		Matrix4f;
 /**
  * Abstraction for OpenGL Shader Programs.
  */
-class OPENGL_API ShaderProgram : public Counted
+class  ShaderProgram : public Counted
 {
 public:
     typedef SmartPointer<ShaderProgram>			Ptr;

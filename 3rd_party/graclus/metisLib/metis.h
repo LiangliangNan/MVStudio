@@ -31,12 +31,14 @@
 #include <dmalloc.h>
 #endif
 
-#include <defs.h>
-#include <struct.h>
-#include <macros.h>
-#include <rename.h>
-#include <proto.h>
+#include "defs.h"
+#include "struct.h"
+#include "macros.h"
+#include "rename.h"
+#include "proto.h"
+
 #include <stdlib.h>
+
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #define random	rand

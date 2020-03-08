@@ -35,7 +35,7 @@ using namespace std;
 
   \attention Created object is removeFromMouseGrabberPool(). */
 ManipulatedCameraFrame::ManipulatedCameraFrame()
-	: driveSpeed_(0.0), sceneUpVector_(0.0, 1.0, 0.0), rotatesAroundUpVector_(false), zoomsOnPivotPoint_(false)
+    : driveSpeed_(0.0), sceneUpVector_(0.0, 1.0, 0.0), rotatesAroundUpVector_(false), zoomsOnPivotPoint_(true)
 {
 	setFlySpeed(0.0);
 	removeFromMouseGrabberPool();
@@ -438,7 +438,7 @@ void ManipulatedCameraFrame::wheelEvent(QWheelEvent* const event, Camera* const 
 	// The wheel triggers a fastDraw. A final update() is needed after the last wheel event to
 	// polish the rendering using draw(). Since the last wheel event does not say its name, we use
 	// the flyTimer_ to trigger flyUpdate(), which emits manipulated. Two wheel events
-	// separated by more than this delay milliseconds will trigger a draw().
+	// separated by more than this delay millisec will trigger a draw().
 	const int finalDrawAfterWheelEventDelay = 400;
 
 	// Starts (or prolungates) the timer.

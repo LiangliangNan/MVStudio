@@ -142,7 +142,7 @@ public Q_SLOTS:
 	void setRotationSensitivity(qreal sensitivity) { rotationSensitivity_ = sensitivity; }
 	/*! Defines the translationSensitivity(). */
 	void setTranslationSensitivity(qreal sensitivity) { translationSensitivity_ = sensitivity; }
-	/*! Defines the spinningSensitivity(), in pixels per milliseconds. */
+	/*! Defines the spinningSensitivity(), in pixels per millisec. */
 	void setSpinningSensitivity(qreal sensitivity) { spinningSensitivity_ = sensitivity; }
 	/*! Defines the wheelSensitivity(). */
 	void setWheelSensitivity(qreal sensitivity) { wheelSensitivity_ = sensitivity; }
@@ -183,7 +183,7 @@ public:
 
 	See spin(), spinningQuaternion() and startSpinning() for details.
 
-	Mouse speed is expressed in pixels per milliseconds. Default value is 0.3 (300 pixels per
+	Mouse speed is expressed in pixels per millisec. Default value is 0.3 (300 pixels per
 	second). Use setSpinningSensitivity() to tune this value. A higher value will make spinning more
 	difficult (a value of 100.0 forbids spinning in practice).
 

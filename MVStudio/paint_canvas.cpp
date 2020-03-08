@@ -117,7 +117,7 @@ void PaintCanvas::init()
 	//////////////////////////////////////////////////////////////////////////
 
 	//float pos[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-	float pos[] = { light_pos_.x, light_pos_.y, light_pos_.z, 0.0f };
+	float pos[] = {static_cast<float>(light_pos_.x), static_cast<float>(light_pos_.y), static_cast<float>(light_pos_.z), 0.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
 	glEnable(GL_LIGHT0);		
@@ -134,7 +134,7 @@ void PaintCanvas::setLightPosition(const vec3d& pos) {
 	glLoadIdentity();
 	// 0 = infinite light 
 	// 1 = local light
-	float p[] = {light_pos_.x, light_pos_.y, light_pos_.z, 0.0f };
+	float p[] = {static_cast<float>(light_pos_.x), static_cast<float>(light_pos_.y), static_cast<float>(light_pos_.z), 0.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, p);
 	glPopMatrix();	
 	

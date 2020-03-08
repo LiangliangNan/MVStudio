@@ -12,7 +12,7 @@
 
 #include "minpack.h"
 #include <math.h>
-#define real __minpack_real__
+#include "minpackP.h"
 
 __minpack_attr__
 void __minpack_func__(covar)(const int *n, real *r__, const int *ldr, 

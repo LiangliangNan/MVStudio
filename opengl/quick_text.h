@@ -1,7 +1,7 @@
 #ifndef _glQuickText_H_
 #define _glQuickText_H_
 
-#include "opengl_common.h"
+
 
 
 /*
@@ -16,7 +16,7 @@ std::string text = "My object \n vertices: %d, \n facets: %d";
 glQuickText::printfAt(box.xmin(), box.ymin(), box.zmin(), 1.0f, text.c_str(), mesh_->size_of_vertices(), mesh_->size_of_facets()) ;
 */
 
-class OPENGL_API GLQuickText
+class  GLQuickText
 {
 public:
 

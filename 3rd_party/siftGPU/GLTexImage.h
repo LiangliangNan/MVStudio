@@ -27,10 +27,7 @@
 #ifndef GL_TEX_IMAGE_H
 #define GL_TEX_IMAGE_H
 
-
 #include "GlobalUtil.h"
-//class GlobalUtil;
-
 
 class GLTexImage :public GlobalUtil 
 {	

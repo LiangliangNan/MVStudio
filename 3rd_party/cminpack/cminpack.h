@@ -9,11 +9,16 @@
 /* The default floating-point type is "double" for C/C++ and "float" for CUDA,
    but you can change this by defining one of the following symbols when
    compiling the library, and before including cminpack.h when using it:
+   __cminpack_long_double__ for long double (requires compiler support)
    __cminpack_double__ for double
    __cminpack_float__ for float
    __cminpack_half__ for half from the OpenEXR library (in this case, you must
                      compile cminpack with a C++ compiler)
 */
+#ifdef __cminpack_long_double__
+#define __cminpack_real__ long double
+#endif
+
 #ifdef __cminpack_double__
 #define __cminpack_real__ double
 #endif
@@ -38,12 +43,12 @@ projects by hand you need to define cminpack_EXPORTS when
 building a DLL on windows.
 */
 #if defined (__GNUC__)
-#define CMINPACK_DECLSPEC_EXPORT  __declspec(__dllexport__)
-#define CMINPACK_DECLSPEC_IMPORT  __declspec(__dllimport__)
+#define CMINPACK_DECLSPEC_EXPORT
+#define CMINPACK_DECLSPEC_IMPORT
 #endif
 #if defined (_MSC_VER) || defined (__BORLANDC__)
-#define CMINPACK_DECLSPEC_EXPORT  __declspec(dllexport)
-#define CMINPACK_DECLSPEC_IMPORT  __declspec(dllimport)
+#define CMINPACK_DECLSPEC_EXPORT
+#define CMINPACK_DECLSPEC_IMPORT
 #endif
 #ifdef __WATCOMC__
 #define CMINPACK_DECLSPEC_EXPORT  __export
@@ -56,9 +61,9 @@ building a DLL on windows.
 
 #if !defined(CMINPACK_NO_DLL) && (defined(__WIN32__) || defined(WIN32) || defined (_WIN32))
 #if defined(cminpack_EXPORTS) || defined(CMINPACK_EXPORTS) || defined(CMINPACK_DLL_EXPORTS)
-    #define  CMINPACK_EXPORT //CMINPACK_DECLSPEC_EXPORT
+    #define  CMINPACK_EXPORT CMINPACK_DECLSPEC_EXPORT
   #else
-    #define  CMINPACK_EXPORT //CMINPACK_DECLSPEC_IMPORT
+    #define  CMINPACK_EXPORT CMINPACK_DECLSPEC_IMPORT
   #endif /* cminpack_EXPORTS */
 #else /* defined (_WIN32) */
  #define CMINPACK_EXPORT
@@ -110,6 +115,10 @@ building a DLL on windows.
 
 #ifdef __cminpack_double__
 #define __cminpack_func__(func) func
+#endif
+
+#ifdef __cminpack_long_double__
+#define __cminpack_func__(func) ld ## func
 #endif
 
 #ifdef __cminpack_float__

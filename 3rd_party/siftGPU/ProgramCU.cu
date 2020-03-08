@@ -10,10 +10,10 @@
 //	documentation for educational, research and non-profit purposes, without
 //	fee, and without a written agreement is hereby granted, provided that the
 //	above copyright notice and the following paragraph appear in all copies.
-//	
+//
 //	The University of North Carolina at Chapel Hill make no representations
 //	about the suitability of this software for any purpose. It is provided
-//	'as is' without express or implied warranty. 
+//	'as is' without express or implied warranty.
 //
 //	Please send BUG REPORTS to ccwu@cs.unc.edu
 //
@@ -21,7 +21,7 @@
 
 #if defined(CUDA_SIFTGPU_ENABLED)
 
-#include "../../opengl/glew.h"
+#include "GL/glew.h"
 #include "stdio.h"
 
 #include "CuTexImage.h"
@@ -88,7 +88,7 @@
 
 
 ///////////////////////////////////////////
-//Thread block size for visualization 
+//Thread block size for visualization
 //(This doesn't affect the speed of computation)
 #define BLOCK_LOG_DIM 4
 #define BLOCK_DIM (1 << BLOCK_LOG_DIM)
@@ -108,7 +108,7 @@ texture<int4, 1, cudaReadModeElementType> texDataList;
 //template<int i>	 __device__ float Conv(float *data)		{    return Conv<i-1>(data) + data[i]*d_kernel[i];}
 //template<>		__device__ float Conv<0>(float *data)	{    return data[0] * d_kernel[0];					}
 
-  
+
 //////////////////////////////////////////////////////////////
 template<int FW> __global__ void FilterH( float* d_result, int width)
 {
@@ -135,7 +135,7 @@ template<int FW> __global__ void FilterH( float* d_result, int width)
 			cache_index += FILTERH_TILE_WIDTH;
 		}
 	}
-	__syncthreads(); 
+	__syncthreads();
 	if(col >= width) return;
 #pragma unroll
 	for(int i = 0; i < FW; ++i)
@@ -175,17 +175,17 @@ template<int  FW>  __global__ void FilterV(float* d_result, int width, int heigh
 	const int col = IMUL(blockIdx.x, FILTERV_TILE_WIDTH) + threadIdx.x;
 	const int row_first = row_block_first - HALF_WIDTH;
 	const int data_index_max = IMUL(height - 1, width) + col;
-	const int cache_col_start = threadIdx.y;	
+	const int cache_col_start = threadIdx.y;
 	const int cache_row_start = IMUL(threadIdx.x, CACHE_TRUE_WIDTH);
 	int cache_index = cache_col_start + cache_row_start;
 	int data_index = IMUL(row_first + cache_col_start, width) + col;
 
-	if(col < width) 
+	if(col < width)
 	{
 #pragma unroll
 		for(int i = 0; i < CACHE_COUNT; ++i)
 		{
-			if(cache_col_start < CACHE_WIDTH - i * FILTERV_BLOCK_HEIGHT) 
+			if(cache_col_start < CACHE_WIDTH - i * FILTERV_BLOCK_HEIGHT)
 			{
 				int fetch_index = data_index < col ? col : (data_index > data_index_max? data_index_max : data_index);
 				data[cache_index + i * FILTERV_BLOCK_HEIGHT] = tex1Dfetch(texData,fetch_index);
@@ -194,13 +194,13 @@ template<int  FW>  __global__ void FilterV(float* d_result, int width, int heigh
 		}
 	}
 	__syncthreads();
-	
+
 	if(col >= width) return;
 
 	int row = row_block_first + threadIdx.y;
 	int index_start = cache_row_start + threadIdx.y;
 #pragma unroll
-	for(int i = 0; i < WRITE_COUNT;		++i, 
+	for(int i = 0; i < WRITE_COUNT;		++i,
 			row += FILTERV_BLOCK_HEIGHT, index_start += FILTERV_BLOCK_HEIGHT)
 	{
 		if(row < height)
@@ -225,11 +225,11 @@ template<int LOG_SCALE> __global__ void UpsampleKernel(float* d_result, int widt
 	int col = IMUL(blockIdx.x, FILTERH_TILE_WIDTH) + threadIdx.x;
 	if(col >= width) return;
 
-	int row = blockIdx.y >> LOG_SCALE; 
+	int row = blockIdx.y >> LOG_SCALE;
 	int index = row * width + col;
 	int dst_row = blockIdx.y;
 	int dst_idx= (width * dst_row + col) * SCALE;
-	int helper = blockIdx.y & SCALE_MASK; 
+	int helper = blockIdx.y & SCALE_MASK;
 	if (helper)
 	{
 		float v11 = tex1Dfetch(texData, index);
@@ -245,7 +245,7 @@ template<int LOG_SCALE> __global__ void UpsampleKernel(float* d_result, int widt
 		for(int i = 1; i < SCALE; ++i)
 		{
 			const float r2 = i * INV_SCALE;
-			const float r1 = 1.0f - r2; 
+			const float r1 = 1.0f - r2;
 			d_result[dst_idx +i] = v1 * r1 + v2 * r2;
 		}
 	}else
@@ -257,7 +257,7 @@ template<int LOG_SCALE> __global__ void UpsampleKernel(float* d_result, int widt
 		for(int i = 1; i < SCALE; ++i)
 		{
 			const float r2 = i * INV_SCALE;
-			const float r1 = 1.0f - r2; 
+			const float r1 = 1.0f - r2;
 			d_result[dst_idx +i] = v1 * r1 + v2 * r2;
 		}
 	}
@@ -285,7 +285,7 @@ template<int LOG_SCALE> __global__ void DownsampleKernel(float* d_result, int sr
 	const int dst_col = IMUL(blockIdx.x, FILTERH_TILE_WIDTH) + threadIdx.x;
 	if(dst_col >= dst_width) return;
 	const int src_col = min((dst_col << LOG_SCALE), (src_width - 1));
-	const int dst_row = blockIdx.y; 
+	const int dst_row = blockIdx.y;
 	const int src_row = blockIdx.y << LOG_SCALE;
 	const int src_idx = IMUL(src_row, src_width) + src_col;
 	const int dst_idx = IMUL(dst_width, dst_row) + dst_col;
@@ -298,7 +298,7 @@ __global__ void DownsampleKernel(float* d_result, int src_width, int dst_width, 
 	const int dst_col = IMUL(blockIdx.x, FILTERH_TILE_WIDTH) + threadIdx.x;
 	if(dst_col >= dst_width) return;
 	const int src_col = min((dst_col << log_scale), (src_width - 1));
-	const int dst_row = blockIdx.y; 
+	const int dst_row = blockIdx.y;
 	const int src_row = blockIdx.y << log_scale;
 	const int src_idx = IMUL(src_row, src_width) + src_col;
 	const int dst_idx = IMUL(dst_width, dst_row) + dst_col;
@@ -383,10 +383,10 @@ void ProgramCU::CreateFilterKernel(float sigma, float* kernel, int& width)
 		width =KERNEL_MIN_WIDTH;
 	}
 
-	float   rv = 1.0f/(sigma*sigma), v, ksum =0; 
+	float   rv = 1.0f/(sigma*sigma), v, ksum =0;
 
 	// pre-compute filter
-	for( i = -sz ; i <= sz ; ++i) 
+	for( i = -sz ; i <= sz ; ++i)
 	{
 		kernel[i+sz] =  v = exp(-0.5f * i * i *rv) ;
 		ksum += v;
@@ -413,7 +413,7 @@ template<int FW> void ProgramCU::FilterImage(CuTexImage *dst, CuTexImage *src, C
 	buf->BindTexture(texData);
 	dim3 gridv((width + FILTERV_TILE_WIDTH - 1)/ FILTERV_TILE_WIDTH,  (height + FILTERV_TILE_HEIGHT - 1)/FILTERV_TILE_HEIGHT);
 	dim3 blockv(FILTERV_TILE_WIDTH, FILTERV_BLOCK_HEIGHT);
-	FilterV<FW><<<gridv, blockv>>>((float*)dst->_cuData, width, height); 
+	FilterV<FW><<<gridv, blockv>>>((float*)dst->_cuData, width, height);
 	CheckErrorCUDA("FilterV");
 }
 
@@ -458,7 +458,7 @@ void __global__ ComputeDOG_Kernel(float* d_dog, float2* d_got, int width, int he
 {
 	int row = (blockIdx.y << DOG_BLOCK_LOG_DIMY) + threadIdx.y;
 	int col = (blockIdx.x << DOG_BLOCK_LOG_DIMX) + threadIdx.x;
-	if(col < width && row < height) 
+	if(col < width && row < height)
 	{
 		int index = IMUL(row, width) + col;
 		float vp = tex1Dfetch(texP, index);
@@ -479,7 +479,7 @@ void __global__ ComputeDOG_Kernel(float* d_dog, int width, int height)
 {
 	int row = (blockIdx.y << DOG_BLOCK_LOG_DIMY) + threadIdx.y;
 	int col = (blockIdx.x << DOG_BLOCK_LOG_DIMX) + threadIdx.x;
-	if(col < width && row < height) 
+	if(col < width && row < height)
 	{
 		int index = IMUL(row, width) + col;
 		float vp = tex1Dfetch(texP, index);
@@ -521,7 +521,7 @@ void ProgramCU::ComputeDOG(CuTexImage* gus, CuTexImage* dog, CuTexImage* got)
 		}
 
 
-void __global__ ComputeKEY_Kernel(float4* d_key, int width, int colmax, int rowmax, 
+void __global__ ComputeKEY_Kernel(float4* d_key, int width, int colmax, int rowmax,
 					float dog_threshold0,  float dog_threshold, float edge_threshold, int subpixel_localization)
 {
        float data[3][3], v;
@@ -579,7 +579,7 @@ void __global__ ComputeKEY_Kernel(float4* d_key, int width, int colmax, int rowm
 			READ_CMP_DOG_DATA(datan[0], texN, idx[0]);
 			READ_CMP_DOG_DATA(datan[1], texN, idx[1]);
 			READ_CMP_DOG_DATA(datan[2], texN, idx[2]);
-			
+
 			if(subpixel_localization)
 			{
 				//subpixel localization
@@ -615,17 +615,17 @@ void __global__ ComputeKEY_Kernel(float4* d_key, int width, int colmax, int rowm
 					{
 						float4 TEMP = A2;	A2 = A1; A1 = TEMP;
 					}
-					if(abs(A1.y) >= 1e-10) 
+					if(abs(A1.y) >= 1e-10)
 					{
 						A1.z /= A1.y;	A1.w /= A1.y;
 						A2.z -= A2.y * A1.z;	A2.w -= A2.y * A1.w;
-						if(abs(A2.z) >= 1e-10) 
+						if(abs(A2.z) >= 1e-10)
 						{
 							ds = A2.w / A2.z;
 							dy = A1.w - ds * A1.z;
 							dx = A0.w - ds * A0.z - dy * A0.y;
 
-							offset_test_passed = 
+							offset_test_passed =
 								fabs(data[1][1] + 0.5f * (dx * fx + dy * fy + ds * fs)) > dog_threshold
 								&&fabs(ds) < 1.0f && fabs(dx) < 1.0f && fabs(dy) < 1.0f;
 						}
@@ -671,7 +671,7 @@ void __global__ InitHist_Kernel(int4* hist, int ws, int wd, int height)
 			int hidx = IMUL(row, wd) + col;
 			int scol = col << 2;
 			int sidx = IMUL(row, ws) + scol;
-			int v[4] = {0, 0, 0, 0}; 
+			int v[4] = {0, 0, 0, 0};
 			if(row > 0 && row < height -1)
 			{
 #pragma unroll
@@ -709,7 +709,7 @@ void __global__ ReduceHist_Kernel(int4* d_hist, int ws, int wd, int height)
 			int hidx = IMUL(row, wd) + col;
 			int scol = col << 2;
 			int sidx = IMUL(row, ws) + scol;
-			int v[4] = {0, 0, 0, 0}; 
+			int v[4] = {0, 0, 0, 0};
 #pragma unroll
 			for(int i = 0; i < 4 && scol < ws; ++i, ++scol)
 			{
@@ -735,7 +735,7 @@ void ProgramCU::ReduceHistogram(CuTexImage*hist1, CuTexImage* hist2)
 }
 
 
-void __global__ ListGen_Kernel(int4* d_list, int width)
+void __global__ ListGen_Kernel(int4* d_list, int list_len, int width)
 {
 	int idx1 = IMUL(blockIdx.x, blockDim.x) + threadIdx.x;
     int4 pos = tex1Dfetch(texDataList, idx1);
@@ -757,7 +757,9 @@ void __global__ ListGen_Kernel(int4* d_list, int width)
 		pos.x += 1;
 		pos.z -= temp.x;
 	}
-	d_list[idx1] = pos;
+  if (idx1 < list_len) {
+    d_list[idx1] = pos;
+  }
 }
 
 //input list (x, y) (x, y) ....
@@ -768,28 +770,29 @@ void ProgramCU::GenerateList(CuTexImage* list, CuTexImage* hist)
 	hist->BindTexture(texDataI4);
 	dim3  grid((len + LISTGEN_BLOCK_DIM -1) /LISTGEN_BLOCK_DIM);
 	dim3  block(LISTGEN_BLOCK_DIM);
-	ListGen_Kernel<<<grid, block>>>((int4*) list->_cuData, hist->GetImgWidth());
+	ListGen_Kernel<<<grid, block>>>((int4*) list->_cuData, len,
+                                  hist->GetImgWidth());
 }
 
-void __global__ ComputeOrientation_Kernel(float4* d_list, 
+void __global__ ComputeOrientation_Kernel(float4* d_list,
 										  int list_len,
-										  int width, int height, 
-										  float sigma, float sigma_step, 
+										  int width, int height,
+										  float sigma, float sigma_step,
 										  float gaussian_factor, float sample_factor,
 										  int num_orientation,
-										  int existing_keypoint, 
-										  int subpixel, 
+										  int existing_keypoint,
+										  int subpixel,
 										  int keepsign)
 {
 	const float ten_degree_per_radius = 5.7295779513082320876798154814105;
 	const float radius_per_ten_degrees = 1.0 / 5.7295779513082320876798154814105;
 	int idx = IMUL(blockDim.x, blockIdx.x) + threadIdx.x;
 	if(idx >= list_len) return;
-	float4 key; 
+	float4 key;
 	if(existing_keypoint)
 	{
-		key = tex1Dfetch(texDataF4, idx);		
-	}else 
+		key = tex1Dfetch(texDataF4, idx);
+	}else
 	{
 		int4 ikey = tex1Dfetch(texDataList, idx);
 		key.x = ikey.x + 0.5f;
@@ -837,7 +840,7 @@ void __global__ ComputeOrientation_Kernel(float4* d_list,
 			float fidx = floor(got.y * ten_degree_per_radius);
 			int oidx = fidx;
 			if(oidx < 0) oidx += 36;
-			vote[oidx] += weight; 
+			vote[oidx] += weight;
 		}
 	}
 
@@ -874,7 +877,7 @@ void __global__ ComputeOrientation_Kernel(float4* d_list,
 		float off =  0.5f * FDIV(next - pre, weight + weight - next - pre);
 		key.w = radius_per_ten_degrees * (index_max + 0.5f + off);
 		d_list[idx] = key;
-	
+
 	}else
 	{
 		float max_vote = vote[0];
@@ -914,13 +917,13 @@ void __global__ ComputeOrientation_Kernel(float4* d_list,
 			}
 			pre = vote[i];
 		}
-		float fr1 = max_rot[0] / 36.0f; 
-		if(fr1 < 0) fr1 += 1.0f; 
+		float fr1 = max_rot[0] / 36.0f;
+		if(fr1 < 0) fr1 += 1.0f;
 		unsigned short us1 = ocount == 0? 65535 : ((unsigned short )floor(fr1 * 65535.0f));
 		unsigned short us2 = 65535;
 		if(ocount > 1)
 		{
-			float fr2 = max_rot[1] / 36.0f; 
+			float fr2 = max_rot[1] / 36.0f;
 			if(fr2 < 0) fr2 += 1.0f;
 			us2 = (unsigned short ) floor(fr2 * 65535.0f);
 		}
@@ -934,7 +937,7 @@ void __global__ ComputeOrientation_Kernel(float4* d_list,
 
 
 
-void ProgramCU::ComputeOrientation(CuTexImage* list, CuTexImage* got, CuTexImage*key, 
+void ProgramCU::ComputeOrientation(CuTexImage* list, CuTexImage* got, CuTexImage*key,
 								   float sigma, float sigma_step, int existing_keypoint)
 {
 	int len = list->GetImgWidth();
@@ -954,17 +957,17 @@ void ProgramCU::ComputeOrientation(CuTexImage* list, CuTexImage* got, CuTexImage
 	dim3 grid((len + block_width -1) / block_width);
 	dim3 block(block_width);
 
-	ComputeOrientation_Kernel<<<grid, block>>>((float4*) list->_cuData, 
-		len, width, height, sigma, sigma_step, 
-		GlobalUtil::_OrientationGaussianFactor, 
+	ComputeOrientation_Kernel<<<grid, block>>>((float4*) list->_cuData,
+		len, width, height, sigma, sigma_step,
+		GlobalUtil::_OrientationGaussianFactor,
 		GlobalUtil::_OrientationGaussianFactor * GlobalUtil::_OrientationWindowFactor,
-		GlobalUtil::_FixedOrientation? 0 : GlobalUtil::_MaxOrientation, 
+		GlobalUtil::_FixedOrientation? 0 : GlobalUtil::_MaxOrientation,
 		existing_keypoint, GlobalUtil::_SubpixelLocalization, GlobalUtil::_KeepExtremumSign);
 
 	ProgramCU::CheckErrorCUDA("ComputeOrientation");
 }
 
-template <bool DYNAMIC_INDEXING> void __global__ ComputeDescriptor_Kernel(float4* d_des, int num, 
+template <bool DYNAMIC_INDEXING> void __global__ ComputeDescriptor_Kernel(float4* d_des, int num,
 											 int width, int height, float window_factor)
 {
 	const float rpi = 4.0/ 3.14159265358979323846;
@@ -975,7 +978,7 @@ template <bool DYNAMIC_INDEXING> void __global__ ComputeDescriptor_Kernel(float4
 	int bidx = idx& 0xf, ix = bidx & 0x3, iy = bidx >> 2;
 	float spt = fabs(key.z * window_factor);
 	float s, c; __sincosf(key.w, &s, &c);
-	float anglef = key.w > 3.14159265358979323846? key.w - (2.0 * 3.14159265358979323846) : key.w ; 
+	float anglef = key.w > 3.14159265358979323846? key.w - (2.0 * 3.14159265358979323846) : key.w ;
 	float cspt = c * spt, sspt = s * spt;
 	float crspt = c / spt, srspt = s / spt;
 	float2 offsetpt, pt;
@@ -1027,7 +1030,7 @@ template <bool DYNAMIC_INDEXING> void __global__ ComputeDescriptor_Kernel(float4
 					#pragma unroll
 					for(int k = 0; k < 8; ++k)
 					{
-						if(k == fidx) 
+						if(k == fidx)
 						{
 							des[k] += (weight1 * weight);
 							des[k+1] += (weight2 * weight);
@@ -1045,7 +1048,7 @@ template <bool DYNAMIC_INDEXING> void __global__ ComputeDescriptor_Kernel(float4
 }
 
 
-template <bool DYNAMIC_INDEXING> void __global__ ComputeDescriptorRECT_Kernel(float4* d_des, int num, 
+template <bool DYNAMIC_INDEXING> void __global__ ComputeDescriptorRECT_Kernel(float4* d_des, int num,
 											 int width, int height, float window_factor)
 {
 	const float rpi = 4.0/ 3.14159265358979323846;
@@ -1097,7 +1100,7 @@ template <bool DYNAMIC_INDEXING> void __global__ ComputeDescriptorRECT_Kernel(fl
 					#pragma unroll
 					for(int k = 0; k < 8; ++k)
 					{
-						if(k == fidx) 
+						if(k == fidx)
 						{
 							des[k] += (weight1 * weight);
 							des[k+1] += (weight2 * weight);
@@ -1170,7 +1173,7 @@ void ProgramCU::ComputeDescriptor(CuTexImage*list, CuTexImage* got, CuTexImage* 
 	    	ComputeDescriptorRECT_Kernel<true><<<grid, block>>>((float4*) dtex->_cuData, num, width, height, GlobalUtil::_DescriptorWindowFactor);
 	    else
 	    	ComputeDescriptorRECT_Kernel<false><<<grid, block>>>((float4*) dtex->_cuData, num, width, height, GlobalUtil::_DescriptorWindowFactor);
- 
+
     }else
     {
 	    if(GlobalUtil::_UseDynamicIndexing)
@@ -1206,7 +1209,7 @@ int ProgramCU::CheckErrorCUDA(const char* location)
         return 1;
 	}else
     {
-        return 0; 
+        return 0;
     }
 }
 
@@ -1269,11 +1272,11 @@ void __global__ ConvertKEY_Kernel(float4* d_result, int width, int height)
 	{
 		int index = row * width + col;
 		float4 keyv = tex1Dfetch(texDataF4, index);
-		int is_key = (keyv.x == 1.0f || keyv.x == -1.0f); 
+		int is_key = (keyv.x == 1.0f || keyv.x == -1.0f);
 		int inside = col > 0 && row > 0 && row < height -1 && col < width - 1;
 		float v = inside? saturate(0.5 + 20 * tex1Dfetch(texData, index)) : 0.5;
-		d_result[index] = is_key && inside ? 
-			(keyv.x > 0? make_float4(1.0f, 0, 0, 1.0f) : make_float4(0.0f, 1.0f, 0.0f, 1.0f)): 
+		d_result[index] = is_key && inside ?
+			(keyv.x > 0? make_float4(1.0f, 0, 0, 1.0f) : make_float4(0.0f, 1.0f, 0.0f, 1.0f)):
 			make_float4(v, v, v, 1.0f) ;
 	}
 }
@@ -1344,7 +1347,7 @@ inline void CuTexImage:: BindTexture(textureReference& texRef)
 
 inline void CuTexImage::BindTexture2D(textureReference& texRef)
 {
-#if defined(SIFTGPU_ENABLE_LINEAR_TEX2D) 
+#if defined(SIFTGPU_ENABLE_LINEAR_TEX2D)
 	cudaBindTexture2D(0, &texRef, _cuData, &texRef.channelDesc, _imgWidth, _imgHeight, _imgWidth* _numChannel* sizeof(float));
 #else
 	cudaChannelFormatDesc desc;
@@ -1355,7 +1358,7 @@ inline void CuTexImage::BindTexture2D(textureReference& texRef)
 
 int ProgramCU::CheckCudaDevice(int device)
 {
-    int count = 0, device_used; 
+    int count = 0, device_used;
     if(cudaGetDeviceCount(&count) != cudaSuccess  || count <= 0)
     {
         ProgramCU::CheckErrorCUDA("CheckCudaDevice");
@@ -1372,18 +1375,18 @@ int ProgramCU::CheckCudaDevice(int device)
 		{
 			GlobalUtil::_MemCapGPU = deviceProp.totalGlobalMem / 1024;
 			GlobalUtil::_texMaxDimGL = 32768;
-			if(GlobalUtil::_verbose) 
+			if(GlobalUtil::_verbose)
 				fprintf(stdout, "NOTE: changing maximum texture dimension to %d\n", GlobalUtil::_texMaxDimGL);
 
 		}
     }
-    if(device >0 && device < count)  
+    if(device >0 && device < count)
     {
         cudaSetDevice(device);
-        CheckErrorCUDA("cudaSetDevice\n"); 
+        CheckErrorCUDA("cudaSetDevice\n");
     }
     cudaGetDevice(&device_used);
-    if(device != device_used) 
+    if(device != device_used)
         fprintf(stderr,  "\nERROR:   Cannot set device to %d\n"
         "\nWARNING: Use # %d device instead (out of %d)\n", device, device_used, count);
     return 1;
@@ -1449,11 +1452,11 @@ void __global__ MultiplyDescriptor_Kernel(int* d_result, int num1, int num2, int
 		for(int k = 0; k < MULT_BLOCK_DIMY; ++k)
 		{
 			unsigned char* p1 = (unsigned char*) (data1 + k * 34 + i *  4 + (i/4));
-			results[k] += 	 ( IMUL(p1[0], p2[0])	+ IMUL(p1[1], p2[1])  
-							 + IMUL(p1[2], p2[2])  	+ IMUL(p1[3], p2[3])  
-							 + IMUL(p1[4], p2[4])  	+ IMUL(p1[5], p2[5])  
-							 + IMUL(p1[6], p2[6])  	+ IMUL(p1[7], p2[7])  
-							 + IMUL(p1[8], p2[8])  	+ IMUL(p1[9], p2[9])  
+			results[k] += 	 ( IMUL(p1[0], p2[0])	+ IMUL(p1[1], p2[1])
+							 + IMUL(p1[2], p2[2])  	+ IMUL(p1[3], p2[3])
+							 + IMUL(p1[4], p2[4])  	+ IMUL(p1[5], p2[5])
+							 + IMUL(p1[6], p2[6])  	+ IMUL(p1[7], p2[7])
+							 + IMUL(p1[8], p2[8])  	+ IMUL(p1[9], p2[9])
 							 + IMUL(p1[10], p2[10])	+ IMUL(p1[11], p2[11])
 							 + IMUL(p1[12], p2[12])	+ IMUL(p1[13], p2[13])
 							 + IMUL(p1[14], p2[14])	+ IMUL(p1[15], p2[15]));
@@ -1470,13 +1473,13 @@ void __global__ MultiplyDescriptor_Kernel(int* d_result, int num1, int num2, int
 		{
 			if(idx1 + i < num1)
 			{
-				cmp_result = results[i] > cmp_result.x? 
-				make_int3(results[i], idx1 + i, cmp_result.x) : 
+				cmp_result = results[i] > cmp_result.x?
+				make_int3(results[i], idx1 + i, cmp_result.x) :
 				make_int3(cmp_result.x, cmp_result.y, max(cmp_result.z, results[i]));
 				d_result[dst_idx + IMUL(i, num2)] = results[i];
 			}
 		}
-		d_temp[ IMUL(blockIdx.y, num2) + idx2] = cmp_result; 
+		d_temp[ IMUL(blockIdx.y, num2) + idx2] = cmp_result;
 	}else
 	{
 #pragma unroll
@@ -1491,7 +1494,7 @@ void __global__ MultiplyDescriptor_Kernel(int* d_result, int num1, int num2, int
 
 void ProgramCU::MultiplyDescriptor(CuTexImage* des1, CuTexImage* des2, CuTexImage* texDot, CuTexImage* texCRT)
 {
-	int num1 = des1->GetImgWidth() / 8;	
+	int num1 = des1->GetImgWidth() / 8;
 	int num2 = des2->GetImgWidth() / 8;
 	dim3 grid(	(num2 + MULT_BLOCK_DIMX - 1)/ MULT_BLOCK_DIMX,
 		(num1 + MULT_BLOCK_DIMY - 1)/MULT_BLOCK_DIMY);
@@ -1501,9 +1504,8 @@ void ProgramCU::MultiplyDescriptor(CuTexImage* des1, CuTexImage* des2, CuTexImag
 	des1->BindTexture(texDes1);
 	des2->BindTexture(texDes2);
 
-	MultiplyDescriptor_Kernel<<<grid, block>>>((int*)texDot->_cuData, num1, num2, 
+	MultiplyDescriptor_Kernel<<<grid, block>>>((int*)texDot->_cuData, num1, num2,
 												(texCRT? (int3*)texCRT->_cuData : NULL));
-	ProgramCU::CheckErrorCUDA("MultiplyDescriptor");
 }
 
 texture<float, 1, cudaReadModeElementType> texLoc1;
@@ -1515,10 +1517,10 @@ struct Matrix33{float mat[3][3];};
 void __global__ MultiplyDescriptorG_Kernel(int* d_result, int num1, int num2, int3* d_temp,
 										   Matrix33 H, float hdistmax, Matrix33 F, float fdistmax)
 {
-	int idx01 = (blockIdx.y  * MULT_BLOCK_DIMY);	
+	int idx01 = (blockIdx.y  * MULT_BLOCK_DIMY);
 	int idx02 = (blockIdx.x  * MULT_BLOCK_DIMX);
 
-	int idx1 = idx01 + threadIdx.y;	
+	int idx1 = idx01 + threadIdx.y;
 	int idx2 = idx02 + threadIdx.x;
 	__shared__ int data1[17 * 2 * MULT_BLOCK_DIMY];
 	__shared__ float loc1[MULT_BLOCK_DIMY * 2];
@@ -1570,12 +1572,13 @@ void __global__ MultiplyDescriptorG_Kernel(int* d_result, int num1, int num2, in
 			x[0] = H.mat[0][0] * locx + H.mat[0][1] * locy + H.mat[0][2];
 			x[1] = H.mat[1][0] * locx + H.mat[1][1] * locy + H.mat[1][2];
 			x[2] = H.mat[2][0] * locx + H.mat[2][1] * locy + H.mat[2][2];
-			diff[0] = fabs(FDIV(x[0], x[2]) - loc2.x);
-			diff[1] = fabs(FDIV(x[1], x[2]) - loc2.y);
-			if(diff[0] < hdistmax && diff[1] < hdistmax)
+			diff[0] = FDIV(x[0], x[2]) - loc2.x;
+			diff[1] = FDIV(x[1], x[2]) - loc2.y;
+      float hdist = diff[0] * diff[0] + diff[1] * diff[1];
+			if(hdist < hdistmax)
 			{
 				//check fundamental matrix
-				float fx1[3], ftx2[3], x2fx1, se; 
+				float fx1[3], ftx2[3], x2fx1, se;
 				fx1[0] = F.mat[0][0] * locx + F.mat[0][1] * locy + F.mat[0][2];
 				fx1[1] = F.mat[1][0] * locx + F.mat[1][1] * locy + F.mat[1][2];
 				fx1[2] = F.mat[2][0] * locx + F.mat[2][1] * locy + F.mat[2][2];
@@ -1611,11 +1614,11 @@ void __global__ MultiplyDescriptorG_Kernel(int* d_result, int num1, int num2, in
 			for(int k = 0; k < MULT_BLOCK_DIMY; ++k)
 			{
 				unsigned char* p1 = (unsigned char*) (data1 + k * 34 + i *  4 + (i/4));
-				results[k] += 	 ( IMUL(p1[0], p2[0])	+ IMUL(p1[1], p2[1])  
-								 + IMUL(p1[2], p2[2])  	+ IMUL(p1[3], p2[3])  
-								 + IMUL(p1[4], p2[4])  	+ IMUL(p1[5], p2[5])  
-								 + IMUL(p1[6], p2[6])  	+ IMUL(p1[7], p2[7])  
-								 + IMUL(p1[8], p2[8])  	+ IMUL(p1[9], p2[9])  
+				results[k] += 	 ( IMUL(p1[0], p2[0])	+ IMUL(p1[1], p2[1])
+								 + IMUL(p1[2], p2[2])  	+ IMUL(p1[3], p2[3])
+								 + IMUL(p1[4], p2[4])  	+ IMUL(p1[5], p2[5])
+								 + IMUL(p1[6], p2[6])  	+ IMUL(p1[7], p2[7])
+								 + IMUL(p1[8], p2[8])  	+ IMUL(p1[9], p2[9])
 								 + IMUL(p1[10], p2[10])	+ IMUL(p1[11], p2[11])
 								 + IMUL(p1[12], p2[12])	+ IMUL(p1[13], p2[13])
 								 + IMUL(p1[14], p2[14])	+ IMUL(p1[15], p2[15]));
@@ -1631,8 +1634,8 @@ void __global__ MultiplyDescriptorG_Kernel(int* d_result, int num1, int num2, in
 		{
 			if(idx1 + i < num1)
 			{
-				cmp_result = results[i] > cmp_result.x? 
-				make_int3(results[i], idx1 + i, cmp_result.x) : 
+				cmp_result = results[i] > cmp_result.x?
+				make_int3(results[i], idx1 + i, cmp_result.x) :
 				make_int3(cmp_result.x, cmp_result.y, max(cmp_result.z, results[i]));
 				d_result[dst_idx + IMUL(i, num2)] = max(results[i], 0);
 			}else
@@ -1640,7 +1643,7 @@ void __global__ MultiplyDescriptorG_Kernel(int* d_result, int num1, int num2, in
 				break;
 			}
 		}
-		d_temp[ IMUL(blockIdx.y, num2) + idx2] = cmp_result; 
+		d_temp[ IMUL(blockIdx.y, num2) + idx2] = cmp_result;
 	}else
 	{
 #pragma unroll
@@ -1656,9 +1659,9 @@ void __global__ MultiplyDescriptorG_Kernel(int* d_result, int num1, int num2, in
 
 void ProgramCU::MultiplyDescriptorG(CuTexImage* des1, CuTexImage* des2,
 		CuTexImage* loc1, CuTexImage* loc2, CuTexImage* texDot, CuTexImage* texCRT,
-		float H[3][3], float hdistmax, float F[3][3], float fdistmax)
+		float* H, float hdistmax, float* F, float fdistmax)
 {
-	int num1 = des1->GetImgWidth() / 8;	
+	int num1 = des1->GetImgWidth() / 8;
 	int num2 = des2->GetImgWidth() / 8;
 	Matrix33 MatF, MatH;
 	//copy the matrix
@@ -1671,11 +1674,11 @@ void ProgramCU::MultiplyDescriptorG(CuTexImage* des1, CuTexImage* des2,
 	//intermediate results
 	texDot->InitTexture( num2,num1);
 	if(texCRT) texCRT->InitTexture( num2, (num1 + MULT_BLOCK_DIMY - 1)/MULT_BLOCK_DIMY, 3);
-	loc1->BindTexture(texLoc1);	
+	loc1->BindTexture(texLoc1);
 	loc2->BindTexture(texLoc2);
-	des1->BindTexture(texDes1);	
+	des1->BindTexture(texDes1);
 	des2->BindTexture(texDes2);
-	MultiplyDescriptorG_Kernel<<<grid, block>>>((int*)texDot->_cuData, num1, num2, 
+	MultiplyDescriptorG_Kernel<<<grid, block>>>((int*)texDot->_cuData, num1, num2,
 												(texCRT? (int3*)texCRT->_cuData : NULL),
 												MatH, hdistmax, MatF, fdistmax);
 }
@@ -1709,7 +1712,7 @@ void __global__  RowMatch_Kernel(int*d_dot, int* d_result, int num2, float distm
 	{
 		if(threadIdx.x + i < num2)
 		{
-			int v = tex1Dfetch(texDOT, base_address + threadIdx.x + i);//d_dot[base_address + threadIdx.x + i];//
+			int v = d_dot[base_address + threadIdx.x + i];  // tex1Dfetch(texDOT, base_address + threadIdx.x + i);
 			bool test = v > t_dotmax;
 			t_dotnxt = test? t_dotmax : max(t_dotnxt, v);
 			t_dotidx = test? (threadIdx.x + i) : t_dotidx;
@@ -1721,7 +1724,7 @@ void __global__  RowMatch_Kernel(int*d_dot, int* d_result, int num2, float distm
 	dotnxt[threadIdx.x] = t_dotnxt;
 	dotidx[threadIdx.x] = t_dotidx;
 	__syncthreads();
-	
+
 #pragma unroll
 	for(int step = ROWMATCH_BLOCK_WIDTH/2; step >0; step /= 2)
 	{
@@ -1752,7 +1755,7 @@ void ProgramCU::GetRowMatch(CuTexImage* texDot, CuTexImage* texMatch, float dist
 	int num2 = texDot->GetImgWidth();
 	dim3 grid(1, num1/ROWMATCH_BLOCK_HEIGHT);
 	dim3 block(ROWMATCH_BLOCK_WIDTH, ROWMATCH_BLOCK_HEIGHT);
-	texDot->BindTexture(texDOT);
+	// texDot->BindTexture(texDOT);
 	RowMatch_Kernel<<<grid, block>>>((int*)texDot->_cuData,
 		(int*)texMatch->_cuData, num2, distmax, ratiomax);
 }

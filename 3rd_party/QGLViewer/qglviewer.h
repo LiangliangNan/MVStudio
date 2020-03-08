@@ -24,7 +24,6 @@
 #define QGLVIEWER_QGLVIEWER_H
 
 #include "camera.h"
-
 #include <QMap>
 #include <QClipboard>
 #include <QTime>
@@ -519,7 +518,7 @@ public Q_SLOTS:
 	bool openSnapshotFormatDialog();
 	void snapshotToClipboard();
 
-private:
+public:
 	bool saveImageSnapshot(const QString& fileName);
 
 #ifndef DOXYGEN
@@ -589,16 +588,16 @@ public:
 	/*! Return \c true when the animation loop is started.
 
 	During animation, an infinite loop calls animate() and draw() and then waits for animationPeriod()
-	milliseconds before calling animate() and draw() again. And again.
+	millisec before calling animate() and draw() again. And again.
 
 	Use startAnimation(), stopAnimation() or toggleAnimation() to change this value.
 
 	See the <a href="../examples/animation.html">animation example</a> for illustration. */
 	bool animationIsStarted() const { return animationStarted_; }
-	/*! The animation loop period, in milliseconds.
+	/*! The animation loop period, in millisec.
 
 	When animationIsStarted(), this is delay waited after draw() to call animate() and draw() again.
-	Default value is 40 milliseconds (25 Hz).
+	Default value is 40 millisec (25 Hz).
 
 	This value will define the currentFPS() when animationIsStarted() (provided that your animate()
 	and draw() methods are fast enough).
@@ -612,7 +611,7 @@ public:
 	int animationPeriod() const { return animationPeriod_; }
 
 public Q_SLOTS:
-	/*! Sets the animationPeriod(), in milliseconds. */
+	/*! Sets the animationPeriod(), in millisec. */
 	void setAnimationPeriod(int period) { animationPeriod_ = period; }
 	virtual void startAnimation();
 	virtual void stopAnimation();

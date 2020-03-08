@@ -2,7 +2,7 @@
 #ifndef _MATH_SYMBOLIC_POLYNOMIAL__
 #define _MATH_SYMBOLIC_POLYNOMIAL__
 
-#include "math_common.h"
+
 #include "../basic/assertions.h"
 #include "factor.h"
 

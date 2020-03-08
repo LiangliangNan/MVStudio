@@ -10,10 +10,10 @@
 //	documentation for educational, research and non-profit purposes, without
 //	fee, and without a written agreement is hereby granted, provided that the
 //	above copyright notice and the following paragraph appear in all copies.
-//	
+//
 //	The University of North Carolina at Chapel Hill make no representations
 //	about the suitability of this software for any purpose. It is provided
-//	'as is' without express or implied warranty. 
+//	'as is' without express or implied warranty.
 //
 //	Please send BUG REPORTS to ccwu@cs.unc.edu
 //
@@ -24,7 +24,6 @@
 #define GPU_SIFT_MATCH_H
 
 #include "GLTexImage.h"
-//class GLTexImage;
 
 class ProgramGPU;
 
@@ -60,7 +59,6 @@ private:
 	ParameterGL _param_guided_mult_f;
 	ParameterGL _param_guided_mult_param;
 	//
-	int _max_sift; 
 	int _num_sift[2];
 	int _id_sift[2];
 	int _have_loc[2];
@@ -72,22 +70,23 @@ private:
 	int	_pixel_per_sift;
 	int _initialized;
 	//
-	std::vector<float> sift_buffer; 
+	std::vector<float> sift_buffer;
 private:
 	void AllocateSiftMatch();
 	void LoadSiftMatchShadersGLSL();
-	int  GetBestMatch(int max_match, int match_buffer[][2], float distmax, float ratiomax, int mbm);
+	int  GetBestMatch(int max_match, uint32_t match_buffer[][2], float distmax, float ratiomax, int mbm);
 public:
 	SiftMatchGL(int max_sift, int use_glsl);
 	virtual ~SiftMatchGL();
 public:
+  bool Allocate(int max_sift, int mbm) override;
 	void InitSiftMatch();
-	void SetMaxSift(int max_sift);
+	void SetMaxSift(int max_sift) override;
 	void SetDescriptors(int index, int num, const unsigned char * descriptor, int id = -1);
 	void SetDescriptors(int index, int num, const float * descriptor, int id = -1);
 	void SetFeautreLocation(int index, const float* locatoins, int gap);
-	int  GetSiftMatch(int max_match, int match_buffer[][2], float distmax, float ratiomax, int mbm);
-	int  GetGuidedSiftMatch(int max_match, int match_buffer[][2], float H[3][3],  float F[3][3], 
+	int  GetSiftMatch(int max_match, uint32_t match_buffer[][2], float distmax, float ratiomax, int mbm);
+	int  GetGuidedSiftMatch(int max_match, uint32_t match_buffer[][2], float* H, float* F,
 		float distmax, float ratiomax, float hdistmax,float fdistmax, int mbm);
 };
 

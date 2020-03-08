@@ -306,6 +306,6 @@ private:
 
 } // namespace
 
-std::ostream& operator<<(std::ostream& o, const qglviewer::Quaternion&);
+QGLVIEWER_EXPORT std::ostream& operator<<(std::ostream& o, const qglviewer::Quaternion&);
 
 #endif // QGLVIEWER_QUATERNION_H

@@ -2,18 +2,18 @@
 #ifndef _OPENGL_SHADER_H_
 #define _OPENGL_SHADER_H_
 
-#include "opengl_common.h"
+
 #include "../basic/counted.h"
 #include "../basic/smart_pointer.h"
 
-#include "glew.h"
+#include "GL/glew.h"
 
 #include <string>
 #include <map>
 
 
 
-class OPENGL_API Shader : public Counted
+class  Shader : public Counted
 {
 public:
 	static bool is_supported() ;
@@ -56,7 +56,7 @@ private:
 
 //_________________________________________________________
 
-class OPENGL_API VertexShader : public Shader
+class  VertexShader : public Shader
 {
 public:
 	VertexShader() ;
@@ -79,7 +79,7 @@ private:
 
 //_________________________________________________________
 
-class OPENGL_API FragmentShader : public Shader
+class  FragmentShader : public Shader
 {
 public:
 	FragmentShader() ;
@@ -100,7 +100,7 @@ private:
 
 //_________________________________________________________
 
-class OPENGL_API GeometryShader : public Shader
+class  GeometryShader : public Shader
 {
 public:
 	GeometryShader() ;

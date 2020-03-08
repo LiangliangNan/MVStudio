@@ -5,7 +5,8 @@
 
 #include "minpack.h"
 #include <math.h>
-#define real __minpack_real__
+#include "minpackP.h"
+
 
 __minpack_attr__
 void __minpack_func__(lmder1)(__minpack_decl_fcnder_mn__ const int *m, const int *n, real *x, 

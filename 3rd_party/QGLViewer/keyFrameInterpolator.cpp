@@ -159,7 +159,7 @@ void KeyFrameInterpolator::resetInterpolation()
 	setInterpolationTime(firstTime());
 }
 
-/*! Appends a new keyFrame to the path, with its associated \p time (in seconds).
+/*! Appends a new keyFrame to the path, with its associated \p time (in sec).
 
   The keyFrame is given as a pointer to a Frame, which will be connected to the
   KeyFrameInterpolator: when \p frame is modified, the KeyFrameInterpolator path is updated
@@ -190,7 +190,7 @@ void KeyFrameInterpolator::addKeyFrame(const Frame* const frame, qreal time)
 	resetInterpolation();
 }
 
-/*! Appends a new keyFrame to the path, with its associated \p time (in seconds).
+/*! Appends a new keyFrame to the path, with its associated \p time (in sec).
 
   The path will use the current \p frame state. If you want the path to change when \p frame is
   modified, you need to pass a \e pointer to the Frame instead (see addKeyFrame(const Frame*,
@@ -470,7 +470,7 @@ qreal KeyFrameInterpolator::keyFrameTime(int index) const
 	return keyFrame_.at(index)->time();
 }
 
-/*! Returns the duration of the KeyFrameInterpolator path, expressed in seconds.
+/*! Returns the duration of the KeyFrameInterpolator path, expressed in sec.
 
  Simply corresponds to lastTime() - firstTime(). Returns 0.0 if the path has less than 2 keyFrames.
  See also keyFrameTime(). */
@@ -479,7 +479,7 @@ qreal KeyFrameInterpolator::duration() const
 	return lastTime() - firstTime();
 }
 
-/*! Returns the time corresponding to the first keyFrame, expressed in seconds.
+/*! Returns the time corresponding to the first keyFrame, expressed in sec.
 
 Returns 0.0 if the path is empty. See also lastTime(), duration() and keyFrameTime(). */
 qreal KeyFrameInterpolator::firstTime() const
@@ -490,7 +490,7 @@ qreal KeyFrameInterpolator::firstTime() const
 		return keyFrame_.first()->time();
 }
 
-/*! Returns the time corresponding to the last keyFrame, expressed in seconds.
+/*! Returns the time corresponding to the last keyFrame, expressed in sec.
 
 Returns 0.0 if the path is empty. See also firstTime(), duration() and keyFrameTime(). */
 qreal KeyFrameInterpolator::lastTime() const
@@ -560,7 +560,7 @@ void KeyFrameInterpolator::updateSplineCache()
 	splineCacheIsValid_ = true;
 }
 
-/*! Interpolate frame() at time \p time (expressed in seconds). interpolationTime() is set to \p
+/*! Interpolate frame() at time \p time (expressed in sec). interpolationTime() is set to \p
   time and frame() is set accordingly.
 
   If you simply want to change interpolationTime() but not the frame() state, use

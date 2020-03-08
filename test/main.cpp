@@ -9,9 +9,9 @@
 
 
 int main(int argc, char* argv[]) {
+	std::string project_file = "../../data/ET/ET.mvsproj";
 
-	//std::string project_file = "../../data/ET/ET(small).mvsproj";
-	std::string project_file = "../../data/building/building.mvsproj";
+//	std::string project_file = "../../data/building/building.mvsproj";
 	Project* project_ = new Project;
 	project_->load(project_file);
 

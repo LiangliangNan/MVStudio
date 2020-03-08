@@ -31,6 +31,8 @@
 */
 #define double_dwarf (1.82691291192569e-153)
 #define double_giant (1.34078079299426e+153)
+#define long_double_dwarf (2.245696932951581572e-2465l)
+#define long_double_giant (1.090748135619415929e+2465l)
 #define float_dwarf (1.327871072777421e-18f)
 #define float_giant (1.844674297419792e+18f)
 #define half_dwarf (0.015625f)
@@ -41,8 +43,8 @@
 #define giant(type) _giant(type)
 #define _giant(type) type ## _giant
 
-#define rdwarf dwarf(real)
-#define rgiant giant(real)
+#define rdwarf dwarf(realm)
+#define rgiant giant(realm)
 
 __cminpack_attr__
 real __cminpack_func__(enorm)(int n, const real *x)

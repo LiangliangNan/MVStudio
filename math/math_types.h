@@ -2,7 +2,7 @@
 #ifndef _MATH_TYPES_H_
 #define _MATH_TYPES_H_
 
-#include "math_common.h"
+
 #include "vecg.h"
 #include "box.h"
 #include "line.h"
@@ -16,7 +16,7 @@
  * boxes and matrices in 2D and 3D. 
  */
 
-class MATH_API GeometricTypes 
+class GeometricTypes
 {
 public:
 
@@ -277,15 +277,15 @@ namespace Geom {
         return ::fabs(triangle_signed_area(p1,p2,p3)) ;
     }
 
-    double MATH_API triangle_beauty(
+    double triangle_beauty(
         const vec2d& p1, const vec2d& p2, const vec2d& p3
     ) ;
 
-    double MATH_API triangle_beauty(
+    double triangle_beauty(
         const vec3d& p1, const vec3d& p2, const vec3d& p3
     ) ;
 
-    vec2d MATH_API triangle_circum_center(
+    vec2d triangle_circum_center(
         const vec2d& p1, const vec2d& p2, const vec2d& p3
     ) ;
 
@@ -336,7 +336,7 @@ namespace Geom {
         ) ;
     }
 
-    vec3d MATH_API perpendicular(const vec3d& V) ;
+    vec3d perpendicular(const vec3d& V) ;
 
     inline double tetra_signed_volume(
         const vec3d& p1, const vec3d& p2, 
@@ -352,7 +352,7 @@ namespace Geom {
         return ::fabs(tetra_signed_volume(p1,p2,p3,p4)) ;
     }
 
-    vec3d MATH_API tetra_circum_center(
+    vec3d tetra_circum_center(
         const vec3d& p1, const vec3d& p2, 
         const vec3d& p3, const vec3d& p4
     ) ;

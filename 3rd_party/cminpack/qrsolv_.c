@@ -5,9 +5,8 @@
 
 #include "minpack.h"
 #include <math.h>
-#define real __minpack_real__
+#include "minpackP.h"
 
-#define abs(x) ((x) >= 0 ? (x) : -(x))
 
 __minpack_attr__
 void __minpack_func__(qrsolv)(const int *n, real *r__, const int *ldr, 
