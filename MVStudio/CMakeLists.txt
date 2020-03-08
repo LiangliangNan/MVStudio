@@ -60,7 +60,7 @@ target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} Qt5::OpenGL)
 target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 
-target_link_libraries(${PROJECT_NAME} basic math pointCloud algo QGLViewer)
+target_link_libraries(${PROJECT_NAME} basic math pointset algo QGLViewer)
 
 # Note: On macOS, high-DPI support is enabled by settings in the Info.plist file. Make sure they are present.
 # For more information, see: http://doc.qt.io/qt-5/highdpi.html

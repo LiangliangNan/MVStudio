@@ -4,7 +4,7 @@
 #ifndef _SFM_GEOMETRY_H_
 #define _SFM_GEOMETRY_H_
 
-#include <easy3d/core/types.h>
+#include "../math/math_types.h"
 
 #include <vector>
 
@@ -38,9 +38,9 @@ namespace sfm {
 		/* Write coordinates*/
 		void write(FILE *f);
 
-		easy3d::dvec3	pos;	/* 3D position of the point */
-		easy3d::dvec3	norm;	/* Estimated normal for this point */
-		easy3d::ivec3	color;	/* Color of the point */
+		vec3d	pos;	/* 3D position of the point */
+		vec3d	norm;	/* Estimated normal for this point */
+		vec3i	color;	/* Color of the point */
 		double	conf;	/* Confidence in this point */
 
 		ImageKeyVector	views;	/* View / keys corresponding to this point */

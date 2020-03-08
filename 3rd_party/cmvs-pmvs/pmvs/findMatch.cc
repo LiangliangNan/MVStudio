@@ -232,6 +232,6 @@ void CfindMatch::write(const std::string prefix, bool bExportPatch, bool bExport
 	m_pos.writePatches2(prefix, bExportPatch, bExportPSet);
 }
 
-void CfindMatch::fillPointSet(easy3d::PointCloud* pset) {
+void CfindMatch::fillPointSet(PointSet* pset) {
 	m_pos.fillPointSet(pset);
 }

@@ -2,6 +2,7 @@
 #ifndef _SPARSE_RECONSTRUCTION_H_
 #define _SPARSE_RECONSTRUCTION_H_
 
+#include "algo_common.h"
 
 #include "../sfm/sfm.h"
 
@@ -10,24 +11,21 @@
 #include <vector>
 
 
-namespace easy3d {
-    class PointCloud;
-}
-
+class PointSet;
 class Project;
 
-class  SparseReconstruction {
+class ALGO_API SparseReconstruction {
 public:
 	SparseReconstruction(Project* proj);
 	virtual ~SparseReconstruction();
 
 	static std::string title() { return "SparseRecon"; }
 
-	bool apply(easy3d::PointCloud* pset = nullptr);
+	bool apply(PointSet* pset = nil);
 
 private:
 	//------------------ SfM ------------------
-	void run_sfm(easy3d::PointCloud* pset);
+	void run_sfm(PointSet* pset);
 
 	//------------------ MVS ------------------
 	void convert_bundler_to_pmvs();

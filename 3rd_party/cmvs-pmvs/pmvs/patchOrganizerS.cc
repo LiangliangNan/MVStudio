@@ -4,14 +4,13 @@
 #include <string>
 #include "patchOrganizerS.h"
 #include "findMatch.h"
-#include <easy3d/core/point_cloud.h>
+#include "../../pointset/point_set.h"
 
 
 
 using namespace PMVS3;
 using namespace Patch;
 using namespace std;
-using namespace easy3d;
 
 Ppatch CpatchOrganizerS::m_MAXDEPTH(new Cpatch());
 Ppatch CpatchOrganizerS::m_BACKGROUND(new Cpatch());
@@ -689,15 +688,14 @@ void CpatchOrganizerS::setScales(Patch::Cpatch& patch) const {
 }
 
 // write out results
-void CpatchOrganizerS::writePLY(easy3d::PointCloud* pset, const std::vector<Ppatch>& patches,
+void CpatchOrganizerS::writePLY(PointSet* pset, const std::vector<Ppatch>& patches,
 	const std::string filename)
 {
 	int num = (int)patches.size();
 
-	pset->resize(num);
-	std::vector<easy3d::vec3>& pts = pset->points();
-	std::vector<easy3d::vec3>& nms = pset->vertex_property<easy3d::vec3>("v:normal").vector();
-	std::vector<easy3d::vec3>& cls = pset->vertex_property<easy3d::vec3>("v:color").vector();
+	std::vector<vec3f>& pts = pset->points();	pts.resize(num);
+	std::vector<vec3f>& nms = pset->normals();	nms.resize(num);
+	std::vector<vec3f>& cls = pset->colors();	cls.resize(num);
 
 	ofstream ofstr;
 	ofstr.open(filename.c_str());
@@ -721,7 +719,7 @@ void CpatchOrganizerS::writePLY(easy3d::PointCloud* pset, const std::vector<Ppat
 	int idx = 0;
 	while (bpatch != bend) {
 		// Get color
-		Ivec3 color;
+		Vec3i color;
 
 		const int mode = 0;
 		// 0: color from images
@@ -782,9 +780,9 @@ void CpatchOrganizerS::writePLY(easy3d::PointCloud* pset, const std::vector<Ppat
 			<< (*bpatch)->m_normal[2] << ' '
 			<< color[0] << ' ' << color[1] << ' ' << color[2] << '\n';
 
-		pts[idx] = vec3((*bpatch)->m_coord[0], (*bpatch)->m_coord[1], (*bpatch)->m_coord[2]);
-		nms[idx] = vec3((*bpatch)->m_normal[0], (*bpatch)->m_normal[1], (*bpatch)->m_normal[2]);
-		cls[idx] = vec3(color[0]/255.0f, color[1]/255.0f, color[2]/255.0f);
+		pts[idx] = vec3f((*bpatch)->m_coord[0], (*bpatch)->m_coord[1], (*bpatch)->m_coord[2]);
+		nms[idx] = vec3f((*bpatch)->m_normal[0], (*bpatch)->m_normal[1], (*bpatch)->m_normal[2]);
+		cls[idx] = vec3f(color[0]/255.0f, color[1]/255.0f, color[2]/255.0f);
 		++idx;
 
 		++bpatch;
@@ -794,7 +792,7 @@ void CpatchOrganizerS::writePLY(easy3d::PointCloud* pset, const std::vector<Ppat
 
 void CpatchOrganizerS::writePLY(const std::vector<Ppatch>& patches,
 	const std::string filename,
-	const std::vector<Ivec3>& colors) {
+	const std::vector<Vec3i>& colors) {
 	ofstream ofstr;
 	ofstr.open(filename.c_str());
 	ofstr << "ply" << '\n'
@@ -813,7 +811,7 @@ void CpatchOrganizerS::writePLY(const std::vector<Ppatch>& patches,
 
 	vector<Ppatch>::const_iterator bpatch = patches.begin();
 	vector<Ppatch>::const_iterator bend = patches.end();
-	vector<Ivec3>::const_iterator colorb = colors.begin();
+	vector<Vec3i>::const_iterator colorb = colors.begin();
 
 	while (bpatch != bend) {
 		ofstr << (*bpatch)->m_coord[0] << ' '
@@ -829,14 +827,13 @@ void CpatchOrganizerS::writePLY(const std::vector<Ppatch>& patches,
 	ofstr.close();
 }
 
-void CpatchOrganizerS::fillPointSet(PointCloud* pset) {
+void CpatchOrganizerS::fillPointSet(PointSet* pset) {
 	collectPatches(1);
 
 	int num = (int)m_ppatches.size();
-	pset->resize(num);
-	std::vector<vec3>& pts = pset->points();
-	std::vector<vec3>& nms = pset->vertex_property<easy3d::vec3>("v:normal").vector();
-	std::vector<vec3>& cls = pset->vertex_property<easy3d::vec3>("v:color").vector();
+	std::vector<vec3f>& pts = pset->points();	pts.resize(num);
+	std::vector<vec3f>& nms = pset->normals();	nms.resize(num);
+	std::vector<vec3f>& cls = pset->colors();	cls.resize(num);
 
 	vector<Ppatch>::const_iterator bpatch = m_ppatches.begin();
 	vector<Ppatch>::const_iterator bend = m_ppatches.end();
@@ -844,7 +841,7 @@ void CpatchOrganizerS::fillPointSet(PointCloud* pset) {
 	int idx = 0;
 	while (bpatch != bend) {
 		// Get color
-		Ivec3 color;
+		Vec3i color;
 
 		const int mode = 0;
 		// 0: color from images
@@ -898,9 +895,9 @@ void CpatchOrganizerS::fillPointSet(PointCloud* pset) {
 			color[2] = (int)(b * 255.0f);
 		}
 
-		pts[idx] = vec3((*bpatch)->m_coord[0], (*bpatch)->m_coord[1], (*bpatch)->m_coord[2]);
-		nms[idx] = vec3((*bpatch)->m_normal[0], (*bpatch)->m_normal[1], (*bpatch)->m_normal[2]);
-		cls[idx] = vec3(color[0] / 255.0f, color[1] / 255.0f, color[2] / 255.0f);
+		pts[idx] = vec3f((*bpatch)->m_coord[0], (*bpatch)->m_coord[1], (*bpatch)->m_coord[2]);
+		nms[idx] = vec3f((*bpatch)->m_normal[0], (*bpatch)->m_normal[1], (*bpatch)->m_normal[2]);
+		cls[idx] = vec3f(color[0] / 255.0f, color[1] / 255.0f, color[2] / 255.0f);
 		++idx;
 
 		++bpatch;

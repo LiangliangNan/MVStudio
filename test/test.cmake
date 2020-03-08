@@ -8,7 +8,7 @@ SET(test_SRC
         )
 
 SET(test_DEPS
-        pointCloud
+        pointset
         image
         algo
         mvglib

@@ -2,7 +2,8 @@
 #ifndef _DIRECTORIES_H
 #define _DIRECTORIES_H
 
-
+#include "algo_common.h"
+#include "../basic/file_utils.h"
 #include "../sfm/sfm.h"
 
 #include <string>
@@ -16,7 +17,7 @@ struct ProjectImage {
 };
 
 
-class  Project
+class ALGO_API Project
 {
 public:
 	Project() {}

@@ -2,34 +2,34 @@
 #include "image_serializer_png.h"
 #include "image.h"
 #include "png.h"
-#include <easy3d/util/logging.h>
+#include "../basic/logger.h"
 
 Image* ImageSerializer_png::serialize_read(const std::string& file_name) {
 	FILE* in = fopen(file_name.c_str(), "rb") ;
 	//FILE* in; fopen_s(&in, file_name.c_str(), "rb") ; // fopen_s doesn't exist under Linux and Mac
-	if(in == nullptr) {
-		LOG(ERROR) << "Could not open file: \'"
+	if(in == nil) {
+		Logger::err("ImageSerializer_png") << "Could not open file: \'"
 			<< file_name
 			<< "\'" << std::endl ;
-		return nullptr ;
+		return nil ;
 	}
 
 	png_structp png_ptr = png_create_read_struct(
 		PNG_LIBPNG_VER_STRING,
 		(png_voidp) NULL, (png_error_ptr) NULL, (png_error_ptr) NULL 
 		) ;
-	if ( png_ptr == nullptr ) {
+	if ( png_ptr == nil ) {
 		fclose(in) ;
-		return nullptr ;
+		return nil ;
 	} 
 
 	png_infop info_ptr = png_create_info_struct ( png_ptr );
-	if ( info_ptr == nullptr ) {
+	if ( info_ptr == nil ) {
 		png_destroy_read_struct (
 			&png_ptr, (png_infopp)NULL, (png_infopp)NULL 
 			) ;
 		fclose(in) ;
-		return nullptr ;
+		return nil ;
 	}
 
 	png_init_io ( png_ptr, in );
@@ -44,7 +44,7 @@ Image* ImageSerializer_png::serialize_read(const std::string& file_name) {
 		) ;
 
 
-	Image* result = nullptr;
+	Image* result = nil;
 
 	if(color_type == PNG_COLOR_TYPE_GRAY) {
 		result = new Image(Image::GRAY, width, height) ;
@@ -115,7 +115,7 @@ bool ImageSerializer_png::serialize_write(
 			image->color_encoding() != Image::RGBA  &&
 			image->color_encoding() != Image::GRAY
 			) {
-				LOG(ERROR)
+				Logger::err("ImageSerializer_png") 
 					<< "PNG writing only supported for GRAY, RGB and RGBA color encoding"
 					<< ", sorry" << std::endl ;
 				return false ;
@@ -123,8 +123,8 @@ bool ImageSerializer_png::serialize_write(
 
 		FILE* out = fopen(file_name.c_str(), "wb") ;
 		//FILE* out; fopen_s(&out, file_name.c_str(), "wb") ; // fopen_s doesn't exist under Linux and Mac
-		if(out == nullptr) {
-			LOG(ERROR) << "Could not open file: \'"
+		if(out == nil) {
+			Logger::err("ImageSerializer_png") << "Could not open file: \'"
 				<< file_name
 				<< "\'" << std::endl ;
 			return false ;
@@ -134,7 +134,7 @@ bool ImageSerializer_png::serialize_write(
 			PNG_LIBPNG_VER_STRING,
 			(png_voidp) NULL, (png_error_ptr) NULL, (png_error_ptr) NULL 
 			) ;
-		if ( png_ptr == nullptr ) {
+		if ( png_ptr == nil ) {
 			fclose(out) ;
 			return false ;
 		} 
@@ -156,7 +156,7 @@ bool ImageSerializer_png::serialize_write(
 			png_color_encoding = PNG_COLOR_TYPE_RGBA ;
 			break ;
 		default:
-			LOG(ERROR) << "should not reach here" ;
+			ogf_assert_not_reached ;
 			break ;
 		}
 
@@ -203,8 +203,8 @@ bool ImageSerializer_png::binary() const {
 bool ImageSerializer_png::query_image_size(const std::string& file_name, int& width, int& height) {
 	FILE* in = fopen(file_name.c_str(), "rb");
 	//FILE* in; fopen_s(&in, file_name.c_str(), "rb") ; // fopen_s doesn't exist under Linux and Mac
-	if (in == nullptr) {
-		LOG(ERROR) << "Could not open file: \'"
+	if (in == nil) {
+		Logger::err("ImageSerializer_png") << "Could not open file: \'"
 			<< file_name
 			<< "\'" << std::endl;
 		return false;
@@ -214,13 +214,13 @@ bool ImageSerializer_png::query_image_size(const std::string& file_name, int& wi
 		PNG_LIBPNG_VER_STRING,
 		(png_voidp)NULL, (png_error_ptr)NULL, (png_error_ptr)NULL
 		);
-	if (png_ptr == nullptr) {
+	if (png_ptr == nil) {
 		fclose(in);
 		return false;
 	}
 
 	png_infop info_ptr = png_create_info_struct(png_ptr);
-	if (info_ptr == nullptr) {
+	if (info_ptr == nil) {
 		png_destroy_read_struct(
 			&png_ptr, (png_infopp)NULL, (png_infopp)NULL
 			);

@@ -2,10 +2,12 @@
 #ifndef _COLOR_H_
 #define _COLOR_H_
 
+#include "../basic/basic_types.h"
+#include "../basic/assertions.h"
+
 #include <cassert>
 #include <iostream>
 
-#include <easy3d/core/types.h>
 
 template <class T> 
 class GenericColor
@@ -124,13 +126,13 @@ void GenericColor<T>::set_a(T a) {
 
 template <class T> inline
 T& GenericColor<T>::operator[](int i) {
-	assert(i >= 0 && i <= 3) ;
+	ogf_assert(i >= 0 && i <= 3) ;
 	return components_[i] ;
 }
 
 template <class T> inline
 const T& GenericColor<T>::operator[](int i) const {
-	assert(i >= 0 && i <= 3) ;
+	ogf_assert(i >= 0 && i <= 3) ;
 	return components_[i] ;
 }
 
@@ -150,14 +152,14 @@ std::istream& operator>>(std::istream& input, GenericColor<T>& color) {
 
 //_______________________ Colors
 
-typedef GenericColor<easy3d::Numeric::int8>    Color_int8 ;
-typedef GenericColor<easy3d::Numeric::uint8>   Color_uint8 ;
-typedef GenericColor<easy3d::Numeric::int16>   Color_int16 ;
-typedef GenericColor<easy3d::Numeric::uint16>  Color_uint16 ;
-typedef GenericColor<easy3d::Numeric::int32>   Color_int32 ;
-typedef GenericColor<easy3d::Numeric::uint32>  Color_uint32 ;
-typedef GenericColor<easy3d::Numeric::float32> Color_float32 ;
-typedef GenericColor<easy3d::Numeric::float64> Color_float64 ;
+typedef GenericColor<Numeric::int8>    Color_int8 ;
+typedef GenericColor<Numeric::uint8>   Color_uint8 ;
+typedef GenericColor<Numeric::int16>   Color_int16 ;
+typedef GenericColor<Numeric::uint16>  Color_uint16 ;
+typedef GenericColor<Numeric::int32>   Color_int32 ;
+typedef GenericColor<Numeric::uint32>  Color_uint32 ;
+typedef GenericColor<Numeric::float32> Color_float32 ;
+typedef GenericColor<Numeric::float64> Color_float64 ;
 
 typedef		Color_float32	Colorf ;
 

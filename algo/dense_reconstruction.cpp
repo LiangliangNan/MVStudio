@@ -2,11 +2,11 @@
 #include "dense_reconstruction.h"
 #include "project.h"
 
-#include <easy3d/util/logging.h>
-#include <easy3d/util/file_system.h>
-#include <easy3d/util/stop_watch.h>
-#include <easy3d/fileio/point_cloud_io.h>
-
+#include "../basic/file_utils.h"
+#include "../basic/progress.h"
+#include "../basic/logger.h"
+#include "../basic/stop_watch.h"
+#include "../pointset/point_set_io.h"
 #include "../sfm/sfm_util.h"
 #include "../3rd_party/cmvs-pmvs/pmvs/findMatch.h"
 #include "../3rd_party/cmvs-pmvs/pmvs/option.h"
@@ -17,8 +17,6 @@
 
 
 using namespace sfm;
-using namespace easy3d;
-
 
 DenseReconstruction::DenseReconstruction(Project* proj)
 : project_(proj)
@@ -31,12 +29,12 @@ DenseReconstruction::~DenseReconstruction() {
 
 bool DenseReconstruction::convert_bundler_to_pmvs() {
 	if (!project_ || !project_->is_valid()) {
-        LOG(WARNING) << "invalid project";
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return false;
 	}
 
-	if (!file_system::is_file(project_->sfm_out_file)) {
-		LOG(WARNING) << "please run sparse reconstruction first";
+	if (!FileUtils::is_file(project_->sfm_out_file)) {
+		Logger::warn(title()) << "please run sparse reconstruction first" << std::endl;
 		return false;
 	}
 
@@ -64,7 +62,7 @@ bool DenseReconstruction::convert_bundler_to_pmvs() {
 	std::string rd_list_file = pmvs_path + "/list.rd.txt";
 	std::ofstream output(rd_list_file.c_str());
 	if (output.fail()) {
-        LOG(WARNING) << "could not open file: \'" << rd_list_file << "\'";
+		Logger::warn(title()) << "could not open file: \'" << rd_list_file << "\'" << std::endl;
 		return false;
 	}
 	for (int i = 0; i < images.size(); i++) {
@@ -86,11 +84,12 @@ bool DenseReconstruction::convert_bundler_to_pmvs() {
 
 	//undistort images
 
-	LOG(INFO) << "undistorting images..." << std::endl;
+	Logger::out(title()) << "undistorting images..." << std::endl;
 
 	const std::string& visualize_path = project_->pmvs_visualize_dir;
 	int count = 0;
 
+	ProgressLogger progress(images.size());
 	for (int i = 0; i < images.size(); i++) {
 		if (cameras[i].f == 0.0)
 			continue;
@@ -101,25 +100,26 @@ bool DenseReconstruction::convert_bundler_to_pmvs() {
 		sfm::undistort_image(images[i], cameras[i], out);
 
 		++ count;
+		progress.next();
 	}
 
-	LOG(INFO) << "undistorting images done" << std::endl;
+	Logger::out(title()) << "undistorting images done" << std::endl;
 
 	return true;
 }
 
 bool DenseReconstruction::convert_pba_to_pmvs() {
 	if (!project_ || !project_->is_valid()) {
-        LOG(WARNING) << "invalid project";
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return false;
 	}
 
 	return true;
 }
 
-bool DenseReconstruction::run_pmvs(PointCloud* pset) {
+bool DenseReconstruction::run_pmvs(PointSet* pset) {
 	if (!project_ || !project_->is_valid()) {
-        LOG(WARNING) << "invalid project";
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return false;
 	}
 
@@ -130,7 +130,7 @@ bool DenseReconstruction::run_pmvs(PointCloud* pset) {
 		ready = convert_pba_to_pmvs();
 
 	if (ready) {
-		LOG(INFO) << "running PMVS..." << std::endl;
+		Logger::out(title()) << "running PMVS..." << std::endl;
 		StopWatch w;
 
 		PMVS3::Soption option;
@@ -140,9 +140,9 @@ bool DenseReconstruction::run_pmvs(PointCloud* pset) {
 		findMatch.init(option);
 		findMatch.run();
 
-		LOG(INFO) << "PMVS done. Time: " << w.elapsed_seconds() << std::endl;
+		Logger::out(title()) << "PMVS done. Time: " << w.elapsed() << std::endl;
 
-		LOG(INFO) << "saving results..." << std::endl;
+		Logger::out(title()) << "saving results..." << std::endl;
 		w.start();
 		//const std::vector<Ppatch>& patches = findMatch.m_pos.m_ppatches;
 
@@ -154,8 +154,8 @@ bool DenseReconstruction::run_pmvs(PointCloud* pset) {
 		//findMatch.write(project_->pmvs_models_dir, export_patch, export_pSet);
 		
 		std::string ply_file = project_->pmvs_models_dir + "/dense.ply";
-		PointCloudIO::save(ply_file, pset);
-		LOG(INFO) << "saving results done. Time: " << w.elapsed_seconds() << std::endl;
+		PointSetIO::save(ply_file, pset);
+		Logger::out(title()) << "saving results done. Time: " << w.elapsed() << std::endl;
 	}
 
 	return true;

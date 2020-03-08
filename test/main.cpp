@@ -1,18 +1,17 @@
 #include <iostream>
-#include <easy3d/util/logging.h>
-#include <easy3d/util/file_system.h>
-#include <easy3d/core/types.h>
+#include "../basic/logger.h"
+#include "../basic/file_utils.h"
+#include "../basic/basic_types.h"
 
 
 #include "../algo/project.h"
-#include "../algo/image_matching.h"
 #include "../sfm/sfm.h"
 
 
 int main(int argc, char* argv[]) {
+	std::string project_file = "../../data/ET/ET.mvsproj";
 
-//	std::string project_file = "../../data/ET/ET.mvsproj";
-	std::string project_file = "/Users/lnan/Desktop/test.mvsproj";
+//	std::string project_file = "../../data/building/building.mvsproj";
 	Project* project_ = new Project;
 	project_->load(project_file);
 
@@ -22,12 +21,9 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-    ImageMatching matching(project_);
-    matching.apply();
-
 	std::string listfocal = project_->sfm_list_file;
 	std::string match_table = project_->sfm_match_table_file;
-	if (!file_system::is_file(listfocal) || !file_system::is_file(match_table)) {
+	if (!FileUtils::is_file(listfocal) || !FileUtils::is_file(match_table)) {
 		std::cerr << "please run image matching first" << std::endl;
 		return 0;
 	}
@@ -36,9 +32,9 @@ int main(int argc, char* argv[]) {
 	for (std::size_t i = 0; i < images.size(); ++i) {
 		if (images[i].ignored)
 			continue;
-		const std::string& basename = file_system::base_name(images[i].file);
+		const std::string& basename = FileUtils::base_name(images[i].file);
 		std::string key_file = project_->sfm_keys_dir + "/" + basename + ".key";
-		if (!file_system::is_file(key_file)) {
+		if (!FileUtils::is_file(key_file)) {
 			std::cerr << basename + ".key" << " doesn\'t exist" << std::endl;
 			return 0;
 		}

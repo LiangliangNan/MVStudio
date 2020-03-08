@@ -11,7 +11,7 @@ INCLUDE("3rd_png.cmake")
 ADD_LIBRARY(png STATIC
             ${3rd_image_png_SRC})
 
-TARGET_LINK_LIBRARIES(png
+TARGET_LINK_LIBRARIES(3rd_image_png
             ${3rd_image_png_DEPS}
             ${3rd_image_png_ADDITIONAL_DEPS}
             ${SOLUTION_STATIC_LIB_DEPS}

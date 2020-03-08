@@ -4,8 +4,8 @@
 #include <QMainWindow>
 
 #include "ui_main_window.h"
-#include "easy3d/core/types.h"
-#include <easy3d/util/logging.h>
+#include "../math/math_types.h"
+#include "../basic/logger.h"
 #include "../basic/progress.h"
 
 
@@ -29,7 +29,7 @@ public:
 
 	PaintCanvas* canvas() { return mainCanvas_; }
 
-	void showCoordinateUnderMouse(const dvec3& p, bool found);
+	void showCoordinateUnderMouse(const vec3d& p, bool found);
 	
 	//////////////////////////////////////////////////////////////////////////
 

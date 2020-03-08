@@ -5,22 +5,34 @@ project(${PROJECT_NAME})
 
 
 set(${PROJECT_NAME}_HEADERS
+        complex.h
         factor.h
+        line.h
+        math_types.h
         matrix.h
         matrix_driver.h
+        oriented_line.h
+        plane.h
+        polynomial.h
+        quaternion.h
+        segment.h
         svd.h
+        vecg.h
+        vecgd.h
+        vectord.h
         )
 
 set(${PROJECT_NAME}_SOURCES
         factor.cpp
+        math_types.cpp
         matrix_driver.c
+        quaternion.cpp
         svd.cpp
+        vectord.cpp
         )
-
 
 
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS} )
 
-target_link_libraries(${PROJECT_NAME} cminpack)
+target_link_libraries(${PROJECT_NAME} basic cminpack)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR})

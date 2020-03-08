@@ -28,7 +28,7 @@ namespace sfm {
 		camera_params_t global_params;
 		camera_params_t *init_params;  /* Initial camera parameters */
 
-		easy3d::dvec3 *points;
+		vec3d *points;
 	} sfm_global_t;
 
 
@@ -36,8 +36,8 @@ namespace sfm {
 
 	static int global_num_points = 0;
 	static sfm_global_t *global_params = NULL;
-	static easy3d::dvec3 *global_points = NULL;
-	static easy3d::dvec2 *global_projections = NULL;
+	static vec3d *global_points = NULL;
+	static vec2d *global_projections = NULL;
 	static int global_constrain_focal = 0;
 	static double global_init_focal = 0.0;
 	static double global_constrain_focal_weight = 0.0;
@@ -171,7 +171,7 @@ namespace sfm {
 
 
 	/* Refine the position of a single camera */
-	void camera_refine(int num_points, easy3d::dvec3 *points, easy3d::dvec2 *projs,
+	void camera_refine(int num_points, vec3d *points, vec2d *projs,
 		camera_params_t *params, int adjust_focal,
 		int estimate_distortion)
 	{
@@ -277,11 +277,11 @@ namespace sfm {
 	}
 
 
-	easy3d::dvec2 sfm_project_final(camera_params_t *params, easy3d::dvec3 pt,
+	vec2d sfm_project_final(camera_params_t *params, vec3d pt,
 		int explicit_camera_centers, int undistort) {
 		double b_cam[3], b_proj[3];
 		double b[3] = { pt.x, pt.y, pt.z };
-		easy3d::dvec2 proj;
+		vec2d proj;
 
 		/* Project! */
 		if (!explicit_camera_centers) {
@@ -337,7 +337,7 @@ namespace sfm {
 			b_proj[1] = K[4] * y_d + K[5];
 		}
 
-		proj = easy3d::dvec2(b_proj[0], b_proj[1]);
+		proj = vec2d(b_proj[0], b_proj[1]);
 		return proj;
 	}
 
@@ -626,10 +626,10 @@ namespace sfm {
 		int undistort,
 		int explicit_camera_centers,
 		camera_params_t *init_camera_params,
-		easy3d::dvec3 *init_pts,
+		vec3d *init_pts,
 		int use_constraints,
 		int use_point_constraints,
-		easy3d::dvec3 *pt_constraints,
+		vec3d *pt_constraints,
 		double pt_constraint_weight,
 		int fix_points,
 		double eps2,
@@ -1075,7 +1075,7 @@ namespace sfm {
 
 	std::vector<int> refine_camera_parameters(const ImageData &data,
 		int num_points,
-		easy3d::dvec3 *points, easy3d::dvec2 *projs,
+		vec3d *points, vec2d *projs,
 		int *pt_idxs, camera_params_t *camera,
 		double *error_out,
 		bool adjust_focal,
@@ -1086,11 +1086,11 @@ namespace sfm {
 		double max_proj_error_threshold)
 	{
 		int num_points_curr = num_points;
-		easy3d::dvec3 *points_curr = new easy3d::dvec3[num_points];
-		easy3d::dvec2 *projs_curr = new easy3d::dvec2[num_points];
+		vec3d *points_curr = new vec3d[num_points];
+		vec2d *projs_curr = new vec2d[num_points];
 
-		memcpy(points_curr, points, num_points * sizeof(easy3d::dvec3));
-		memcpy(projs_curr, projs, num_points * sizeof(easy3d::dvec2));
+		memcpy(points_curr, points, num_points * sizeof(vec3d));
+		memcpy(projs_curr, projs, num_points * sizeof(vec2d));
 
 		std::vector<int> inliers;
 
@@ -1112,8 +1112,8 @@ namespace sfm {
 			if (!remove_outliers)
 				break;
 
-			easy3d::dvec3 *points_next = new easy3d::dvec3[num_points];
-			easy3d::dvec2 *projs_next = new easy3d::dvec2[num_points];
+			vec3d *points_next = new vec3d[num_points];
+			vec2d *projs_next = new vec2d[num_points];
 
 			int count = 0;
 			double error = 0.0;
@@ -1122,7 +1122,7 @@ namespace sfm {
 			double *errors = new double[num_points_curr];
 
 			for (int i = 0; i < num_points_curr; i++) {
-				easy3d::dvec2 pr = sfm_project_final(camera, points_curr[i], 1,
+				vec2d pr = sfm_project_final(camera, points_curr[i], 1,
 					estimate_distortion ? 1 : 0);
 
 				double dx = pr.x - projs_curr[i].x;
@@ -1276,7 +1276,7 @@ namespace sfm {
 
 
 
-	bool find_and_verify_camera(int num_points, easy3d::dvec3 *points_solve, easy3d::dvec2 *projs_solve,
+	bool find_and_verify_camera(int num_points, vec3d *points_solve, vec2d *projs_solve,
 		int *idxs_solve,
 		double *K, double *R, double *t,
 		double proj_estimation_threshold,
@@ -1392,7 +1392,7 @@ namespace sfm {
 
 
 	/* Triangulate two points */
-	easy3d::dvec3 triangulate(easy3d::dvec2 p, easy3d::dvec2 q,
+	vec3d triangulate(vec2d p, vec2d q,
 		camera_params_t c1, camera_params_t c2,
 		double &proj_error, bool &in_front, double &angle,
 		bool explicit_camera_centers)
@@ -1416,8 +1416,8 @@ namespace sfm {
 		matrix_product(3, 3, 3, 1, K1inv, proj1, proj1_norm);
 		matrix_product(3, 3, 3, 1, K2inv, proj2, proj2_norm);
 
-		easy3d::dvec2 p_norm(proj1_norm[0] / proj1_norm[2], proj1_norm[1] / proj1_norm[2]);
-		easy3d::dvec2 q_norm(proj2_norm[0] / proj2_norm[2], proj2_norm[1] / proj2_norm[2]);
+		vec2d p_norm(proj1_norm[0] / proj1_norm[2], proj1_norm[1] / proj1_norm[2]);
+		vec2d q_norm(proj2_norm[0] / proj2_norm[2], proj2_norm[1] / proj2_norm[2]);
 
 		/* Undo radial distortion */
 		p_norm = undistort_normalized_point(p_norm, c1);
@@ -1427,9 +1427,9 @@ namespace sfm {
 		angle = compute_ray_angle(p, q, c1, c2);
 
 		/* Triangulate the point */
-		easy3d::dvec3 pt;
+		vec3d pt;
 		if (!explicit_camera_centers) {
-			pt = ::triangulate(p_norm, q_norm, c1.R, c1.t, c2.R, c2.t, &proj_error);
+			pt = triangulate(p_norm, q_norm, c1.R, c1.t, c2.R, c2.t, &proj_error);
 		}
 		else {
 			double t1[3];
@@ -1441,7 +1441,7 @@ namespace sfm {
 			matrix_product(3, 3, 3, 1, c2.R, c2.t, t2);
 			matrix_scale(3, 1, t2, -1.0, t2);
 
-			pt = ::triangulate(p_norm, q_norm, c1.R, t1, c2.R, t2, &proj_error);
+			pt = triangulate(p_norm, q_norm, c1.R, t1, c2.R, t2, &proj_error);
 		}
 
 		proj_error = (c1.f + c2.f) * 0.5 * sqrt(proj_error * 0.5);

@@ -2,7 +2,7 @@
 //	File:		SiftGPU.h
 //	Author:		Changchang Wu
 //	Description :	interface for the SIFTGPU class.
-//					SiftGPU:	The SiftGPU Tool.
+//					SiftGPU:	The SiftGPU Tool.  
 //					SiftGPUEX:	SiftGPU + viewer
 //					SiftParam:	Sift Parameters
 //					SiftMatchGPU: GPU SIFT Matcher;
@@ -15,10 +15,10 @@
 //	documentation for educational, research and non-profit purposes, without
 //	fee, and without a written agreement is hereby granted, provided that the
 //	above copyright notice and the following paragraph appear in all copies.
-//
+//	
 //	The University of North Carolina at Chapel Hill make no representations
 //	about the suitability of this software for any purpose. It is provided
-//	'as is' without express or implied warranty.
+//	'as is' without express or implied warranty. 
 //
 //	Please send BUG REPORTS to ccwu@cs.unc.edu
 //
@@ -28,7 +28,7 @@
 #ifndef GPU_SIFT_H
 #define GPU_SIFT_H
 
-#if  defined(_WIN32)
+#if  defined(_WIN32) 
 	#ifdef SIFTGPU_DLL
 		#ifdef DLL_EXPORT
 			#define SIFTGPU_EXPORT __declspec(dllexport)
@@ -38,30 +38,15 @@
 	#else
 		#define SIFTGPU_EXPORT
 	#endif
-		#define SIFTGPU_EXPORT_EXTERN SIFTGPU_EXPORT
+
+    #define SIFTGPU_EXPORT_EXTERN SIFTGPU_EXPORT
+
 	#if _MSC_VER > 1000
 		#pragma once
 	#endif
 #else
 	#define SIFTGPU_EXPORT
-		#define SIFTGPU_EXPORT_EXTERN extern "C"
-#endif
-
-#ifdef _MSC_VER
-#if _MSC_VER >= 1600
-#include <stdint.h>
-#else
-typedef __int8 int8_t;
-typedef __int16 int16_t;
-typedef __int32 int32_t;
-typedef __int64 int64_t;
-typedef unsigned __int8 uint8_t;
-typedef unsigned __int16 uint16_t;
-typedef unsigned __int32 uint32_t;
-typedef unsigned __int64 uint64_t;
-#endif
-#elif __GNUC__ >= 3
-#include <stdint.h>
+    #define SIFTGPU_EXPORT_EXTERN extern "C"
 #endif
 
 ///////////////////////////////////////////////////////////////////
@@ -73,9 +58,9 @@ class SiftParam
 {
 public:
 	float*		_sigma;
-	float		_sigma_skip0; //
+	float		_sigma_skip0; // 
 	float		_sigma_skip1; //
-
+	
 	//sigma of the first level
 	float		_sigma0;
 	float		_sigman;
@@ -118,14 +103,11 @@ public:
 		SIFTGPU_PARTIAL_SUPPORTED = 1, // detction works, but not orientation/descriptor
 		SIFTGPU_FULL_SUPPORTED = 2
 	};
-
-  int gpu_index = 0;
-
 	typedef struct SiftKeypoint
 	{
 		float x, y, s, o; //x, y, scale, orientation.
 	}SiftKeypoint;
-protected:
+protected: 
 	//when more than one images are specified
 	//_current indicates the active one
 	int		_current;
@@ -154,21 +136,21 @@ protected:
 public:
 	//timing results for 10 steps
 	float			    _timing[10];
-	inline const char*  GetCurrentImagePath() {return _imgpath; }
+    inline const char*  GetCurrentImagePath() {return _imgpath; }
 public:
 	//set the image list for processing
 	SIFTGPU_EXPORT virtual void SetImageList(int nimage, const char** filelist);
 	//get the number of SIFT features in current image
 	SIFTGPU_EXPORT virtual int	GetFeatureNum();
-	//save the SIFT result as a ANSCII/BINARY file
+	//save the SIFT result as a ANSCII/BINARY file 
 	SIFTGPU_EXPORT virtual void SaveSIFT(const char * szFileName);
 	//Copy the SIFT result to two vectors
 	SIFTGPU_EXPORT virtual void GetFeatureVector(SiftKeypoint * keys, float * descriptors);
 	//Set keypoint list before running sift to get descriptors
 	SIFTGPU_EXPORT virtual void SetKeypointList(int num, const SiftKeypoint * keys, int keys_have_orientation = 1);
-	//Enable downloading results to CPU.
+	//Enable downloading results to CPU. 
 	//create a new OpenGL context for processing
-	//call VerifyContextGL instead if you want to crate openGL context yourself, or your are
+	//call VerifyContextGL instead if you want to crate openGL context yourself, or your are 
 	//mixing mixing siftgpu with other openGL code
 	SIFTGPU_EXPORT virtual int CreateContextGL();
 	//verify the current opengl context..
@@ -181,7 +163,7 @@ public:
 	//set SiftGPU to brief display mode, which is faster
 	inline void SetVerboseBrief(){SetVerbose(2);};
 	//parse SiftGPU parameters
-	SIFTGPU_EXPORT virtual void ParseParam(const int argc, const char **argv);
+	SIFTGPU_EXPORT virtual void ParseParam(int argc, char **argv);
 	//run SIFT on a new image given filename
 	SIFTGPU_EXPORT virtual int  RunSIFT(const char * imgpath);
 	//run SIFT on an image in the image list given the file index
@@ -191,18 +173,18 @@ public:
 	//gl_type (e.g. GL_UNSIGNED_BYTE, GL_FLOAT) is the data type of the pixel data;
 	//Check glTexImage2D(...format, type,...) for the accepted values
 	//Using image data of GL_LUMINANCE + GL_UNSIGNED_BYTE can minimize transfer time
-	SIFTGPU_EXPORT virtual int  RunSIFT(int width, int height,	const void * data,
+	SIFTGPU_EXPORT virtual int  RunSIFT(int width, int height,	const void * data, 
 										unsigned int gl_format, unsigned int gl_type);
 	//run SIFT on current image (specified by arguments), or processing the current image again
 	SIFTGPU_EXPORT virtual int  RunSIFT();
-	//run SIFT with keypoints on current image again.
+	//run SIFT with keypoints on current image again. 
 	SIFTGPU_EXPORT virtual int  RunSIFT(int num, const SiftKeypoint * keys, int keys_have_orientation = 1);
 	//constructor, the parameter np is ignored..
 	SIFTGPU_EXPORT SiftGPU(int np = 1);
 	//destructor
 	SIFTGPU_EXPORT virtual ~SiftGPU();
 	//set the active pyramid...dropped function
-	SIFTGPU_EXPORT virtual void SetActivePyramid(int) {};
+    SIFTGPU_EXPORT virtual void SetActivePyramid(int index) {}
 	//retrieve the number of images in the image list
 	SIFTGPU_EXPORT virtual int GetImageCount();
 	//set parameter GlobalUtil::_ForceTightPyramid
@@ -210,22 +192,19 @@ public:
 	//allocate pyramid for a given size of image
 	SIFTGPU_EXPORT virtual int AllocatePyramid(int width, int height);
 	//none of the texture in processing can be larger
-	//automatic down-sample is used if necessary.
+	//automatic down-sample is used if necessary. 
 	SIFTGPU_EXPORT virtual void SetMaxDimension(int sz);
-	SIFTGPU_EXPORT int GetFeatureCountThreshold();
-	SIFTGPU_EXPORT int GetMaxOrientation();
-	SIFTGPU_EXPORT int GetMaxDimension();
 
+	//retrieve the size of current input image
 	SIFTGPU_EXPORT void GetImageDimension(int &w, int&h);
-
 	///
 public:
 	//overload the new operator because delete operator is virtual
-	//and it is operating on the heap inside the dll (due to the
+	//and it is operating on the heap inside the dll (due to the 
 	//compiler setting of /MT and /MTd). Without the overloaded operator
-	//deleting a SiftGPU object will cause a heap corruption in the
+	//deleting a SiftGPU object will cause a heap corruption in the 
 	//static link case (but not for the runtime dll loading).
-	SIFTGPU_EXPORT void* operator new (size_t size);
+	SIFTGPU_EXPORT void* operator new (size_t size); 
 };
 
 
@@ -247,7 +226,7 @@ class SiftGPUEX:public SiftGPU
 	enum{COLOR_NUM = 36};
 	float _colors[COLOR_NUM*3];
 	//display functions
-	void DisplayInput();	//display gray level image of input image
+	void DisplayInput();	//display gray level image of input image	
 	void DisplayDebug();	//display debug view
 	void DisplayFeatureBox(int i);	//display SIFT features
 	void DisplayLevel(void (*UseDisplayShader)(), int i);		//display one level image
@@ -268,14 +247,12 @@ public:
 	SIFTGPU_EXPORT void ToggleDisplayDebug();
 	//randomize the display colors
 	SIFTGPU_EXPORT void RandomizeColor();
-	//retrieve the size of current input image
-	SIFTGPU_EXPORT void GetImageDimension(int &w, int&h);
 	//get the location of the window specified by user
 	SIFTGPU_EXPORT void GetInitWindowPotition(int& x, int& y);
 };
 
 ///matcher export
-//This is a gpu-based sift match implementation.
+//This is a gpu-based sift match implementation. 
 class SiftMatchGPU
 {
 public:
@@ -283,17 +260,14 @@ public:
 		SIFTMATCH_SAME_AS_SIFTGPU = 0, //when siftgpu already initialized.
 		SIFTMATCH_GLSL = 2,
 		SIFTMATCH_CUDA = 3,
-		SIFTMATCH_CUDA_DEVICE0 = 3 //to use device i, use SIFTMATCH_CUDA_DEVICE0 + i
+        SIFTMATCH_CUDA_DEVICE0 = 3 //to use device i, use SIFTMATCH_CUDA_DEVICE0 + i
 	};
-
-  int gpu_index = 0;
-
 private:
+	int				__max_sift;
 	int				__language;
 	SiftMatchGPU *	__matcher;
 	virtual void   InitSiftMatch(){}
 protected:
-  int       __max_sift;
 	//move the two functions here for derived class
 	SIFTGPU_EXPORT virtual int  _CreateContextGL();
 	SIFTGPU_EXPORT virtual int  _VerifyContextGL();
@@ -308,18 +282,14 @@ public:
 	//change gpu_language, check the enumerants in SIFTMATCH_LANGUAGE.
 	SIFTGPU_EXPORT virtual void SetLanguage(int gpu_language);
 
-	//after calling SetLanguage, you can call SetDeviceParam to select GPU
-	//-winpos, -display, -cuda [device_id]
-	//This is only used when you call CreateContextGL..
-	//This function doesn't change the language.
-	SIFTGPU_EXPORT virtual void SetDeviceParam(int argc, char**argv);
-
-  // Allocate all matrices the matrices and return true if successful.
-  virtual bool Allocate(int max_sift, int mbm);
+    //after calling SetLanguage, you can call SetDeviceParam to select GPU
+    //-winpos, -display, -cuda [device_id] 
+    //This is only used when you call CreateContextGL..
+	//This function doesn't change the language. 
+    SIFTGPU_EXPORT virtual void SetDeviceParam(int argc, char**argv);
 
 	//change the maximum of features to match whenever you want
-  SIFTGPU_EXPORT virtual void SetMaxSift(int max_sift);
-  SIFTGPU_EXPORT virtual int GetMaxSift() const { return __max_sift; };
+	SIFTGPU_EXPORT virtual void SetMaxSift(int max_sift);
 	//desctructor
 	SIFTGPU_EXPORT virtual ~SiftMatchGPU();
 
@@ -333,12 +303,12 @@ public:
 	//Given two normalized descriptor d1,d2, the distance here is acos(d1 *d2);
 	SIFTGPU_EXPORT virtual int  GetSiftMatch(
 				int max_match,	// the length of the match_buffer.
-				uint32_t match_buffer[][2], //buffer to receive the matched feature indices
+				int match_buffer[][2], //buffer to receive the matched feature indices
 				float distmax = 0.7,	//maximum distance of sift descriptor
 				float ratiomax = 0.8,	//maximum distance ratio
 				int mutual_best_match = 1); //mutual best match or one way
 
-	//two functions for guded matching, two constraints can be used
+	//two functions for guded matching, two constraints can be used 
 	//one homography and one fundamental matrix, the use is as follows
 	//1. for each image, first call SetDescriptor then call SetFeatureLocation
 	//2. Call GetGuidedSiftMatch
@@ -352,12 +322,12 @@ public:
 	//use a guiding Homography H and a guiding Fundamental Matrix F to compute feature matches
 	//the function returns the number of matches.
 	SIFTGPU_EXPORT virtual int  GetGuidedSiftMatch(
-					int max_match, uint32_t match_buffer[][2], //buffer to recieve
-					float* H,			//homography matrix,  (Set NULL to skip)
-					float* F,			//fundamental matrix, (Set NULL to skip)
+					int max_match, int match_buffer[][2], //buffer to recieve 
+					float H[3][3],			//homography matrix,  (Set NULL to skip)
+					float F[3][3],			//fundamental matrix, (Set NULL to skip)
 					float distmax = 0.7,	//maximum distance of sift descriptor
 					float ratiomax = 0.8,   //maximum distance ratio
-					float hdistmax = 32,    //threshold for |H * x1 - x2|_2
+					float hdistmax = 32,    //threshold for |H * x1 - x2|_1 
 					float fdistmax = 16,    //threshold for sampson error of x2'FX1
 					int mutual_best_match = 1); //mutual best or one way
 
@@ -374,23 +344,23 @@ SIFTGPU_EXPORT_EXTERN SiftMatchGPU* CreateNewSiftMatchGPU(int max_sift = 4096);
 
 
 ////////////////////////////////////////////////////////////////////////////
-class ComboSiftGPU: public SiftGPU, public SiftMatchGPU
+class ComboSiftGPU: public SiftGPU, public SiftMatchGPU 
 {
 public:
 	///////////////////////////////////////////////
-	SIFTGPU_EXPORT void* operator new (size_t size);
+	SIFTGPU_EXPORT void* operator new (size_t size); 
 };
-SIFTGPU_EXPORT_EXTERN ComboSiftGPU* CreateComboSiftGPU();
+SIFTGPU_EXPORT_EXTERN ComboSiftGPU* CreateComboSiftGPU(); 
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //Multi-process mode and remote mode
 SIFTGPU_EXPORT_EXTERN ComboSiftGPU* CreateRemoteSiftGPU(int port = 7777, char* remote_server = NULL);
 //Run SiftGPU computation on a remote computer/process/thread
-//if( remote_server == NULL)
+//if( remote_server == NULL) 
 //			a local server is created in a different process and connected
 //			multiple-GPU can be used by creating multiple instances
 //			GPU selection done through SiftGPU::ParseParam function
-//otherwise,
+//otherwise, 
 //			Assumes the existenc of a remote server and connects to it
 //			GPU selection skipped if already done on the server-end
 //			RUN server: server_siftgpu -server port [siftgpu_param]
@@ -399,7 +369,7 @@ SIFTGPU_EXPORT_EXTERN ComboSiftGPU* CreateRemoteSiftGPU(int port = 7777, char* r
 //	SiftGPU* siftgpu = combo, SiftMatchGPU * matcher = combo;
 //  siftgpu->ParseParam... siftgpu->CreateContextGL..
 //  matcher->SetLanguage...matcher->VerifyContextGL...
-//  // GPU-selection is done throught siftgpu->ParseParam,
+//  // GPU-selection is done throught siftgpu->ParseParam, 
 //  // it doesn't really initialize SiftGPU untill you call CreateContextGL/VerifyContextGL
 //  delete combo;
 
@@ -407,4 +377,4 @@ SIFTGPU_EXPORT_EXTERN ComboSiftGPU* CreateRemoteSiftGPU(int port = 7777, char* r
 //two internally used function.
 SIFTGPU_EXPORT int  CreateLiteWindow(LiteWindow* window);
 SIFTGPU_EXPORT void RunServerLoop(int port, int argc, char** argv);
-#endif
+#endif 

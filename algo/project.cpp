@@ -1,22 +1,21 @@
 #include "project.h"
-#include <easy3d/util/logging.h>
-#include <easy3d/util/file_system.h>
+#include "../basic/logger.h"
+
 #include <fstream>
 
-using namespace easy3d;
 
 bool Project::create(const std::string& proj_file, const std::string& img_dir, SfMMethod sfm) {
-	project_dir = file_system::parent_directory(proj_file);
+	project_dir = FileUtils::dir_name(proj_file);
 	image_dir = img_dir;
 	sfm_method_ = sfm;
 
 	std::vector<std::string> entries;
-	file_system::get_directory_entries(image_dir, entries, false);
+	FileUtils::get_directory_entries(image_dir, entries, false);
 
 	images.clear();
 	for (std::size_t i = 0; i < entries.size(); ++i) {
 		const std::string& name = entries[i];
-		std::string ext = file_system::extension(name);
+		std::string ext = FileUtils::extension(name);
 		if (ext == "jpg" || ext == "JPG") {
 			ProjectImage img;
 			img.file = image_dir + "/" + name;
@@ -26,7 +25,7 @@ bool Project::create(const std::string& proj_file, const std::string& img_dir, S
 	}
 
 	if (images.size() < 3) {
-		LOG(WARNING) << "too few (only " << images.size() << ") images provided";
+		Logger::warn(title()) << "too few (only " << images.size() << ") images provided" << std::endl;
 		return false;
 	}
 
@@ -40,7 +39,7 @@ bool Project::create(const std::string& proj_file, const std::string& img_dir, S
 
 
 bool Project::create(const std::string& proj_file, SfMMethod sfm) {
-	project_dir = file_system::parent_directory(proj_file);
+	project_dir = FileUtils::dir_name(proj_file);
 	sfm_method_ = sfm;
 
 	images.clear();
@@ -54,12 +53,12 @@ bool Project::add_images(const std::string& img_dir) {
 	image_dir = img_dir;
 
 	std::vector<std::string> entries;
-	file_system::get_directory_entries(image_dir, entries, false);
+	FileUtils::get_directory_entries(image_dir, entries, false);
 
 	images.clear();
 	for (std::size_t i = 0; i < entries.size(); ++i) {
 		const std::string& name = entries[i];
-		std::string ext = file_system::extension(name);
+		std::string ext = FileUtils::extension(name);
 		if (ext == "jpg" || ext == "JPG") {
 			ProjectImage img;
 			img.file = image_dir + "/" + name;
@@ -69,7 +68,7 @@ bool Project::add_images(const std::string& img_dir) {
 	}
 
 	if (images.size() < 3) {
-		LOG(WARNING) << "too few (only " << images.size() << ") images provided";
+		Logger::warn(title()) << "too few (only " << images.size() << ") images provided" << std::endl;
 		return false;
 	}
 
@@ -90,23 +89,23 @@ void Project::set_ignore_image(const std::string& image, bool ign) {
 void Project::initialize() {
 	// sift features and image matching
 	sfm_keys_dir = project_dir + "/keys";
-	if (!file_system::is_directory(sfm_keys_dir))
-		file_system::create_directory(sfm_keys_dir);
+	if (!FileUtils::is_directory(sfm_keys_dir))
+		FileUtils::create_directory(sfm_keys_dir);
 	sfm_list_file = sfm_keys_dir + "/list_focal.txt";
 	sfm_match_table_file = sfm_keys_dir + "/match_table.txt";
 
 	// sfm
 	sfm_output_dir = project_dir + "/sfm";	
-	if (!file_system::is_directory(sfm_output_dir))
-		file_system::create_directory(sfm_output_dir);
+	if (!FileUtils::is_directory(sfm_output_dir))
+		FileUtils::create_directory(sfm_output_dir);
 	sfm_out_file = sfm_output_dir + "/bundle.out";
 	sfm_dump_file_base = "/bundle_";
 
 	// pmvs
-	pmvs_dir = project_dir + "/pmvs";		if (!file_system::is_directory(pmvs_dir))		file_system::create_directory(pmvs_dir);
-	pmvs_models_dir = pmvs_dir + "/models";	if (!file_system::is_directory(pmvs_models_dir))	file_system::create_directory(pmvs_models_dir);
-	pmvs_txt_dir = pmvs_dir + "/txt";		if (!file_system::is_directory(pmvs_txt_dir))	file_system::create_directory(pmvs_txt_dir);
-	pmvs_visualize_dir = pmvs_dir + "/visualize";	if (!file_system::is_directory(pmvs_visualize_dir))	file_system::create_directory(pmvs_visualize_dir);
+	pmvs_dir = project_dir + "/pmvs";		if (!FileUtils::is_directory(pmvs_dir))		FileUtils::create_directory(pmvs_dir);
+	pmvs_models_dir = pmvs_dir + "/models";	if (!FileUtils::is_directory(pmvs_models_dir))	FileUtils::create_directory(pmvs_models_dir);
+	pmvs_txt_dir = pmvs_dir + "/txt";		if (!FileUtils::is_directory(pmvs_txt_dir))	FileUtils::create_directory(pmvs_txt_dir);
+	pmvs_visualize_dir = pmvs_dir + "/visualize";	if (!FileUtils::is_directory(pmvs_visualize_dir))	FileUtils::create_directory(pmvs_visualize_dir);
 	pmvs_vis_data_file = pmvs_dir + "/vis.dat";
 	pmvs_option_file = pmvs_dir + "/pmvs_options.txt";
 }
@@ -119,42 +118,42 @@ void Project::set_sfm_method(SfMMethod sfm) {
 
 bool Project::is_valid() {
 	// check if all directories exist
-	if (!file_system::is_directory(project_dir)) {
-		if (!file_system::create_directory(project_dir))
+	if (!FileUtils::is_directory(project_dir)) {
+		if (!FileUtils::create_directory(project_dir))
 			return false;
 	}
-	if (!file_system::is_directory(sfm_keys_dir)) {
-		if (!file_system::create_directory(sfm_keys_dir))
+	if (!FileUtils::is_directory(sfm_keys_dir)) {
+		if (!FileUtils::create_directory(sfm_keys_dir))
 			return false;
 	}	
-	if (!file_system::is_directory(sfm_output_dir)) {
-		if (!file_system::create_directory(sfm_output_dir))
+	if (!FileUtils::is_directory(sfm_output_dir)) {
+		if (!FileUtils::create_directory(sfm_output_dir))
 			return false;
 	}
-	if (!file_system::is_directory(pmvs_dir)) {
-		if (!file_system::create_directory(pmvs_dir))
+	if (!FileUtils::is_directory(pmvs_dir)) {
+		if (!FileUtils::create_directory(pmvs_dir))
 			return false;
 	}
-	if (!file_system::is_directory(pmvs_models_dir)) {
-		if (!file_system::create_directory(pmvs_models_dir))
+	if (!FileUtils::is_directory(pmvs_models_dir)) {
+		if (!FileUtils::create_directory(pmvs_models_dir))
 			return false;
 	}
-	if (!file_system::is_directory(pmvs_txt_dir)) {
-		if (!file_system::create_directory(pmvs_txt_dir))
+	if (!FileUtils::is_directory(pmvs_txt_dir)) {
+		if (!FileUtils::create_directory(pmvs_txt_dir))
 			return false;
 	}
-	if (!file_system::is_directory(pmvs_visualize_dir)) {
-		if (!file_system::create_directory(pmvs_visualize_dir))
+	if (!FileUtils::is_directory(pmvs_visualize_dir)) {
+		if (!FileUtils::create_directory(pmvs_visualize_dir))
 			return false;
 	}
 
-	if (!file_system::is_directory(image_dir)) {
-		if (!file_system::create_directory(image_dir))
+	if (!FileUtils::is_directory(image_dir)) {
+		if (!FileUtils::create_directory(image_dir))
 			return false;
 	}
 
 	if (images.size() < 3) {
-		LOG(WARNING) << "too few (only " << images.size() << ") images provided";
+		Logger::warn(title()) << "too few (only " << images.size() << ") images provided" << std::endl;
 		return false;
 	}
 
@@ -164,8 +163,8 @@ bool Project::is_valid() {
 	unsigned int count = 0;
 	for (std::size_t i = 0; i < images.size(); ++i) {
 		const std::string&  file = images[i].file;
-		if (!file_system::is_file(file)) {
-			LOG(WARNING) << "missing image \'" << file_system::simple_name(file) << "\'";
+		if (!FileUtils::is_file(file)) {
+			Logger::warn(title()) << "missing image \'" << FileUtils::simple_name(file) << "\'" << std::endl;
 			images[i].ignored = true;
 			count++;
 		}
@@ -176,11 +175,11 @@ bool Project::is_valid() {
 
 
 bool Project::load(const std::string& file) {
-	project_dir = file_system::parent_directory(file);
+	project_dir = FileUtils::dir_name(file);
 
 	std::ifstream input(file.c_str());
 	if (input.fail()) {
-		LOG(WARNING) << "could not load project \'" << file << "\'";
+		Logger::warn(title()) << "could not load project \'" << file << "\'" << std::endl;
 		return false;
 	}
 
@@ -195,7 +194,7 @@ bool Project::load(const std::string& file) {
 	else if (sfm == "PBA")
 		sfm_method_ = SFM_PBA;
 	else {
-		LOG(WARNING) << "unknown SfM method \'" << sfm << "\'. Use default \'BUNDLER\'";
+		Logger::warn(title()) << "unknown SfM method \'" << sfm << "\'. Use default \'BUNDLER\'" << std::endl;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
@@ -209,14 +208,14 @@ bool Project::load(const std::string& file) {
 		std::string name;
 		bool ignored;
 		input >> name >> ignored;
-		std::string ext = file_system::extension(name);
+		std::string ext = FileUtils::extension(name);
 		if (ext != "jpg" && ext != "JPG") {
-			LOG(WARNING) << "unsupported image format \'" << ext << "\' (ignored)" << std::endl;
+			Logger::warn(title()) << "unsupported image format \'" << ext << "\' (ignored)" << std::endl;
 			continue;
 		}
 
-		if (!file_system::is_file(name)) {
-			LOG(WARNING) << "missing image \'" << file_system::simple_name(name) << "\'";
+		if (!FileUtils::is_file(name)) {
+			Logger::warn(title()) << "missing image \'" << FileUtils::simple_name(name) << "\'" << std::endl;
 			continue;
 		}
 		ProjectImage img;
@@ -234,7 +233,7 @@ bool Project::load(const std::string& file) {
 bool Project::save(const std::string& file) const {
 	std::ofstream output(file.c_str());
 	if (output.fail()) {
-		LOG(WARNING) << "could not save project \'" << file << "\'";
+		Logger::warn(title()) << "could not save project \'" << file << "\'" << std::endl;
 		return false;
 	}
 

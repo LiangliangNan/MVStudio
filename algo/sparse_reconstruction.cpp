@@ -2,12 +2,12 @@
 #include "sparse_reconstruction.h"
 #include "project.h"
 
-#include <easy3d/util/logging.h>
-#include <easy3d/util/file_system.h>
-#include <easy3d/util/stop_watch.h>
+#include "../basic/file_utils.h"
+#include "../basic/progress.h"
+#include "../basic/logger.h"
+#include "../basic/stop_watch.h"
 
 
-using namespace easy3d;
 
 SparseReconstruction::SparseReconstruction(Project* proj) 
 	: project_(proj)
@@ -18,16 +18,16 @@ SparseReconstruction::~SparseReconstruction() {
 }
 
 
-bool SparseReconstruction::apply(PointCloud* pset /* = nil */) {
+bool SparseReconstruction::apply(PointSet* pset /* = nil */) {
 	if (!project_ || !project_->is_valid()) {
-		LOG(WARNING) << "invalid project" << std::endl;
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return false;
 	}
 
 	std::string listfocal = project_->sfm_list_file;
 	std::string match_table = project_->sfm_match_table_file;
-	if (!file_system::is_file(listfocal) || !file_system::is_file(match_table)) {
-		LOG(WARNING) << "please run image matching first" << std::endl;
+	if (!FileUtils::is_file(listfocal) || !FileUtils::is_file(match_table)) {
+		Logger::warn(title()) << "please run image matching first" << std::endl;
 		return false;
 	}
 
@@ -35,10 +35,10 @@ bool SparseReconstruction::apply(PointCloud* pset /* = nil */) {
 	for (std::size_t i = 0; i < images.size(); ++i) {
 		if (images[i].ignored)
 			continue;
-		const std::string& basename = file_system::base_name(images[i].file);
+		const std::string& basename = FileUtils::base_name(images[i].file);
 		std::string key_file = project_->sfm_keys_dir + "/" + basename + ".key";
-		if (!file_system::is_file(key_file)) {
-			LOG(WARNING) << basename + ".key" << " doesn\'t exist" << std::endl;
+		if (!FileUtils::is_file(key_file)) {
+			Logger::warn(title()) << basename + ".key" << " doesn\'t exist" << std::endl;
 			return false;
 		}
 	}
@@ -51,9 +51,9 @@ bool SparseReconstruction::apply(PointCloud* pset /* = nil */) {
 
 
 
-void SparseReconstruction::run_sfm(PointCloud* pset) {
+void SparseReconstruction::run_sfm(PointSet* pset) {
 	if (!project_ || !project_->is_valid()) {
-		LOG(WARNING) << "invalid project" << std::endl;
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return;
 	}
 

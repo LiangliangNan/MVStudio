@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7B5CCF91-C18E-4D34-B6A3-4B9F171BB7CB}</ProjectGuid>
+    <RootNamespace>algorithm</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>algo</ProjectName>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_WINDOWS;_USRDLL;ALGO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader />
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>../3rd_party/include;../3rd_party/matrix;../3rd_party/zlib;../3rd_party/ann/include;../3rd_party/include/miniBoost;../3rd_party/imagelib;../3rd_party/tinycthread</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;winmm.lib;cudart_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(CUDA_PATH)\lib\x64</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_WINDOWS;_USRDLL;ALGO_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader />
+      <AdditionalIncludeDirectories>../3rd_party/include;../3rd_party/matrix;../3rd_party/zlib;../3rd_party/ann/include;../3rd_party/include/miniBoost;../3rd_party/imagelib;../3rd_party/tinycthread</AdditionalIncludeDirectories>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;winmm.lib;cudart_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(CUDA_PATH)\lib\x64</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="algo_common.h" />
+    <ClInclude Include="dense_reconstruction.h" />
+    <ClInclude Include="image_matching.h" />
+    <ClInclude Include="project.h" />
+    <ClInclude Include="sparse_reconstruction.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dense_reconstruction.cpp" />
+    <ClCompile Include="image_matching.cpp" />
+    <ClCompile Include="project.cpp" />
+    <ClCompile Include="sparse_reconstruction.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\3rd_party\clapack\blas\3rd_blas.vcxproj">
+      <Project>{abf3484a-3db6-4114-a5c6-020659289e86}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\clapack\lapack\3rd_clapack.vcxproj">
+      <Project>{2a945f21-edfd-42be-a4a3-b1eae2f446bc}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\clapack\libf2c\3rd_libf2c.vcxproj">
+      <Project>{ba4bf8a6-154c-4375-808f-63194676d022}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\cmvs-pmvs\pmvs.vcxproj">
+      <Project>{b0cd1851-48f8-42ca-8f6b-c9ee0a83c8a1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\jpeg-6b\3rd_jpeg.vcxproj">
+      <Project>{706bae66-45ba-4e92-826d-3ff679777e9a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\nlopt\nlopt_2.4.2.vcxproj">
+      <Project>{81d5c2c2-d8e0-4a02-a97f-e1784b308d87}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\png-1.6.29\3rd_png.vcxproj">
+      <Project>{5332ee6d-1aa7-4ed9-894e-eda342aa6146}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\siftGPU\SiftGPU.vcxproj">
+      <Project>{9252e247-4fe2-4929-bd5d-c2fa16efd656}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\3rd_party\tinycthread\tinycthread.vcxproj">
+      <Project>{ecfc7713-7832-4847-840e-f1a039162b53}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\basic\basic.vcxproj">
+      <Project>{b83a04f9-4270-4440-9d1a-80dcaab009c4}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\image\image.vcxproj">
+      <Project>{715278a4-b2ff-4ae1-91fd-e6175f6b2a89}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\opengl\opengl.vcxproj">
+      <Project>{2f82d905-594b-44f4-b8ff-cf2ba286be09}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\pointset\pointset.vcxproj">
+      <Project>{206aec20-3f2a-42c8-a0d7-20407748ffad}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\sfm\sfm.vcxproj">
+      <Project>{dbb350eb-b7e7-49ab-a9c1-6ab91b0d0409}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

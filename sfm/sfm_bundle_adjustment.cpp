@@ -2,23 +2,24 @@
 #include "geometry.h"
 #include "epipolar.h"
 #include "bundle_adjustment.h"
-#include <easy3d/util/logging.h>
-#include <easy3d/util/stop_watch.h>
+#include "../basic/logger.h"
+#include "../basic/stop_watch.h"
 #include "../math/matrix_driver.h"
 #include "../mvglib/qsort.h"
 #include "../mvglib/triangulate.h"
-#include <easy3d/core/point_cloud.h>
-#include <easy3d/util/file_system.h>
+#include "../pointset/point_set.h"
+#include "../basic/file_utils.h"
+#include "../basic/progress.h"
 
 #include <cassert>
 #include <iomanip>
 
 
-using namespace easy3d;
+
 namespace sfm {
 
-	void SfM::run_sfm(easy3d::PointCloud* pset) {
-		LOG(INFO) << "running SfM..." << std::endl;
+	void SfM::run_sfm(PointSet* pset) {
+		Logger::out(title()) << "running SfM..." << std::endl;
 		StopWatch w;
 
 		/* Set track pointers to -1 */
@@ -35,8 +36,8 @@ namespace sfm {
 
 		camera_params_t *cameras = new camera_params_t[num_images];
 		int max_pts = (int)track_data_.size(); // 1243742; /* HACK! */
-		easy3d::dvec3 *points = new easy3d::dvec3[max_pts];
-		easy3d::ivec3 *colors = new easy3d::ivec3[max_pts];
+		vec3d *points = new vec3d[max_pts];
+		vec3i *colors = new vec3i[max_pts];
 		std::vector<ImageKeyVector> pt_views;
 
 
@@ -56,7 +57,7 @@ namespace sfm {
 			added_order[0] = i_best;
 			added_order[1] = j_best;
 
-			LOG(INFO) << "Adjusting cameras " << i_best << " and " << j_best << " (score = " << max_score << ")" << std::endl;
+			Logger::out(title()) << "Adjusting cameras " << i_best << " and " << j_best << " (score = " << max_score << ")" << std::endl;
 
 			/* **** Set up the initial cameras **** */
 			double init_focal_length_0 = 0.0, init_focal_length_1 = 0.0;
@@ -72,18 +73,17 @@ namespace sfm {
 			/* Run sfm for the first time */
 			double error0;
 			error0 = run_bundle_adjustment(curr_num_pts, 2, 0, false, cameras, points, added_order, colors, pt_views);
-			LOG(INFO) << "focal lengths: " << cameras[0].f << ", " << cameras[1].f << std::endl;
+			Logger::out(title()) << "focal lengths: " << cameras[0].f << ", " << cameras[1].f << std::endl;
 
 			if (pset) {
-				pset->resize(curr_num_pts);
-
-				std::vector<easy3d::vec3>& pts = pset->points();
-				auto prop = pset->vertex_property<easy3d::vec3>("v:color");
-				std::vector<easy3d::vec3>& cls = prop.vector();
+				std::vector<vec3f>& pts = pset->points();	pts.resize(curr_num_pts);
+				std::vector<vec3f>& cls = pset->colors();	cls.resize(curr_num_pts);
 				for (std::size_t i = 0; i < curr_num_pts; ++i) {
-					pts[i] = easy3d::vec3(points[i].x, points[i].y, points[i].z);
-					cls[i] = easy3d::vec3(colors[i].x / 255.0f, colors[i].y / 255.0f, colors[i].z / 255.0f);
+					pts[i] = vec3f(points[i].x, points[i].y, points[i].z);
+					cls[i] = vec3f(colors[i].x / 255.0f, colors[i].y / 255.0f, colors[i].z / 255.0f);
 				}
+				pset->fit();
+				pset->update_all();
 			}
 #ifdef _DEBUG	
 			tmp_file = option_.output_directory + "/points_0001.ply";
@@ -103,7 +103,12 @@ namespace sfm {
 		}
 
 		int round = 0;
+		ProgressLogger progress(num_images);
 		while (curr_num_cameras < num_images) {
+			if (progress.is_canceled())
+				break;
+			progress.notify(curr_num_cameras);
+
 			int parent_idx;
 			int max_cam =
 				find_camera_with_most_matches(curr_num_cameras, curr_num_pts,
@@ -212,7 +217,7 @@ namespace sfm {
 				//printf("  focal lengths:\n");
 
 				for (int i = 0; i < curr_num_cameras; i++) {
-					LOG(INFO) << "focal length for image [" << i << "](" << file_system::simple_name(image_data_[added_order[i]].image_file) << "): "
+					Logger::out(title()) << "focal length for image [" << i << "](" << FileUtils::simple_name(image_data_[added_order[i]].image_file) << "): "
 						<< cameras[i].f << " (" << image_data_[added_order[i]].init_focal << ")" << std::endl;
 // 					printf("   [%03d] %0.3f (%0.3f) %s %d; %0.3e %0.3e\n",
 // 						i, cameras[i].f,
@@ -225,14 +230,13 @@ namespace sfm {
 			round++;
 
 			if (pset) {
-				std::vector<easy3d::vec3>& pts = pset->points();
-				auto prop = pset->vertex_property<easy3d::vec3>("v:color");
-				std::vector<easy3d::vec3>& cls = prop.vector();
+				std::vector<vec3f>& pts = pset->points();	pts.resize(curr_num_pts);
+				std::vector<vec3f>& cls = pset->colors();	cls.resize(curr_num_pts);
 				for (std::size_t i = 0; i < curr_num_pts; ++i) {
-					pts[i] = easy3d::vec3(points[i].x, points[i].y, points[i].z);
-					cls[i] = easy3d::vec3(colors[i].x / 255.0f, colors[i].y / 255.0f, colors[i].z / 255.0f);
+					pts[i] = vec3f(points[i].x, points[i].y, points[i].z);
+					cls[i] = vec3f(colors[i].x / 255.0f, colors[i].y / 255.0f, colors[i].z / 255.0f);
 				}				
-//				pset->update_all();
+				pset->update_all();
 			}
 
 #ifdef _DEBUG
@@ -251,15 +255,15 @@ namespace sfm {
 
 		}
 
-		double sfm_time = w.elapsed_seconds();
+		double sfm_time = w.elapsed();
 
 		/* Dump output */
-		LOG(INFO) << "saving results..." << std::endl;
+		Logger::out(title()) << "saving results..." << std::endl;
 		w.start();
 		dump_output_file(option_.bundle_output_file,
 			num_images, curr_num_cameras, curr_num_pts,
 			added_order, cameras, points, colors, pt_views);
-		LOG(INFO) << "saving results done. Time: " << w.elapsed_seconds() << std::endl;
+		Logger::out(title()) << "saving results done. Time: " << w.elapsed() << std::endl;
 
 		/* Save the camera parameters and points */
 
@@ -312,7 +316,7 @@ namespace sfm {
 		delete[] points;
 		delete[] colors;
 
-		LOG(INFO) << "setting up matches from bundle-adjusted points..." << std::endl;
+		Logger::out(title()) << "setting up matches from bundle-adjusted points..." << std::endl;
 		set_matches_from_points();
 
 		//for (int i = 0; i < num_images; i++) {
@@ -322,7 +326,7 @@ namespace sfm {
 		//		image_data_[i] was NOT used during bundle adjustment
 		//}
 
-		LOG(INFO) << "SfM done: " << sfm_time << " seconds" << std::endl;
+		Logger::out(title()) << "SfM done: " << sfm_time << " seconds" << std::endl;
 	}
 
 
@@ -341,7 +345,7 @@ namespace sfm {
 
 	double SfM::run_bundle_adjustment(int num_pts, int num_cameras, int start_camera,
 		bool fix_points, camera_params_t *init_camera_params,
-		easy3d::dvec3 *init_pts, int *added_order, easy3d::ivec3 *colors,
+		vec3d *init_pts, int *added_order, vec3i *colors,
 		std::vector<ImageKeyVector> &pt_views, double eps2,
 		double *S, double *U, double *V,
 		double *W, bool remove_outliers)
@@ -353,7 +357,7 @@ namespace sfm {
 		int num_dists = 0;
 
 		int *remap = new int[num_pts];
-		easy3d::dvec3 *nz_pts = new easy3d::dvec3[num_pts];
+		vec3d *nz_pts = new vec3d[num_pts];
 
 		do {
 			if (num_pts - total_outliers < MIN_POINTS) {
@@ -422,7 +426,7 @@ namespace sfm {
 				point_constraints_, option_.point_constraint_weight,
 				fix_points ? 1 : 0, eps2, V, S, U, W);
 
-			LOG(INFO) << "bundle adjustment took " << w.elapsed_seconds() << " seconds" << std::endl;
+			Logger::out(title()) << "bundle adjustment took " << w.elapsed() << " seconds" << std::endl;
 
 			/* Check for outliers */
 
@@ -611,7 +615,7 @@ namespace sfm {
 					// 						"(reproj error: %0.3f)\n", idx, reproj_errors[i]);
 
 					if (colors != NULL) {
-						colors[idx] = easy3d::ivec3(0x0, 0x0, 0xff);
+						colors[idx] = vec3i(0x0, 0x0, 0xff);
 					}
 
 					int num_views = (int)pt_views[idx].size();
@@ -638,7 +642,7 @@ namespace sfm {
 				num_outliers = (int)outliers.size();
 				total_outliers += num_outliers;
 
-				LOG(INFO) << "removing " << num_outliers << " outliers" << std::endl;
+				Logger::out(title()) << "removing " << num_outliers << " outliers" << std::endl;
 			}
 
 			delete[] vmask;
@@ -668,7 +672,7 @@ namespace sfm {
 		int *added_order,
 		int *added_order_inv,
 		camera_params_t *cameras,
-		easy3d::dvec3 *points, easy3d::ivec3 *colors,
+		vec3d *points, vec3i *colors,
 		std::vector<ImageKeyVector> &pt_views)
 	{
 		int num_images = num_of_images();
@@ -698,12 +702,12 @@ namespace sfm {
 		int n = 0;
 		double error = 0.0;
 		for (int i = 0; i < (int)point_data_.size(); i++) {
-			points[i] = easy3d::dvec3(point_data_[i].pos[0],
+			points[i] = vec3d(point_data_[i].pos[0],
 				point_data_[i].pos[1],
 				point_data_[i].pos[2]);
 			// -point_data_[i].pos[2]);
 
-			colors[i] = easy3d::ivec3(point_data_[i].color[0],
+			colors[i] = vec3i(point_data_[i].color[0],
 				point_data_[i].color[1],
 				point_data_[i].color[2]);
 
@@ -899,13 +903,13 @@ namespace sfm {
 
 
 	/* Triangulate a subtrack */
-	easy3d::dvec3 SfM::triangulate_n_views(const ImageKeyVector &views,
+	vec3d SfM::triangulate_n_views(const ImageKeyVector &views,
 		int *added_order, camera_params_t *cameras,
 		double &error, bool explicit_camera_centers)
 	{
 		int num_views = (int)views.size();
 
-		easy3d::dvec2 *pv = new easy3d::dvec2[num_views];
+		vec2d *pv = new vec2d[num_views];
 		double *Rs = new double[9 * num_views];
 		double *ts = new double[3 * num_views];
 
@@ -927,7 +931,7 @@ namespace sfm {
 			matrix_product(3, 3, 3, 1, Kinv, p3, p_n);
 
 			// EDIT!!!
-			pv[i] = easy3d::dvec2(-p_n[0], -p_n[1]);
+			pv[i] = vec2d(-p_n[0], -p_n[1]);
 			pv[i] = undistort_normalized_point(pv[i], cameras[camera_idx]);
 
 			cam = cameras + camera_idx;
@@ -942,7 +946,7 @@ namespace sfm {
 			}
 		}
 
-		easy3d::dvec3 pt = triangulate_n(num_views, pv, Rs, ts, &error);
+		vec3d pt = triangulate_n(num_views, pv, Rs, ts, &error);
 
 		error = 0.0;
 		for (int i = 0; i < num_views; i++) {
@@ -951,7 +955,7 @@ namespace sfm {
 			int key_idx = views[i].second;
 			Keypoint &key = get_key(image_idx, key_idx);
 
-			easy3d::dvec2 pr = sfm_project_final(cameras + camera_idx, pt,
+			vec2d pr = sfm_project_final(cameras + camera_idx, pt,
 				explicit_camera_centers ? 1 : 0,
 				option_.estimate_distortion ? 1 : 0);
 
@@ -975,7 +979,7 @@ namespace sfm {
 	int SfM::bundle_adjust_add_all_new_points(int num_points, int num_cameras,
 		int *added_order,
 		camera_params_t *cameras,
-		easy3d::dvec3 *points, easy3d::ivec3 *colors,
+		vec3d *points, vec3i *colors,
 		double reference_baseline,
 		std::vector<ImageKeyVector> &pt_views,
 		double max_reprojection_error,
@@ -1065,8 +1069,8 @@ namespace sfm {
 					Keypoint &key1 = get_key(image_idx1, key_idx1);
 					Keypoint &key2 = get_key(image_idx2, key_idx2);
 
-					easy3d::dvec2 p(key1.x, key1.y);
-					easy3d::dvec2 q(key2.x, key2.y);
+					vec2d p(key1.x, key1.y);
+					vec2d q(key2.x, key2.y);
 
 					double angle = compute_ray_angle(p, q,
 						cameras[camera_idx1],
@@ -1090,7 +1094,7 @@ namespace sfm {
 			}
 
 			double error;
-			easy3d::dvec3 pt = triangulate_n_views(new_tracks[i], added_order, cameras,
+			vec3d pt = triangulate_n_views(new_tracks[i], added_order, cameras,
 				error, true);
 
 			if (isnan(error) || error > max_reprojection_error) {
@@ -1128,7 +1132,7 @@ namespace sfm {
 			unsigned char r = get_key(image_idx, key_idx).r;
 			unsigned char g = get_key(image_idx, key_idx).g;
 			unsigned char b = get_key(image_idx, key_idx).b;
-			colors[pt_count] = easy3d::ivec3((int)r, (int)g, (int)b);
+			colors[pt_count] = vec3i((int)r, (int)g, (int)b);
 
 			pt_views.push_back(new_tracks[i]);
 
@@ -1161,7 +1165,7 @@ namespace sfm {
 	int SfM::remove_bad_points_and_cameras(int num_points, int num_cameras,
 		int *added_order,
 		camera_params_t *cameras,
-		easy3d::dvec3 *points, easy3d::ivec3 *colors,
+		vec3d *points, vec3i *colors,
 		std::vector<ImageKeyVector> &pt_views)
 	{
 		int num_pruned = 0;
@@ -1217,7 +1221,7 @@ namespace sfm {
 				pt_views[i].clear();
 
 				if (colors != NULL) {
-					colors[i] = easy3d::ivec3(0x0, 0x0, 0xff);
+					colors[i] = vec3i(0x0, 0x0, 0xff);
 				}
 
 				num_pruned++;
@@ -1347,7 +1351,7 @@ namespace sfm {
 		double &init_focal_length_0,
 		double &init_focal_length_1,
 		camera_params_t *cameras,
-		easy3d::dvec3 *points, easy3d::ivec3 *colors,
+		vec3d *points, vec3i *colors,
 		std::vector<ImageKeyVector> &pt_views)
 	{
 		/* Load the keys for the images */
@@ -1448,7 +1452,7 @@ namespace sfm {
 				double y_pt = (y_proj / option_.init_focal_length) * INITIAL_DEPTH;
 				double z_pt = INITIAL_DEPTH + cameras[0].t[2];
 
-				points[pt_count] = easy3d::dvec3(x_pt, y_pt, z_pt);
+				points[pt_count] = vec3d(x_pt, y_pt, z_pt);
 			}
 			else {
 				double x_proj1 = get_key(i_best, key_idx1).x;
@@ -1458,8 +1462,8 @@ namespace sfm {
 
 				double error;
 
-				easy3d::dvec2 p(x_proj1, y_proj1);
-				easy3d::dvec2 q(x_proj2, y_proj2);
+				vec2d p(x_proj1, y_proj1);
+				vec2d q(x_proj2, y_proj2);
 
 				bool in_front = true;
 				double angle = 0.0;
@@ -1478,7 +1482,7 @@ namespace sfm {
 			unsigned char r = get_key(i_best, key_idx1).r;
 			unsigned char g = get_key(i_best, key_idx1).g;
 			unsigned char b = get_key(i_best, key_idx1).b;
-			colors[pt_count] = easy3d::ivec3((int)r, (int)g, (int)b);
+			colors[pt_count] = vec3i((int)r, (int)g, (int)b);
 
 			get_key(i_best, key_idx1).extra = pt_count;
 			get_key(j_best, key_idx2).extra = pt_count;
@@ -1507,7 +1511,7 @@ namespace sfm {
 		int image_idx, int camera_idx,
 		int num_cameras, int num_points,
 		int *added_order,
-		easy3d::dvec3 *points,
+		vec3d *points,
 		camera_params_t *parent,
 		camera_params_t *cameras,
 		std::vector<ImageKeyVector> &pt_views,
@@ -1524,9 +1528,9 @@ namespace sfm {
 		/* **** Connect the new camera to any existing points **** */
 		int num_pts_solve = 0;
 		int num_keys = (int)data.keys.size();
-		easy3d::dvec3 *points_solve = new easy3d::dvec3[num_keys];
-		easy3d::dvec2 *projs_solve = new easy3d::dvec2[num_keys];
-		easy3d::dvec2 *projs_solve_orig = new easy3d::dvec2[num_keys];
+		vec3d *points_solve = new vec3d[num_keys];
+		vec2d *projs_solve = new vec2d[num_keys];
+		vec2d *projs_solve_orig = new vec2d[num_keys];
 		int *idxs_solve = new int[num_keys];
 		int *keys_solve = new int[num_keys];
 
@@ -1556,7 +1560,7 @@ namespace sfm {
 			* the camera position */
 			points_solve[num_pts_solve] = points[pt];
 
-			projs_solve[num_pts_solve] = easy3d::dvec2(data.keys[key].x, data.keys[key].y);
+			projs_solve[num_pts_solve] = vec2d(data.keys[key].x, data.keys[key].y);
 
 			idxs_solve[num_pts_solve] = pt;
 			keys_solve[num_pts_solve] = key;
@@ -1667,8 +1671,8 @@ namespace sfm {
 
 		int num_inliers = (int)inliers_weak.size();
 
-		easy3d::dvec3 *points_final = new easy3d::dvec3[num_inliers];
-		easy3d::dvec2 *projs_final = new easy3d::dvec2[num_inliers];
+		vec3d *points_final = new vec3d[num_inliers];
+		vec2d *projs_final = new vec2d[num_inliers];
 		int *idxs_final = new int[num_inliers];
 		int *keys_final = new int[num_inliers];
 		int num_points_final = num_inliers;
@@ -1762,7 +1766,7 @@ namespace sfm {
 	/* Refine a given camera and the points it observes */
 	std::vector<int> SfM::refine_camera_and_points(const ImageData &data,
 		int num_points,
-		easy3d::dvec3 *points, easy3d::dvec2 *projs,
+		vec3d *points, vec2d *projs,
 		int *pt_idxs,
 		camera_params_t *cameras,
 		int *added_order,
@@ -1782,12 +1786,12 @@ namespace sfm {
 			inliers_out.push_back(i);
 
 		int num_points_curr = num_points;
-		easy3d::dvec3 *points_curr = new easy3d::dvec3[num_points];
-		easy3d::dvec2 *projs_curr = new easy3d::dvec2[num_points];
+		vec3d *points_curr = new vec3d[num_points];
+		vec2d *projs_curr = new vec2d[num_points];
 		int *pt_idxs_curr = new int[num_points];
 
-		memcpy(points_curr, points, sizeof(easy3d::dvec3) * num_points);
-		memcpy(projs_curr, projs, sizeof(easy3d::dvec2) * num_points);
+		memcpy(points_curr, points, sizeof(vec3d) * num_points);
+		memcpy(projs_curr, projs, sizeof(vec2d) * num_points);
 		memcpy(pt_idxs_curr, pt_idxs, sizeof(int) * num_points);
 
 		do {
@@ -1913,7 +1917,7 @@ namespace sfm {
 	}
 
 
-	double SfM::refine_points(int num_points, easy3d::dvec3 *points, easy3d::dvec2 *projs,
+	double SfM::refine_points(int num_points, vec3d *points, vec2d *projs,
 		int *pt_idxs, camera_params_t *cameras,
 		int *added_order,
 		const std::vector<ImageKeyVector> &pt_views,
@@ -1929,7 +1933,7 @@ namespace sfm {
 
 			if (num_views < 2) continue;
 
-			easy3d::dvec2 *pv = new easy3d::dvec2[num_views];
+			vec2d *pv = new vec2d[num_views];
 			double *Rs = new double[9 * num_views];
 			double *ts = new double[3 * num_views];
 
@@ -1950,7 +1954,7 @@ namespace sfm {
 					double p_n[3];
 					matrix_product(3, 3, 3, 1, Kinv, p3, p_n);
 
-					pv[j] = easy3d::dvec2(p_n[0], p_n[1]);
+					pv[j] = vec2d(p_n[0], p_n[1]);
 
 					cam = cameras + camera_idx;
 				}
@@ -1963,7 +1967,7 @@ namespace sfm {
 					double p_n[3];
 					matrix_product(3, 3, 3, 1, Kinv, p3, p_n);
 
-					pv[j] = easy3d::dvec2(p_n[0], p_n[1]);
+					pv[j] = vec2d(p_n[0], p_n[1]);
 					cam = camera_out;
 				}
 
@@ -1978,7 +1982,7 @@ namespace sfm {
 			points[i] = triangulate_n_refine(points[i], num_views, pv, Rs, ts,
 				&error_curr);
 
-			easy3d::dvec2 pr = sfm_project_final(camera_out, points[i], 1,
+			vec2d pr = sfm_project_final(camera_out, points[i], 1,
 				option_.estimate_distortion ? 1 : 0);
 
 			double dx = pr.x - projs[i].x;

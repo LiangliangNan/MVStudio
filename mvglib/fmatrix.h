@@ -4,7 +4,7 @@
 #ifndef _MVGLIB_FMATRIX_H_
 #define _MVGLIB_FMATRIX_H_
 
-#include "easy3d/core/types.h"
+#include "../math/math_types.h"
 
 
 
@@ -13,17 +13,17 @@
 void fmatrix_compute_epipoles(double *F, double *e1, double *e2);
 
 /* Compute the distance from l to the epipolar line of r under F */
-double fmatrix_compute_residual(double *F, easy3d::dvec3 r, easy3d::dvec3 l);
+double fmatrix_compute_residual(double *F, vec3d r, vec3d l);
 
 /* Use RANSAC to estimate an F-matrix */
-int estimate_fmatrix_ransac_matches(int num_pts, easy3d::dvec3 *a_pts, easy3d::dvec3 *b_pts,
+int estimate_fmatrix_ransac_matches(int num_pts, vec3d *a_pts, vec3d *b_pts, 
                                     int num_trials, double threshold, 
                                     double success_ratio, 
                                     int essential, double *F);
 
 /* Use linear least-squares to estimate the fundamantal matrix.  The
  * F-matrix is returned in Fout, and the two epipoles in e1 and e2 */
-int estimate_fmatrix_linear(int num_pts, easy3d::dvec3 *r_pts, easy3d::dvec3 *l_pts,
+int estimate_fmatrix_linear(int num_pts, vec3d *r_pts, vec3d *l_pts, 
                             int essential, 
                             double *Fout, double *e1, double *e2);
 
@@ -42,7 +42,7 @@ void estimate_essential_different_focal_lengths(double *F,
 int closest_rank2_matrix(double *Fin, double *Fout, double *U, double *VT);
 
 /* Refine an F-matrix estimate using LM */
-void refine_fmatrix_nonlinear_matches(int num_pts, easy3d::dvec3 *r_pts, easy3d::dvec3 *l_pts,
+void refine_fmatrix_nonlinear_matches(int num_pts, vec3d *r_pts, vec3d *l_pts, 
 				      double *F0, double *Fout);
 
 /* Compute an F-matrix from two sets of camera parameters */

@@ -11,7 +11,7 @@ INCLUDE("pmvs.cmake")
 ADD_LIBRARY(cmvs-pmvs STATIC
             ${3rd_cmvs-pmvs_SRC})
 
-TARGET_LINK_LIBRARIES(cmvs-pmvs
+TARGET_LINK_LIBRARIES(3rd_cmvs-pmvs
             ${3rd_cmvs-pmvs_DEPS}
             ${3rd_cmvs-pmvs_ADDITIONAL_DEPS}
             ${SOLUTION_STATIC_LIB_DEPS}
@@ -34,5 +34,3 @@ target_include_directories(cmvs-pmvs PRIVATE
         ${TINYCTHREAD_INCLUDE_DIR}
         ${NLOPT_INCLUDE_DIR}
         )
-
-target_include_directories(cmvs-pmvs PRIVATE ${MVSTUDIO_INCLUDE_DIR})

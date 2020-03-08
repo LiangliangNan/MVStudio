@@ -1,11 +1,11 @@
 #ifndef _SFM_OPTION_H_
 #define _SFM_OPTION_H_
 
-
+#include "sfm_export.h"
 #include <string>
 
 
-struct SfmOption
+struct SFM_API SfmOption
 {
 	SfmOption();
 

@@ -13,16 +13,16 @@
 //	documentation for educational, research and non-profit purposes, without
 //	fee, and without a written agreement is hereby granted, provided that the
 //	above copyright notice and the following paragraph appear in all copies.
-//
+//	
 //	The University of North Carolina at Chapel Hill make no representations
 //	about the suitability of this software for any purpose. It is provided
-//	'as is' without express or implied warranty.
+//	'as is' without express or implied warranty. 
 //
 //	Please send BUG REPORTS to ccwu@cs.unc.edu
 //
 ////////////////////////////////////////////////////////////////////////////
 
-
+  
 #include "GL/glew.h"
 #include <string.h>
 #include <stdio.h>
@@ -44,13 +44,13 @@ ProgramGLSL::ShaderObject::ShaderObject(int shadertype, const char * source, int
 {
 
 
-	_type = shadertype;
+	_type = shadertype; 
 	_compiled = 0;
 
 
 	_shaderID = glCreateShader(shadertype);
 	if(_shaderID == 0) return;
-
+	
 	if(source)
 	{
 
@@ -91,7 +91,7 @@ int ProgramGLSL::ShaderObject::ReadShaderFile(const char *sourcefile,  char*& co
 	file = fopen(sourcefile,"rt");
 	if(file == NULL) return 0;
 
-
+	
 	fseek(file, 0, SEEK_END);
 	len = ftell(file);
 	rewind(file);
@@ -108,7 +108,7 @@ int ProgramGLSL::ShaderObject::ReadShaderFile(const char *sourcefile,  char*& co
 	fclose(file);
 
 	return len;
-
+	
 }
 
 void ProgramGLSL::ShaderObject::CheckCompileLog()
@@ -142,16 +142,16 @@ int  ProgramGLSL::ShaderObject::IsValidVertexShader()
 
 void ProgramGLSL::ShaderObject::PrintCompileLog(ostream&os)
 {
-	GLint len = 0;
+	GLint len = 0;	
 
 	glGetShaderiv(_shaderID, GL_INFO_LOG_LENGTH , &len);
 	if(len <=1) return;
-
+	
 	char * compileLog = new char[len+1];
 	if(compileLog == NULL) return;
 
 	glGetShaderInfoLog(_shaderID, len, &len, compileLog);
-
+	
 
 	os<<"Compile Log\n"<<compileLog<<"\n";
 
@@ -171,12 +171,12 @@ ProgramGLSL::~ProgramGLSL()
 }
 void ProgramGLSL::AttachShaderObject(ShaderObject &shader)
 {
-	if(_programID  && shader.IsValidShaderObject())
+	if(_programID  && shader.IsValidShaderObject()) 
 		glAttachShader(_programID, shader.GetShaderID());
 }
 void ProgramGLSL::DetachShaderObject(ShaderObject &shader)
 {
-	if(_programID  && shader.IsValidShaderObject())
+	if(_programID  && shader.IsValidShaderObject()) 
 		glDetachShader(_programID, shader.GetShaderID());
 }
 int ProgramGLSL::LinkProgram()
@@ -222,16 +222,16 @@ int ProgramGLSL::ValidateProgram()
 
 void ProgramGLSL::PrintLinkLog(std::ostream &os)
 {
-	GLint len = 0;
+	GLint len = 0;	
 
 	glGetProgramiv(_programID, GL_INFO_LOG_LENGTH , &len);
 	if(len <=1) return;
-
+	
 	char* linkLog = new char[len+1];
 	if(linkLog == NULL) return;
 
 	glGetProgramInfoLog(_programID, len, &len, linkLog);
-
+	
 	linkLog[len] = 0;
 
 	if(strstr(linkLog, "failed"))
@@ -282,7 +282,7 @@ ProgramGLSL::ProgramGLSL(const char *frag_source)
 	{
 		_linked = 0;
 	}
-
+	
 }
 
 /*
@@ -320,7 +320,7 @@ int ProgramGLSL::IsNative()
 	return _linked;
 }
 
-FilterGLSL::FilterGLSL(float sigma)
+FilterGLSL::FilterGLSL(float sigma) 
 {
 	//pixel inside 3*sigma box
 	int sz = int( ceil( GlobalUtil::_FilterWidthFactor * sigma -0.5) ) ;//
@@ -337,10 +337,10 @@ FilterGLSL::FilterGLSL(float sigma)
 	int i;
 	float * kernel = new float[width];
 	float   rv = 1.0f/(sigma*sigma);
-	float   v, ksum =0;
+	float   v, ksum =0; 
 
 	// pre-compute filter
-	for( i = -sz ; i <= sz ; ++i)
+	for( i = -sz ; i <= sz ; ++i) 
 	{
 		kernel[i+sz] =  v = exp(-0.5f * i * i *rv) ;
 		ksum += v;
@@ -350,12 +350,12 @@ FilterGLSL::FilterGLSL(float sigma)
 	rv = 1.0f / ksum;
 	for(i = 0; i< width ;i++) kernel[i]*=rv;
 	//
-
+	
     MakeFilterProgram(kernel, width);
 
 	_size = sz;
 
-	delete[] kernel;
+	delete[] kernel; 
     if(GlobalUtil::_verbose && GlobalUtil::_timingL) std::cout<<"Filter: sigma = "<<sigma<<", size = "<<width<<"x"<<width<<endl;
 }
 
@@ -381,7 +381,7 @@ ProgramGPU* FilterGLSL::CreateFilterH(float kernel[], int width)
 	out<<  "uniform sampler2DRect tex;";
 	out<< "\nvoid main(void){ float intensity = 0.0 ;  vec2 pos;\n";
 
-    int half_width = width / 2;
+    int half_width = width / 2; 
 	for(int i = 0; i< width; i++)
 	{
 		if(i == half_width)
@@ -397,7 +397,7 @@ ProgramGPU* FilterGLSL::CreateFilterH(float kernel[], int width)
 	}
 
 	//copy original data to red channel
-	out<<"gl_FragColor.r = or;\n";
+	out<<"gl_FragColor.r = or;\n"; 
 	out<<"gl_FragColor.b  = intensity;}\n"<<'\0';
 
 	return new ProgramGLSL(out.str().c_str());
@@ -411,7 +411,7 @@ ProgramGPU* FilterGLSL::CreateFilterV(float kernel[], int height)
 
 	out<<  "uniform sampler2DRect tex;";
 	out<< "\nvoid main(void){ float intensity = 0.0;vec2 pos; \n";
-    int half_height = height / 2;
+    int half_height = height / 2; 
 	for(int i = 0; i< height; i++)
 	{
 
@@ -425,13 +425,13 @@ ProgramGPU* FilterGLSL::CreateFilterV(float kernel[], int height)
 			out<<"pos = gl_TexCoord[0].st + vec2(0, float("<<(i - half_height) <<") );\n";
 			out<<"intensity+= texture2DRect(tex, pos).b * "<<kernel[i]<<";\n";
 		}
-
+		
 	}
 
 	out<<"gl_FragColor.b = orb.y;\n";
 	out<<"gl_FragColor.g = intensity - orb.x;\n"; // difference of gaussian..
 	out<<"gl_FragColor.r = intensity;}\n"<<'\0';
-
+	
 //	std::cout<<buffer<<endl;
 	return new ProgramGLSL(out.str().c_str());
 }
@@ -460,7 +460,7 @@ ProgramGPU* FilterGLSL::CreateFilterHPK(float kernel[], int width)
 		out<<"coord = gl_TexCoord[0].xy + vec2(float("<<i-nhpixel<<"),0);\n";
 		out<<"pc=texture2DRect(tex, coord);\n";
 		if(GlobalUtil::_PreciseBorder)		out<<"if(coord.x < 0.0) pc = pc.rrbb;\n";
-		//for each sub-pixel j  in center, the weight of sub-pixel k
+		//for each sub-pixel j  in center, the weight of sub-pixel k 
 		xw = (i - nhpixel)*2;
 		for( j = 0; j < 3; j++)
 		{
@@ -475,11 +475,11 @@ ProgramGPU* FilterGLSL::CreateFilterHPK(float kernel[], int width)
 		{
 			out<<"result += vec4("<<weight[1]<<", "<<weight[0]<<", "<<weight[1]<<", "<<weight[0]<<")*pc.rrbb;\n";
 			out<<"result += vec4("<<weight[2]<<", "<<weight[1]<<", "<<weight[2]<<", "<<weight[1]<<")*pc.ggaa;\n";
-		}
-
+		}	
+	
 	}
 	out<<"gl_FragColor = result;}\n"<<'\0';
-
+	
 	return new ProgramGLSL(out.str().c_str());
 
 
@@ -510,7 +510,7 @@ ProgramGPU* FilterGLSL::CreateFilterVPK(float kernel[], int height)
 		out<<"pc=texture2DRect(tex, coord);\n";
 		if(GlobalUtil::_PreciseBorder)	out<<"if(coord.y < 0.0) pc = pc.rgrg;\n";
 
-		//for each sub-pixel j  in center, the weight of sub-pixel k
+		//for each sub-pixel j  in center, the weight of sub-pixel k 
 		yw = (i - nhpixel)*2;
 		for( j = 0; j < 3; j++)
 		{
@@ -558,7 +558,7 @@ ShaderBag::ShaderBag()
     f_gaussian_skip0 = NULL;
     f_gaussian_skip1 = NULL;
     f_gaussian_step = NULL;
-    _gaussian_step_num = 0;
+    _gaussian_step_num = 0; 
 
 }
 
@@ -591,7 +591,7 @@ ShaderBag::~ShaderBag()
     {
 	    if(f_gaussian_skip0_v[i]) delete f_gaussian_skip0_v[i];
     }
-    if(f_gaussian_step && _gaussian_step_num > 0)
+    if(f_gaussian_step && _gaussian_step_num > 0) 
     {
 	    for(int i = 0; i< _gaussian_step_num; i++)
 	    {
@@ -605,9 +605,9 @@ ShaderBag::~ShaderBag()
 void ShaderBag::SelectInitialSmoothingFilter(int octave_min, SiftParam&param)
 {
     float sigma = param.GetInitialSmoothSigma(octave_min);
-    if(sigma == 0)
+    if(sigma == 0) 
     {
-       f_gaussian_skip0 = NULL;
+       f_gaussian_skip0 = NULL; 
     }else
     {
 	    for(unsigned int i = 0; i < f_gaussian_skip0_v.size(); i++)
@@ -618,23 +618,23 @@ void ShaderBag::SelectInitialSmoothingFilter(int octave_min, SiftParam&param)
 			    return ;
 		    }
 	    }
-	    FilterGLSL * filter = new FilterGLSL(sigma);
+	    FilterGLSL * filter = new FilterGLSL(sigma); 
 	    filter->_id = octave_min;
 	    f_gaussian_skip0_v.push_back(filter);
-	    f_gaussian_skip0 = filter;
+	    f_gaussian_skip0 = filter; 
     }
 }
 
 void ShaderBag::CreateGaussianFilters(SiftParam&param)
 {
-	if(param._sigma_skip0>0.0f)
+	if(param._sigma_skip0>0.0f) 
 	{
         FilterGLSL * filter;
 		f_gaussian_skip0 = filter = new FilterGLSL(param._sigma_skip0);
-		filter->_id = GlobalUtil::_octave_min_default;
+		filter->_id = GlobalUtil::_octave_min_default; 
 		f_gaussian_skip0_v.push_back(filter);
 	}
-	if(param._sigma_skip1>0.0f)
+	if(param._sigma_skip1>0.0f) 
 	{
 		f_gaussian_skip1 = new FilterGLSL(param._sigma_skip1);
 	}
@@ -660,7 +660,7 @@ void ShaderBagGLSL::LoadFixedShaders()
 {
 
 
-	s_gray = new ProgramGLSL(
+	s_gray = new ProgramGLSL( 
 		"uniform sampler2DRect tex; void main(void){\n"
 		"float intensity = dot(vec3(0.299, 0.587, 0.114), texture2DRect(tex, gl_TexCoord[0].st ).rgb);\n"
 		"gl_FragColor = vec4(intensity, intensity, intensity, 1.0);}");
@@ -709,7 +709,7 @@ void ShaderBagGLSL::LoadFixedShaders()
 	"	vec4 oo = texture2DRect(oTex, cc.rg);\n"
 	"	gl_FragColor.rg = cc.rg;\n"
 	"	gl_FragColor.b = oo.a;\n"
-	"	gl_FragColor.a = size;}");
+	"	gl_FragColor.a = size;}");  
 
 		_param_orientation_gtex = glGetUniformLocation(*program, "oTex");
 		_param_orientation_size = glGetUniformLocation(*program, "size");
@@ -719,9 +719,9 @@ void ShaderBagGLSL::LoadFixedShaders()
 	}
 
 	if(GlobalUtil::_DescriptorPPT) LoadDescriptorShader();
-	if(s_descriptor_fp == NULL)
+	if(s_descriptor_fp == NULL) 
 	{
-		GlobalUtil::_DescriptorPPT = GlobalUtil::_FullSupported = 0;
+		GlobalUtil::_DescriptorPPT = GlobalUtil::_FullSupported = 0; 
 		std::cerr<<"Descriptor ignored on this hardware"<<endl;
 	}
 
@@ -734,7 +734,7 @@ void ShaderBagGLSL::LoadDisplayShaders()
 	s_copy_key = new ProgramGLSL(
 		"uniform sampler2DRect tex; void main(){\n"
 	"gl_FragColor.rg= texture2DRect(tex, gl_TexCoord[0].st).rg; gl_FragColor.ba = vec2(0.0,1.0);	}");
-
+	
 
 	ProgramGLSL * program;
 	s_vertex_list = program = new ProgramGLSL(
@@ -778,15 +778,15 @@ void ShaderBagGLSL::LoadDisplayShaders()
 
 void ShaderBagGLSL::LoadKeypointShader(float threshold, float edge_threshold)
 {
-	float threshold0 = threshold* (GlobalUtil::_SubpixelLocalization?0.8f:1.0f);
+	float threshold0 = threshold* (GlobalUtil::_SubpixelLocalization?0.8f:1.0f);	
 	float threshold1 = threshold;
 	float threshold2 = (edge_threshold+1)*(edge_threshold+1)/edge_threshold;
 	ostringstream out;;
 	streampos pos;
 
 	//tex(X)(Y)
-	//X: (CLR) (CENTER 0, LEFT -1, RIGHT +1)
-	//Y: (CDU) (CENTER 0, DOWN -1, UP    +1)
+	//X: (CLR) (CENTER 0, LEFT -1, RIGHT +1)  
+	//Y: (CDU) (CENTER 0, DOWN -1, UP    +1) 
 	if(GlobalUtil::_DarknessAdaption)
 	{
 		out <<	"#define THRESHOLD0 (" << threshold0 << " * min(2.0 * cc.r + 0.1, 1.0))\n"
@@ -833,7 +833,7 @@ void ShaderBagGLSL::LoadKeypointShader(float threshold, float edge_threshold)
 	"	if(dog == 0.0) return;\n";
 
 	pos = out.tellp();
-	//do edge supression first..
+	//do edge supression first.. 
 	//vector v1 is < (-1, 0), (1, 0), (0,-1), (0, 1)>
 	//vector v2 is < (-1,-1), (-1,1), (1,-1), (1, 1)>
 
@@ -908,18 +908,18 @@ void ShaderBagGLSL::LoadKeypointShader(float threshold, float edge_threshold)
 	"	fss = v3.x + v3.y - cc.g - cc.g;\n"
 	"	fxs = 0.25 * ( v4.y + v5.x - v4.x - v5.y);\n"
 	"	fys = 0.25 * ( v4.w + v5.z - v4.z - v5.w);\n"
-
-	//
-	// let dog difference be quatratic function  of dx, dy, ds;
-	// df(dx, dy, ds) = fx * dx + fy*dy + fs * ds +
+	
+	// 
+	// let dog difference be quatratic function  of dx, dy, ds; 
+	// df(dx, dy, ds) = fx * dx + fy*dy + fs * ds + 
 	//				  + 0.5 * ( fxx * dx * dx + fyy * dy * dy + fss * ds * ds)
 	//				  + (fxy * dx * dy + fxs * dx * ds + fys * dy * ds)
 	// (fx, fy, fs, fxx, fyy, fss, fxy, fxs, fys are the derivatives)
-
+	
 	//the local extremum satisfies
 	// df/dx = 0, df/dy = 0, df/dz = 0
-
-	//that is
+	
+	//that is 
 	// |-fx|     | fxx fxy fxs |   |dx|
 	// |-fy|  =  | fxy fyy fys | * |dy|
 	// |-fs|     | fxs fys fss |   |ds|
@@ -957,7 +957,7 @@ void ShaderBagGLSL::LoadKeypointShader(float threshold, float edge_threshold)
 	"			A1.yzw /= A1.y;								\n"
 	"			A2.yzw -= A2.y * A1.yzw;					\n"
 	"			if(abs(A2.z) >= 1e-10) {		\n"
-	// compute dx, dy, ds:
+	// compute dx, dy, ds: 
 	<<
 	"				\n"
 	"				dxys.z = A2.w /A2.z;				    \n"
@@ -984,7 +984,7 @@ void ShaderBagGLSL::LoadKeypointShader(float threshold, float edge_threshold)
 
 
 
-	ProgramGLSL * program = new ProgramGLSL(out.str().c_str());
+	ProgramGLSL * program = new ProgramGLSL(out.str().c_str()); 
 	if(program->IsNative())
 	{
 		s_keypoint = program ;
@@ -993,7 +993,7 @@ void ShaderBagGLSL::LoadKeypointShader(float threshold, float edge_threshold)
 	{
 		delete program;
 		out.seekp(pos);
-		out <<
+		out << 
 	"	gl_FragData[1] =  vec4(dog, 0.0, 0.0, 0.0) ;	\n"
 	"}\n" <<'\0';
 		s_keypoint = program = new ProgramGLSL(out.str().c_str());
@@ -1014,7 +1014,7 @@ void ShaderBagGLSL::SetDogTexParam(int texU, int texD)
 
 void ShaderBagGLSL::SetGenListStepParam(int tex, int tex0)
 {
-	glUniform1i(_param_genlist_step_tex0, 1);
+	glUniform1i(_param_genlist_step_tex0, 1);	
 }
 void ShaderBagGLSL::SetGenVBOParam( float width, float fwidth,  float size)
 {
@@ -1028,7 +1028,7 @@ void ShaderBagGLSL::SetGenVBOParam( float width, float fwidth,  float size)
 void ShaderBagGLSL::UnloadProgram()
 {
 	glUseProgram(0);
-}
+} 
 
 
 
@@ -1043,7 +1043,7 @@ void ShaderBagGLSL::LoadGenListShader(int ndoglev, int nlev)
 	"gl_FragColor = vec4(greaterThan(helper, vec4(0.0,0.0,0.0,0.0)));\n"
 	"}");
 
-
+	
 	s_genlist_init_ex = program = new ProgramGLSL(
 	"uniform sampler2DRect tex;uniform vec2 bbox;\n"
 	"void main (void ){\n"
@@ -1072,7 +1072,7 @@ void ShaderBagGLSL::LoadGenListShader(int ndoglev, int nlev)
 	"}");
 
 
-	//read of the first part, which generates tex coordinates
+	//read of the first part, which generates tex coordinates 
 	s_genlist_start= program =  LoadGenListStepShader(1, 1);
 	_param_ftex_width= glGetUniformLocation(*program, "width");
 	_param_genlist_start_tex0 = glGetUniformLocation(*program, "tex0");
@@ -1318,7 +1318,7 @@ void ShaderBagGLSL::WriteOrientationCodeToStream(std::ostream& out)
 	}else
 	{
 		//manually unroll the loop for ATI.
-		out <<
+		out << 
 	"	   FILTER_CODE(0);\n"
 	"	   FILTER_CODE(1);\n"
 	"	   FILTER_CODE(2);\n"
@@ -1337,8 +1337,8 @@ void ShaderBagGLSL::WriteOrientationCodeToStream(std::ostream& out)
 	"			bins[3]), bins[4]), bins[5]), bins[6]), bins[7]), bins[8]);\n"
 	"	maxh2 = max(maxh4.xy, maxh4.zw); maxh = vec4(max(maxh2.x, maxh2.y));";
 
-	std::string testpeak_code;
-	std::string savepeak_code;
+	char *testpeak_code;
+	char *savepeak_code;
 
 	//save two/three/four orientations with the largest votings?
 
@@ -1346,8 +1346,8 @@ void ShaderBagGLSL::WriteOrientationCodeToStream(std::ostream& out)
 	{
 		out<<"\n"
 		"	vec4 Orientations = vec4(0.0, 0.0, 0.0, 0.0);				\n"
-		"	vec4 weights = vec4(0.0,0.0,0.0,0.0);		";
-
+		"	vec4 weights = vec4(0.0,0.0,0.0,0.0);		";	
+		
 		testpeak_code = "\\\n"
 		"	{test = greaterThan(bins[i], hh);";
 
@@ -1494,7 +1494,7 @@ void ShaderBagGLSL::SetSimpleOrientationInput(int oTex, float sigma, float sigma
 void ShaderBagGLSL::SetFeatureOrientationParam(int gtex, int width, int height, float sigma, int stex, float step)
 {
 	///
-	glUniform1i(_param_orientation_gtex, 1);
+	glUniform1i(_param_orientation_gtex, 1);	
 
 	if((GlobalUtil::_SubpixelLocalization || GlobalUtil::_KeepExtremumSign)&& stex)
 	{
@@ -1563,7 +1563,7 @@ void ShaderBagGLSL::LoadDescriptorShaderF2()
 	"	offsetpt.y = floor(idx*0.25) - 1.5;			\n"
 	"	temp = cscs.xwyx*offsetpt.xyxy;				\n"
 	"	pt = pos + temp.xz + temp.yw;				\n";
-
+	
 	//get a horizontal bounding box of the rotated rectangle
 	out<<
 	"	vec2 bwin = abs(cscs.xy);					\n"
@@ -1610,7 +1610,7 @@ void ShaderBagGLSL::LoadDescriptorShaderF2()
 	"	 gl_FragData[0] = DA; gl_FragData[1] = DB;\n"
 	"}\n"<<'\0';
 
-	ProgramGLSL * program =  new ProgramGLSL(out.str().c_str());
+	ProgramGLSL * program =  new ProgramGLSL(out.str().c_str()); 
 
 	if(program->IsNative())
 	{
@@ -1636,7 +1636,7 @@ void ShaderBagGLSL::LoadDescriptorShader()
 void ShaderBagGLSL::SetFeatureDescirptorParam(int gtex, int otex, float dwidth, float fwidth,  float width, float height, float sigma)
 {
 	///
-	glUniform1i(_param_descriptor_gtex, 1);
+	glUniform1i(_param_descriptor_gtex, 1);	
 
 	float dsize[4] ={dwidth, 1.0f/dwidth, fwidth, 1.0f/fwidth};
 	glUniform4fv(_param_descriptor_dsize, 1, dsize);
@@ -1655,7 +1655,7 @@ void ShaderBagPKSL::LoadFixedShaders()
 	ProgramGLSL * program;
 
 
-	s_gray = new ProgramGLSL(
+	s_gray = new ProgramGLSL( 
 	"uniform sampler2DRect tex; void main(){\n"
 	"float intensity = dot(vec3(0.299, 0.587, 0.114), texture2DRect(tex,gl_TexCoord[0].xy ).rgb);\n"
 	"gl_FragColor= vec4(intensity, intensity, intensity, 1.0);}"	);
@@ -1700,7 +1700,7 @@ void ShaderBagPKSL::LoadFixedShaders()
 	"	vec4 invalid = vec4(equal(grad, vec4(0.0)));	\n"
 	"	vec4 ov = atan(dy, dx + invalid);		\n"
 	"	gl_FragData[2] = ov; \n"
-	"}\n\0"); //when
+	"}\n\0"); //when 
 
 	_param_grad_pass_texp = glGetUniformLocation(*program, "texp");
 
@@ -1718,7 +1718,7 @@ void ShaderBagPKSL::LoadFixedShaders()
 		"	vec4 oo = texture2DRect(oTex, co);\n"
 		"	bvec2 bo = lessThan(fract(co), vec2(0.5)); \n"
 		"	float o = bo.y? (bo.x? oo.r : oo.g) : (bo.x? oo.b : oo.a); \n"
-		"	gl_FragColor = vec4(cc.rg, o, size.x * pow(size.y, cc.a));}");
+		"	gl_FragColor = vec4(cc.rg, o, size.x * pow(size.y, cc.a));}");  
 
 		_param_orientation_gtex= glGetUniformLocation(*program, "oTex");
 		_param_orientation_size= glGetUniformLocation(*program, "size");
@@ -1730,9 +1730,9 @@ void ShaderBagPKSL::LoadFixedShaders()
 	if(GlobalUtil::_DescriptorPPT)
 	{
 		LoadDescriptorShader();
-		if(s_descriptor_fp == NULL)
+		if(s_descriptor_fp == NULL) 
 		{
-			GlobalUtil::_DescriptorPPT = GlobalUtil::_FullSupported = 0;
+			GlobalUtil::_DescriptorPPT = GlobalUtil::_FullSupported = 0; 
 			std::cerr<<"Descriptor ignored on this hardware"<<endl;
 		}
 	}
@@ -1815,7 +1815,7 @@ void ShaderBagPKSL::LoadOrientationShader(void)
 	"#define SAMPLE_WF float("<<GlobalUtil::_OrientationWindowFactor<< " )\n"
 	"#define ORIENTATION_THRESHOLD "<< GlobalUtil::_MulitiOrientationThreshold << "\n"
 	"uniform sampler2DRect tex;	uniform sampler2DRect gtex;\n"
-	"uniform sampler2DRect otex; uniform vec4 size;\n"
+	"uniform sampler2DRect otex; uniform vec4 size;\n" 
 	"void main()		\n"
 	"{													\n"
 	"	vec4 bins[10];								\n"
@@ -1983,8 +1983,8 @@ void ShaderBagPKSL::LoadGenListShader(int ndoglev,int nlev)
 	_param_genlist_init_bbox = glGetUniformLocation( *program, "bbox");
 
 	s_genlist_end = program = new ProgramGLSL(
-		GlobalUtil::_KeepExtremumSign == 0 ?
-
+		GlobalUtil::_KeepExtremumSign == 0 ? 
+	
 	"uniform sampler2DRect tex; uniform sampler2DRect ktex; void main()\n"
 	"{\n"
 	"	vec4 tc = texture2DRect( tex, gl_TexCoord[0].xy);\n"
@@ -1995,8 +1995,8 @@ void ShaderBagPKSL::LoadGenListShader(int ndoglev,int nlev)
 	"	opos.x = dot(keys, vec4(-0.5, 0.5, -0.5, 0.5));\n"
 	"	opos.y = dot(keys, vec4(-0.5, -0.5, 0.5, 0.5));\n"
 	"	gl_FragColor = vec4(opos + pos * 2.0 + tk.yz, 1.0, tk.w);\n"
-	"}" :
-
+	"}" : 
+	
 	"uniform sampler2DRect tex; uniform sampler2DRect ktex; void main()\n"
 	"{\n"
 	"	vec4 tc = texture2DRect( tex, gl_TexCoord[0].xy);\n"
@@ -2007,7 +2007,7 @@ void ShaderBagPKSL::LoadGenListShader(int ndoglev,int nlev)
 	"	opos.x = dot(keys, vec4(-0.5, 0.5, -0.5, 0.5));\n"
 	"	opos.y = dot(keys, vec4(-0.5, -0.5, 0.5, 0.5));\n"
 	"	gl_FragColor = vec4(opos + pos * 2.0 + tk.yz, sign(tk.r), tk.w);\n"
-	"}"
+	"}"	
 	);
 
 	_param_genlist_end_ktex = glGetUniformLocation(*program, "ktex");
@@ -2026,7 +2026,7 @@ void ShaderBagPKSL::LoadGenListShader(int ndoglev,int nlev)
 	"}");
 
 
-	//read of the first part, which generates tex coordinates
+	//read of the first part, which generates tex coordinates 
 
 	s_genlist_start= program =  ShaderBagGLSL::LoadGenListStepShader(1, 1);
 	_param_ftex_width= glGetUniformLocation(*program, "width");
@@ -2071,8 +2071,8 @@ void ShaderBagPKSL::LoadKeypointShader(float dog_threshold, float edge_threshold
 				"FUNCTION(3);\n";
 	}
 	//tex(X)(Y)
-	//X: (CLR) (CENTER 0, LEFT -1, RIGHT +1)
-	//Y: (CDU) (CENTER 0, DOWN -1, UP    +1)
+	//X: (CLR) (CENTER 0, LEFT -1, RIGHT +1)  
+	//Y: (CDU) (CENTER 0, DOWN -1, UP    +1) 
 
 	if(GlobalUtil::_DarknessAdaption)
 	{
@@ -2135,7 +2135,7 @@ void ShaderBagPKSL::LoadKeypointShader(float dog_threshold, float edge_threshold
 	"	gl_FragColor = vec4(0.0);\n"
 	"	if(any(notEqual(key, vec4(0.0)))) {\n";
 
-	//do edge supression first..
+	//do edge supression first.. 
 	//vector v1 is < (-1, 0), (1, 0), (0,-1), (0, 1)>
 	//vector v2 is < (-1,-1), (-1,1), (1,-1), (1, 1)>
 
@@ -2158,7 +2158,7 @@ void ShaderBagPKSL::LoadKeypointShader(float dog_threshold, float edge_threshold
 	"	}\n"
 	"	REPEAT4(EDGE_SUPPRESION);\n"
 	"	if(any(notEqual(key, vec4(0.0)))) {\n";
-
+	
 	////////////////////////////////////////////////
 	//read 9 pixels of upper/lower level
 	out<<
@@ -2246,7 +2246,7 @@ void ShaderBagPKSL::LoadKeypointShader(float dog_threshold, float edge_threshold
 	"	TESTMOVE_KEYPOINT(2);\n"
 	"	TESTMOVE_KEYPOINT(3);\n"
 	<<
-
+		
 	"	float fs = 0.5*( cu[0] - cd[0] );				\n"
 	"	float fss = cu[0] + cd[0] - cc[0] - cc[0];\n"
 	"	float fxs = 0.25 * (v4[0].y + v5[0].x - v4[0].x - v5[0].y);\n"
@@ -2301,7 +2301,7 @@ void ShaderBagPKSL::LoadKeypointShader(float dog_threshold, float edge_threshold
 	"	}}}}\n"
 	"}\n"	<<'\0';
 
-	ProgramGLSL * program = new ProgramGLSL(out.str().c_str());
+	ProgramGLSL * program = new ProgramGLSL(out.str().c_str()); 
 	s_keypoint = program ;
 
 	//parameter
@@ -2317,7 +2317,7 @@ void ShaderBagPKSL::SetDogTexParam(int texU, int texD)
 }
 void ShaderBagPKSL::SetGenListStepParam(int tex, int tex0)
 {
-	glUniform1i(_param_genlist_step_tex0, 1);
+	glUniform1i(_param_genlist_step_tex0, 1);	
 }
 
 void ShaderBagPKSL::SetGenVBOParam(float width, float fwidth,float size)
@@ -2392,7 +2392,7 @@ ProgramGLSL* ShaderBagPKSL::LoadDescriptorProgramRECT()
 	"	vec4 temp; vec2 pt;				\n"
     "	pt.x = pos.x + fract(idx*0.25) * wsz.x;				\n"
 	"	pt.y = pos.y + (floor(idx*0.25) + 0.5) * spt.y;			\n";
-
+	
 	//get a horizontal bounding box of the rotated rectangle
 	out<<
     "	vec4 sz;					\n"
@@ -2444,8 +2444,8 @@ ProgramGLSL* ShaderBagPKSL::LoadDescriptorProgramRECT()
 	"	 gl_FragData[0] = DA; gl_FragData[1] = DB;\n"
 	"}\n"<<'\0';
 
-	ProgramGLSL * program =  new ProgramGLSL(out.str().c_str());
-	if(program->IsNative())
+	ProgramGLSL * program =  new ProgramGLSL(out.str().c_str()); 
+	if(program->IsNative()) 
 	{
 		return program;
 	}
@@ -2500,7 +2500,7 @@ ProgramGLSL* ShaderBagPKSL::LoadDescriptorProgramPKSL()
 	"	vec2 coord = floor( vec2( mod(index, dsize.z), index*dsize.w)) + 0.5 ;\n"
 	"	vec2 pos = texture2DRect(tex, coord).xy;		\n"
 	"	if(any(lessThan(pos.xy, vec2(1.0))) || any(greaterThan(pos.xy, dim-1.0))) "
-	"	//discard;	\n"
+	"	//discard;	\n" 
 	"	{ gl_FragData[0] = gl_FragData[1] = vec4(0.0); return; }\n"
 	"	float anglef = texture2DRect(tex, coord).z;\n"
 	"	if(anglef > M_PI) anglef -= TWO_PI;\n"
@@ -2525,7 +2525,7 @@ ProgramGLSL* ShaderBagPKSL::LoadDescriptorProgramPKSL()
 	"	offsetpt.y = floor(idx*0.25) - 1.5;			\n"
 	"	temp = cscs.xwyx*offsetpt.xyxy;				\n"
 	"	pt = pos + temp.xz + temp.yw;				\n";
-
+	
 	//get a horizontal bounding box of the rotated rectangle
 	out<<
 	"	vec2 bwin = abs(cscs.xy);					\n"
@@ -2580,8 +2580,8 @@ ProgramGLSL* ShaderBagPKSL::LoadDescriptorProgramPKSL()
 	"	 gl_FragData[0] = DA; gl_FragData[1] = DB;\n"
 	"}\n"<<'\0';
 
-	ProgramGLSL * program =  new ProgramGLSL(out.str().c_str());
-	if(program->IsNative())
+	ProgramGLSL * program =  new ProgramGLSL(out.str().c_str()); 
+	if(program->IsNative()) 
 	{
 		return program;
 	}
@@ -2618,8 +2618,8 @@ void ShaderBagPKSL::SetSimpleOrientationInput(int oTex, float sigma, float sigma
 void ShaderBagPKSL::SetFeatureOrientationParam(int gtex, int width, int height, float sigma, int otex, float step)
 {
 	///
-	glUniform1i(_param_orientation_gtex, 1);
-	glUniform1i(_param_orientation_otex, 2);
+	glUniform1i(_param_orientation_gtex, 1);	
+	glUniform1i(_param_orientation_otex, 2);	
 
 	float size[4];
 	size[0] = (float)width;
@@ -2634,14 +2634,14 @@ void ShaderBagPKSL::SetFeatureDescirptorParam(int gtex, int otex, float dwidth, 
     if(sigma == 0 && s_rect_description)
     {
         //rectangle description mode
-        s_rect_description->UseProgram();
+        s_rect_description->UseProgram();       
         GLint param_descriptor_gtex = glGetUniformLocation(*s_rect_description, "gtex");
 		GLint param_descriptor_otex = glGetUniformLocation(*s_rect_description, "otex");
 		GLint param_descriptor_size = glGetUniformLocation(*s_rect_description, "size");
 		GLint param_descriptor_dsize = glGetUniformLocation(*s_rect_description, "dsize");
 	    ///
-	    glUniform1i(param_descriptor_gtex, 1);
-	    glUniform1i(param_descriptor_otex, 2);
+	    glUniform1i(param_descriptor_gtex, 1);	
+	    glUniform1i(param_descriptor_otex, 2);	
 
 	    float dsize[4] ={dwidth, 1.0f/dwidth, fwidth, 1.0f/fwidth};
 	    glUniform4fv(param_descriptor_dsize, 1, dsize);
@@ -2653,8 +2653,8 @@ void ShaderBagPKSL::SetFeatureDescirptorParam(int gtex, int otex, float dwidth, 
     }else
     {
 	    ///
-	    glUniform1i(_param_descriptor_gtex, 1);
-	    glUniform1i(_param_descriptor_otex, 2);
+	    glUniform1i(_param_descriptor_gtex, 1);	
+	    glUniform1i(_param_descriptor_otex, 2);	
 
 
 	    float dsize[4] ={dwidth, 1.0f/dwidth, fwidth, 1.0f/fwidth};

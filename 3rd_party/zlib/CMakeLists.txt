@@ -11,7 +11,7 @@ INCLUDE("3rd_zlib.cmake")
 ADD_LIBRARY(zlib STATIC
             ${3rd_zlib_SRC})
 
-TARGET_LINK_LIBRARIES(zlib
+TARGET_LINK_LIBRARIES(3rd_zlib
             ${3rd_zlib_DEPS}
             ${3rd_zlib_ADDITIONAL_DEPS}
             ${SOLUTION_STATIC_LIB_DEPS}

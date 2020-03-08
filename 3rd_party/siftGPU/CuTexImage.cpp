@@ -10,10 +10,10 @@
 //	documentation for educational, research and non-profit purposes, without
 //	fee, and without a written agreement is hereby granted, provided that the
 //	above copyright notice and the following paragraph appear in all copies.
-//
+//	
 //	The University of North Carolina at Chapel Hill make no representations
 //	about the suitability of this software for any purpose. It is provided
-//	'as is' without express or implied warranty.
+//	'as is' without express or implied warranty. 
 //
 //	Please send BUG REPORTS to ccwu@cs.unc.edu
 //
@@ -36,10 +36,10 @@ using namespace std;
 
 #include "GlobalUtil.h"
 #include "GLTexImage.h"
-#include "CuTexImage.h"
+#include "CuTexImage.h" 
 #include "ProgramCU.h"
 
-#if CUDA_VERSION <= 2010 && defined(SIFTGPU_ENABLE_LINEAR_TEX2D)
+#if CUDA_VERSION <= 2010 && defined(SIFTGPU_ENABLE_LINEAR_TEX2D) 
 #error "Require CUDA 2.2 or higher"
 #endif
 
@@ -100,13 +100,13 @@ CuTexImage::CuTexImage(int width, int height, int nchannel, GLuint pbo)
 
 CuTexImage::~CuTexImage()
 {
-
+	
 
 	if(_fromPBO)
 	{
 		cudaGLUnmapBufferObject(_fromPBO);
 		cudaGLUnregisterBufferObject(_fromPBO);
-	}else if(_cuData)
+	}else if(_cuData) 
 	{
 		cudaFree(_cuData);
 	}
@@ -119,38 +119,25 @@ void CuTexImage::SetImageSize(int width, int height)
 	_imgHeight = height;
 }
 
-bool CuTexImage::InitTexture(int width, int height, int nchannel)
+void CuTexImage::InitTexture(int width, int height, int nchannel)
 {
+	int size; 
 	_imgWidth = width;
 	_imgHeight = height;
 	_numChannel = min(max(nchannel, 1), 4);
 
-	const size_t size = width * height * _numChannel * sizeof(float);
+	size = width * height * _numChannel * sizeof(float);
 
-  if (size < 0) {
-    return false;
-  }
-
-  // SiftGPU uses int for all indexes and
-  // this ensures that all elements can be accessed.
-  if (size >= INT_MAX * sizeof(float)) {
-    return false;
-  }
-
-	if(size <= _numBytes) return true;
-
+	if(size <= _numBytes) return;
+	
 	if(_cuData) cudaFree(_cuData);
-
+	
 	//allocate the array data
-	const cudaError_t status = cudaMalloc(&_cuData, _numBytes = size);
+	cudaMalloc(&_cuData, _numBytes = size);
 
-  if (status != cudaSuccess) {
-    _cuData = NULL;
-    _numBytes = 0;
-    return false;
-  }
-
-  return true;
+#ifdef _DEBUG
+	ProgramCU::CheckErrorCUDA("CuTexImage::InitTexture");
+#endif
 }
 
 void CuTexImage::CopyFromHost(const void * buf)
@@ -173,10 +160,10 @@ void CuTexImage::CopyToHost(void * buf, int stream)
 
 void CuTexImage::InitTexture2D()
 {
-#if !defined(SIFTGPU_ENABLE_LINEAR_TEX2D)
+#if !defined(SIFTGPU_ENABLE_LINEAR_TEX2D) 
 	if(_cuData2D && (_texWidth < _imgWidth || _texHeight < _imgHeight))
 	{
-		cudaFreeArray(_cuData2D);
+		cudaFreeArray(_cuData2D); 
 		_cuData2D = NULL;
 	}
 
@@ -190,27 +177,21 @@ void CuTexImage::InitTexture2D()
 		desc.y = _numChannel >=2 ? sizeof(float) * 8 : 0;
 		desc.z = _numChannel >=3 ? sizeof(float) * 8 : 0;
 		desc.w = _numChannel >=4 ? sizeof(float) * 8 : 0;
-		const cudaError_t status = cudaMallocArray(&_cuData2D, &desc, _texWidth, _texHeight);
-
-    if (status != cudaSuccess) {
-      _cuData = NULL;
-      _numBytes = 0;
-    }
-
-		ProgramCU::CheckErrorCUDA("CuTexImage::InitTexture2D");
+		cudaMallocArray(&_cuData2D, &desc, _texWidth, _texHeight); 
+		ProgramCU::CheckErrorCUDA("cudaMallocArray");
 	}
 #endif
 }
 
 void CuTexImage::CopyToTexture2D()
 {
-#if !defined(SIFTGPU_ENABLE_LINEAR_TEX2D)
+#if !defined(SIFTGPU_ENABLE_LINEAR_TEX2D) 
 	InitTexture2D();
 
 	if(_cuData2D)
 	{
-		cudaMemcpy2DToArray(_cuData2D, 0, 0, _cuData, _imgWidth* _numChannel* sizeof(float) ,
-		_imgWidth * _numChannel*sizeof(float), _imgHeight,	cudaMemcpyDeviceToDevice);
+		cudaMemcpy2DToArray(_cuData2D, 0, 0, _cuData, _imgWidth* _numChannel* sizeof(float) , 
+		_imgWidth * _numChannel*sizeof(float), _imgHeight,	cudaMemcpyDeviceToDevice); 
 		ProgramCU::CheckErrorCUDA("cudaMemcpy2DToArray");
 	}
 #endif
@@ -228,7 +209,7 @@ int CuTexImage::DebugCopyToTexture2D()
 	tex._texWidth =5;  tex._texHeight = 2;
 	tex.CopyToTexture2D();
 	cudaMemcpyFromArray(data2[0], tex._cuData2D, 0, 0, 10 * sizeof(float), cudaMemcpyDeviceToHost);*/
-
+	
 	return 1;
 }
 
@@ -253,7 +234,7 @@ int CuTexImage::CopyToPBO(GLuint pbo)
 	GLint bsize, esize = _imgWidth * _imgHeight * sizeof(float) * _numChannel;
 	glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, pbo);
 	glGetBufferParameteriv(GL_PIXEL_PACK_BUFFER_ARB, GL_BUFFER_SIZE, &bsize);
-	if(bsize < esize)
+	if(bsize < esize) 
 	{
 		glBufferData(GL_PIXEL_PACK_BUFFER_ARB, esize*3/2,	NULL, GL_STATIC_DRAW_ARB);
 		glGetBufferParameteriv(GL_PIXEL_PACK_BUFFER_ARB, GL_BUFFER_SIZE, &bsize);

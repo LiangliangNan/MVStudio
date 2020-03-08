@@ -1,10 +1,10 @@
 #include "paint_canvas.h"
 #include "main_window.h"
 #include "../3rd_party/QGLViewer/manipulatedCameraFrame.h"
-#include <easy3d/util/file_system.h>
-#include "../pointCloud/point_set.h"
-#include "../pointCloud/point_set_io.h"
-#include "../pointCloud/point_set_render.h"
+#include "../basic/file_utils.h"
+#include "../pointset/point_set.h"
+#include "../pointset/point_set_io.h"
+#include "../pointset/point_set_render.h"
 #include "../opengl/opengl_info.h"
 #include "../algo/image_matching.h"
 #include "../algo/sparse_reconstruction.h"
@@ -34,7 +34,7 @@ PaintCanvas::PaintCanvas(QWidget *parent)
 
 	render_ = new PointSetRender;
 
-	light_pos_ = dvec3(0.27f, 0.27f, 0.92f);
+	light_pos_ = vec3d(0.27f, 0.27f, 0.92f);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -55,21 +55,21 @@ PaintCanvas::~PaintCanvas() {
 
 void PaintCanvas::init()
 {
-	LOG(INFO) << "initializing..." << std::endl ;
+	Logger::out(title()) << "initializing..." << std::endl ;
 
  	//////////////////////////////////////////////////////////////////////////
  	GLenum err = glewInit();
  	if (GLEW_OK != err) {
  		// Problem: glewInit failed, something is seriously wrong. 
- 		LOG(ERROR) << glewGetErrorString(err) << std::endl ;
+ 		Logger::err(title()) << glewGetErrorString(err) << std::endl ;
  	}
-	LOG(INFO) << "Using GLEW: " << GLInfo::glew_version() << std::endl ;
-	LOG(INFO) << "GL Vendor: " << GLInfo::gl_vendor() << std::endl ;
-	LOG(INFO) << "GL Renderer: " << GLInfo::gl_renderer() << std::endl ;
-	LOG(INFO) << "GL Version: " << GLInfo::gl_version() << std::endl ;
+	Logger::out(title()) << "Using GLEW: " << GLInfo::glew_version() << std::endl ;
+	Logger::out(title()) << "GL Vendor: " << GLInfo::gl_vendor() << std::endl ;
+	Logger::out(title()) << "GL Renderer: " << GLInfo::gl_renderer() << std::endl ;
+	Logger::out(title()) << "GL Version: " << GLInfo::gl_version() << std::endl ;
 
-	LOG(INFO) << "GLSL Version: " << GLInfo::glsl_version() << std::endl ;
-	//LOG(INFO) << "GL_Extensions: " << GLInfo::gl_extensions() << std::endl;
+	Logger::out(title()) << "GLSL Version: " << GLInfo::glsl_version() << std::endl ;
+	//Logger::out(title()) << "GL_Extensions: " << GLInfo::gl_extensions() << std::endl;
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -122,7 +122,7 @@ void PaintCanvas::init()
 	glEnable(GL_NORMALIZE);
 }
 
-void PaintCanvas::setLightPosition(const dvec3& pos) {
+void PaintCanvas::setLightPosition(const vec3d& pos) { 
 	light_pos_ = pos;
 
 	makeCurrent();
@@ -186,7 +186,7 @@ void PaintCanvas::mouseMoveEvent(QMouseEvent* e)
 {
 	bool found = false;
 	qglviewer::Vec p = camera()->pointUnderPixel(e->pos(), found);
-	main_window_->showCoordinateUnderMouse(dvec3(p.x, p.y, p.z), found);
+	main_window_->showCoordinateUnderMouse(vec3d(p.x, p.y, p.z), found);
 
 	QGLViewer::mouseMoveEvent(e); 
 }
@@ -247,7 +247,7 @@ void PaintCanvas::pasteCamera() {
 	QString str = qApp->clipboard()->text();
 	QStringList list = str.split(" ", QString::SkipEmptyParts);
 	if(list.size() != 7) {
-		LOG(ERROR) << "camera not available in clipboard" << std::endl;
+		Logger::err(title()) << "camera not available in clipboard" << std::endl;
 		return;
 	}
 
@@ -256,7 +256,7 @@ void PaintCanvas::pasteCamera() {
 		bool ok;
 		vec[i] = list[i].toFloat(&ok);
 		if(!ok) {
-			LOG(ERROR) << "camera not available in clipboard" << std::endl;
+			Logger::err(title()) << "camera not available in clipboard" << std::endl;
 			return;
 		}
 	}
@@ -266,7 +266,7 @@ void PaintCanvas::pasteCamera() {
 		bool ok;
 		orient[i] = list[i+3].toDouble(&ok);
 		if(!ok) {
-			LOG(ERROR) << "camera not available in clipboard" << std::endl;
+			Logger::err(title()) << "camera not available in clipboard" << std::endl;
 			return;
 		}
 	}
@@ -405,18 +405,18 @@ void PaintCanvas::drawCornerAxis()
 }
 
 
-dvec2 PaintCanvas::projectionOf(const dvec3& p) {    // point to screen
+vec2d PaintCanvas::projectionOf(const vec3d& p) {    // point to screen
 	qglviewer::Vec v = camera()->projectedCoordinatesOf(qglviewer::Vec(p.x, p.y, p.z));
-	return dvec2(v.x, v.y);
+	return vec2d(v.x, v.y);
 }
 
-dvec3 PaintCanvas::unProjectionOf(double winx, double winy, double winz) {  // screen to point
+vec3d PaintCanvas::unProjectionOf(double winx, double winy, double winz) {  // screen to point	
 	qglviewer::Vec v = camera()->unprojectedCoordinatesOf(qglviewer::Vec(winx, winy, winz));
-	return dvec3(v.x, v.y, v.z);
+	return vec3d(v.x, v.y, v.z);
 }
 
 
-void PaintCanvas::setPointSet(PointCloud* pset, bool fit) {
+void PaintCanvas::setPointSet(PointSet* pset, bool fit) {
 	if (point_set_) {
 		delete point_set_;
 		render_->set_pointset(nil);
@@ -475,11 +475,11 @@ bool PaintCanvas::saveProject(const QString& file) {
 
 void PaintCanvas::imageMatching() {
 	if (!project_) {
-		LOG(WARNING) << "empty project" << std::endl;
+		Logger::warn(title()) << "empty project" << std::endl;
 		return;
 	}
 	if (!project_->is_valid()) {
-		LOG(WARNING) << "invalid project" << std::endl;
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return;
 	}
 	
@@ -494,16 +494,16 @@ void PaintCanvas::imageMatching() {
 
 void PaintCanvas::sparseReconstruction() {
 	if (!project_) {
-		LOG(WARNING) << "empty project" << std::endl;
+		Logger::warn(title()) << "empty project" << std::endl;
 		return;
 	}
 	if (!project_->is_valid()) {
-		LOG(WARNING) << "invalid project" << std::endl;
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return;
 	}
 
 	if (!point_set_) {
-		PointCloud* pset = new PointCloud;
+		PointSet* pset = new PointSet;
 		setPointSet(pset, false);
 	}
 
@@ -515,16 +515,16 @@ void PaintCanvas::sparseReconstruction() {
 
 void PaintCanvas::denseReconstruction() {
 	if (!project_) {
-		LOG(WARNING) << "empty project" << std::endl;
+		Logger::warn(title()) << "empty project" << std::endl;
 		return;
 	}
 	if (!project_->is_valid()) {
-		LOG(WARNING) << "invalid project" << std::endl;
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return;
 	}
 
 	if (!point_set_) {
-		PointCloud* pset = new PointCloud;
+		PointSet* pset = new PointSet;
 		setPointSet(pset, false);
 	}
 

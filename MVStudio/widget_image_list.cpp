@@ -3,7 +3,7 @@
 #include "paint_canvas.h"
 #include "image_item.h"
 
-#include <easy3d/util/file_system.h>
+#include "../basic/file_utils.h"
 
 #include <QMenu>
 #include <QFileDialog>
@@ -63,7 +63,7 @@ void WidgetImageList::updateImageList() {
 		}
 
 		item->set_image(images[i].file);
-		const std::string& name = file_system::simple_name(images[i].file);
+		const std::string& name = FileUtils::simple_name(images[i].file);
 		if (images[i].ignored)
 			item->setData(Qt::DisplayRole, QString::fromStdString(name + "	ignored"));
 		else
@@ -85,7 +85,7 @@ void WidgetImageList::updateImageList() {
 		}
 	}
 
-	assert(count() == images.size());
+	ogf_assert(count() == images.size());
 
 	QString title = QString("Images (Total: %1)").arg(num_items);
 	mainWindow_->dockWidgetImages->setWindowTitle(title);

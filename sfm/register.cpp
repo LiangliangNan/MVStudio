@@ -1,6 +1,6 @@
 
 #include "register.h"
-#include <easy3d/core/types.h>
+#include "../math/math_types.h"
 #include "../math/matrix_driver.h"
 #include "../mvglib/homography.h"
 #include "../mvglib/horn.h"
@@ -52,8 +52,8 @@ namespace sfm {
 			return empty;
 		}
 
-		easy3d::dvec3* r_pts = new easy3d::dvec3[min_matches];
-		easy3d::dvec3* l_pts = new easy3d::dvec3[min_matches];
+		vec3d* r_pts = new vec3d[min_matches];
+		vec3d* l_pts = new vec3d[min_matches];
 		double *weight = new double[min_matches];
 
 		for (int round = 0; round < nRANSAC; round++) {
@@ -180,8 +180,8 @@ namespace sfm {
 		std::vector<KeypointMatch> matches, MotionModel mm,
 		const std::vector<int> &inliers, double *M)
 	{
-		easy3d::dvec3* r_pts = new easy3d::dvec3[inliers.size()];
-		easy3d::dvec3* l_pts = new easy3d::dvec3[inliers.size()];
+		vec3d* r_pts = new vec3d[inliers.size()];
+		vec3d* l_pts = new vec3d[inliers.size()];
 		double *weight = new double[inliers.size()];
 
 		/* Compute residual */

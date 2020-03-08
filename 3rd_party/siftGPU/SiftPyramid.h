@@ -174,12 +174,12 @@ private:
 
 #define SIFTGPU_ENABLE_REVERSE_ORDER
 #ifdef SIFTGPU_ENABLE_REVERSE_ORDER
-#define FIRST_OCTAVE(R)            (R? _octave_num - 1 : 0)
-#define NOT_LAST_OCTAVE(i, R)      (R? (i >= 0) : (i < _octave_num))
-#define GOTO_NEXT_OCTAVE(i, R)     (R? (--i) : (++i))
-#define FIRST_LEVEL(R)             (R? param._dog_level_num - 1 : 0)   
-#define GOTO_NEXT_LEVEL(j, R)      (R? (--j) : (++j))
-#define NOT_LAST_LEVEL(j, R)       (R? (j >= 0) : (j < param._dog_level_num))
+#define FIRST_OCTAVE(R)            (R ? _octave_num - 1 : 0)
+#define NOT_LAST_OCTAVE(i, R)      (R ? (i >= 0) : (i < _octave_num))
+#define GOTO_NEXT_OCTAVE(i, R)     (R ? (--i) : (++i))
+#define FIRST_LEVEL(R)             (R ? param._dog_level_num - 1 : 0)   
+#define GOTO_NEXT_LEVEL(j, R)      (R ? (--j) : (++j))
+#define NOT_LAST_LEVEL(j, R)       (R ? (j >= 0) : (j < param._dog_level_num))
 #define FOR_EACH_OCTAVE(i, R)      for(int i = FIRST_OCTAVE(R); NOT_LAST_OCTAVE(i, R); GOTO_NEXT_OCTAVE(i, R))
 #define FOR_EACH_LEVEL(j, R)       for(int j = FIRST_LEVEL(R);  NOT_LAST_LEVEL(j, R);  GOTO_NEXT_LEVEL(j, R))
 #else

@@ -2,7 +2,7 @@
 #ifndef _SFM_KEYS_H_
 #define _SFM_KEYS_H_
 
-#include <easy3d/core/types.h>
+#include "../basic/basic_types.h"
 
 #include <vector>
 #include <string>
@@ -17,7 +17,7 @@ namespace sfm {
 
 		virtual ~Keypoint() {}
 
-		virtual unsigned char *desc() { return nullptr; }
+		virtual unsigned char *desc() { return nil; }
 
 		float x;
 		float y;			/* Subpixel location of keypoint. */

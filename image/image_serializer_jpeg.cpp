@@ -1,7 +1,7 @@
 
 #include "image_serializer_jpeg.h"
 #include "image.h"
-#include <easy3d/util/logging.h>
+#include "../basic/logger.h"
 
 #include <stdio.h>
 extern "C" {
@@ -11,7 +11,7 @@ extern "C" {
 #include <setjmp.h>
 
 
-using namespace easy3d;
+
 
 struct my_error_mgr {
 	struct jpeg_error_mgr pub;	/* "public" fields */
@@ -26,7 +26,7 @@ typedef struct my_error_mgr * my_error_ptr;
 METHODDEF(void) my_error_exit(j_common_ptr cinfo) {
 	static char buffer[1024];
 	(*cinfo->err->format_message)(cinfo, buffer);
-	LOG(ERROR) << buffer << std::endl;
+	Logger::err("ImageSerializer_jpeg") << buffer << std::endl;
 	/* cinfo->err really points to a my_error_mgr struct, so coerce pointer */
 	my_error_ptr myerr = (my_error_ptr)cinfo->err;
 	/* Always display the message. */
@@ -39,7 +39,7 @@ METHODDEF(void) my_error_exit(j_common_ptr cinfo) {
 
 Image* ImageSerializer_jpeg::serialize_read(const std::string& filename_in) {
 	//Logger::out("ImageSerializer_jpeg") << "Loading " << filename_in << std::endl ;
-	Image* result = nullptr;
+	Image* result = nil;
 	const char* filename = filename_in.c_str();
 	/* We use our private extension JPEG error handler.
 	* Note that this struct must live as long as the main JPEG parameter
@@ -51,14 +51,14 @@ Image* ImageSerializer_jpeg::serialize_read(const std::string& filename_in) {
 	*/
 	struct jpeg_decompress_struct cinfo;
 
-	FILE * infile = nullptr;		/* source file */
+	FILE * infile = nil;		/* source file */
 	JSAMPARRAY buffer;		/* Output row buffer */
 	int row_stride;		/* physical row width in output buffer */
 
 	if ((infile = fopen(filename, "rb")) == NULL) {
-		LOG(ERROR)
+		Logger::err("ImageSerializer_jpeg")
 			<< "could not open file:" << filename_in << std::endl;
-		return nullptr;
+		return nil;
 	}
 
 	/* Step 1: allocate and initialize JPEG decompression object */
@@ -74,7 +74,7 @@ Image* ImageSerializer_jpeg::serialize_read(const std::string& filename_in) {
 		jpeg_destroy_decompress(&cinfo);
 		fclose(infile);
 		delete result;
-		return nullptr;
+		return nil;
 	}
 
 	/* Now we can initialize the JPEG decompression object. */
@@ -121,7 +121,7 @@ Image* ImageSerializer_jpeg::serialize_read(const std::string& filename_in) {
 		result = new Image(Image::RGB, cinfo.output_width, cinfo.output_height);
 		break;
 	default:
-		return nullptr;
+		return nil;
 		break;
 	}
 
@@ -187,7 +187,7 @@ bool ImageSerializer_jpeg::serialize_write(
 
 	FILE * outfile = fopen(file_name.c_str(), "wb");
 	if (outfile  == NULL) {
-		LOG(ERROR) << "could not open file:" << file_name << std::endl;
+		Logger::err("ImageSerializer_jpeg") << "could not open file:" << file_name << std::endl;
 		return false;
 	}
 
@@ -250,7 +250,7 @@ bool ImageSerializer_jpeg::query_image_size(const std::string& file_name, int& w
 	FILE *f = fopen(file_name.c_str(), "rb");
 
 	if (f == NULL) {
-		LOG(ERROR)
+		Logger::err("ImageSerializer_jpeg")
 			<< "could not open file:" << file_name << std::endl;
 		return false;
 	}

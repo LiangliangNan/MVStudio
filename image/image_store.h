@@ -2,8 +2,11 @@
 #ifndef _IMAGE_IMAGE_STORE_H_
 #define _IMAGE_IMAGE_STORE_H_
 
+#include "image_common.h"
+#include "../basic/basic_types.h"
+#include "../basic/counted.h"
 
-#include <easy3d/core/types.h>
+
 
 /**
 * Internal storage associated with a Image. A ImageStore
@@ -11,7 +14,7 @@
 * Images can share the same ImageStore.
 */
 
-class ImageStore {
+class IMAGE_API ImageStore : public Counted {
 public:
 	ImageStore(int bytes_per_pixel, int dim_x) ;
 	ImageStore(int bytes_per_pixel, int dim_x, int dim_y) ;
@@ -46,15 +49,16 @@ public:
 
 	int bytes_per_pixel() const ;
 
-	easy3d::Memory::pointer base_mem() const ;
+	Memory::pointer base_mem() const ;
 
 private:
 	int bytes_per_pixel_ ;
 	int dimension_ ;
 	int size_[3] ;
-    easy3d::Memory::byte* base_mem_ ;
+	Memory::byte* base_mem_ ;
 } ;
 
+typedef SmartPointer<ImageStore> ImageStore_var ;
 
 //_________________________________________________________
 
@@ -64,7 +68,7 @@ inline int ImageStore::dimension() const {
 }
 
 inline int ImageStore::size(int axis) const {
-	assert(axis >= 0 && axis < 3) ;
+	ogf_assert(axis >= 0 && axis < 3) ;
 	return size_[axis] ;
 }
 
@@ -84,7 +88,7 @@ inline int ImageStore::bytes_per_pixel() const {
 	return bytes_per_pixel_ ;
 }
 
-inline easy3d::Memory::pointer ImageStore::base_mem() const {
+inline Memory::pointer ImageStore::base_mem() const {
 	return base_mem_ ;
 }
 

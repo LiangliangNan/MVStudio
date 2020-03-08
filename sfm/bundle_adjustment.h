@@ -3,7 +3,7 @@
 
 
 #include "camera.h"
-#include <easy3d/core/types.h>
+#include "../math/math_types.h"
 
 #include <vector>
 
@@ -23,7 +23,7 @@ namespace sfm {
 		double *R, double *dt, double *b, double *p,
 		int undistort, int explicit_camera_centers);
 
-	easy3d::dvec2 sfm_project_final(camera_params_t *params, easy3d::dvec3 pt,
+	vec2d sfm_project_final(camera_params_t *params, vec3d pt,
 		int explicit_camera_centers, int undistort);
 
 	void bundle_adjustment(int num_pts, int num_cameras, int ncons,
@@ -34,10 +34,10 @@ namespace sfm {
 		int undistort,
 		int explicit_camera_centers,
 		camera_params_t *init_camera_params,
-		easy3d::dvec3 *init_pts,
+		vec3d *init_pts,
 		int use_constraints,
 		int use_point_constraints,
-		easy3d::dvec3 *points_constraints,
+		vec3d *points_constraints,
 		double point_constraint_weight,
 		int fix_points,
 		double eps2,
@@ -47,7 +47,7 @@ namespace sfm {
 
 
 	/* Refine the position of a single camera */
-	void camera_refine(int num_points, easy3d::dvec3 *points, easy3d::dvec2 *projs,
+	void camera_refine(int num_points, vec3d *points, vec2d *projs,
 		camera_params_t *params, int adjust_focal,
 		int estimate_distortion);
 }
@@ -77,7 +77,7 @@ namespace sfm {
 
 	std::vector<int> refine_camera_parameters(const ImageData &data,
 		int num_points,
-		easy3d::dvec3 *points, easy3d::dvec2 *projs,
+		vec3d *points, vec2d *projs,
 		int *pt_idxs, camera_params_t *camera,
 		double *error_out,
 		bool adjust_focal,
@@ -91,7 +91,7 @@ namespace sfm {
 	/* Use a 180 rotation to fix up the intrinsic matrix */
 	void fix_intrinsics(double *P, double *K, double *R, double *t);
 
-	bool find_and_verify_camera(int num_points, easy3d::dvec3 *points_solve, easy3d::dvec2 *projs_solve,
+	bool find_and_verify_camera(int num_points, vec3d *points_solve, vec2d *projs_solve,
 		int *idxs_solve,
 		double *K, double *R, double *t,
 		double proj_estimation_threshold,
@@ -101,7 +101,7 @@ namespace sfm {
 		std::vector<int> &outliers);
 
 	/* Triangulate two points */
-	easy3d::dvec3 triangulate(easy3d::dvec2 p, easy3d::dvec2 q,
+	vec3d triangulate(vec2d p, vec2d q,
 		camera_params_t c1, camera_params_t c2,
 		double &proj_error, bool &in_front, double &angle,
 		bool explicit_camera_centers);

@@ -1,7 +1,6 @@
 
 #include "image_store.h"
 
-using namespace easy3d;
 
 ImageStore::ImageStore(int bytes_per_pixel, int dim_x) {
 	bytes_per_pixel_ = bytes_per_pixel ;

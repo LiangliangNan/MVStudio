@@ -2,7 +2,7 @@
 //	File:		SiftPyramid.cpp
 //	Author:		Changchang Wu
 //	Description :	Implementation of the SiftPyramid class.
-//
+//					
 //
 //
 //	Copyright (c) 2007 University of North Carolina at Chapel Hill
@@ -11,11 +11,11 @@
 //	Permission to use, copy, modify and distribute this software and its
 //	documentation for educational, research and non-profit purposes, without
 //	fee, and without a written agreement is hereby granted, provided that the
-//	above copyright notice and the following paragraph appear in all copies.
+//	above copyright notice and the following paragraph appear in all copies.	
 //
 //	The University of North Carolina at Chapel Hill make no representations
 //	about the suitability of this software for any purpose. It is provided
-//	'as is' without express or implied warranty.
+//	'as is' without express or implied warranty. 
 //
 //	Please send BUG REPORTS to ccwu@cs.unc.edu
 //
@@ -41,18 +41,18 @@ using namespace std;
 #include "IL/il.h"
 #include "direct.h"
 #include "io.h"
-#include <sys/stat.h>
+#include <sys/stat.h> 
 #endif
 
 
 
 void SiftPyramid::RunSIFT(GLTexInput*input)
 {
-    CleanupBeforeSIFT();
+    CleanupBeforeSIFT(); 
 
 	if(_existing_keypoints & SIFT_SKIP_FILTERING)
 	{
-
+		
 	}else
 	{
 		GlobalUtil::StartTimer("Build    Pyramid");
@@ -95,7 +95,7 @@ void SiftPyramid::RunSIFT(GLTexInput*input)
 	}
 
 
-
+	
 	if(_existing_keypoints& SIFT_SKIP_ORIENTATION)
 	{
 		//use exisitng feature orientation or
@@ -113,7 +113,7 @@ void SiftPyramid::RunSIFT(GLTexInput*input)
 			GlobalUtil::StartTimer("MultiO Feature List");
 			ReshapeFeatureListCPU();
             LimitFeatureCount(1);
-			GlobalUtil::StopTimer();
+			GlobalUtil::StopTimer();	
 			_timing[4] = GetElapsedTime();
 		}
 	}else
@@ -137,7 +137,7 @@ void SiftPyramid::RunSIFT(GLTexInput*input)
 #endif
 		DownloadKeypoints();
 		GlobalUtil::StopTimer();
-		_timing[5] =  GetElapsedTime();
+		_timing[5] =  GetElapsedTime(); 
 	}
 
 
@@ -148,7 +148,7 @@ void SiftPyramid::RunSIFT(GLTexInput*input)
 		GlobalUtil::StartTimer("Get Descriptor");
 		GetFeatureDescriptors();
 		GlobalUtil::StopTimer();
-		_timing[6] =  GetElapsedTime();
+		_timing[6] =  GetElapsedTime(); 
 	}
 
 	//reset the existing keypoints
@@ -172,13 +172,13 @@ void SiftPyramid::LimitFeatureCount(int have_keylist)
 
 	if(GlobalUtil::_FeatureCountThreshold <= 0 || _existing_keypoints) return;
 	///////////////////////////////////////////////////////////////
-	//skip the lowest levels to reduce number of features.
+	//skip the lowest levels to reduce number of features. 
 
     if(GlobalUtil::_TruncateMethod == 2)
     {
         int i = 0, new_feature_num = 0, level_num = param._dog_level_num * _octave_num;
         for(; new_feature_num < _FeatureCountThreshold && i < level_num; ++i) new_feature_num += _levelFeatureNum[i];
-        for(; i < level_num; ++i)            _levelFeatureNum[i] = 0;
+        for(; i < level_num; ++i)            _levelFeatureNum[i] = 0; 
 
         if(new_feature_num < _featureNum)
         {
@@ -214,14 +214,14 @@ void SiftPyramid::PrepareBuffer()
 {
 	//when there is no existing keypoint list, the feature list need to be downloaded
 	//when an existing keypoint list does not have orientaiton, we need to download them again.
-	if(!(_existing_keypoints & SIFT_SKIP_ORIENTATION))
+	if(!(_existing_keypoints & SIFT_SKIP_ORIENTATION)) 
 	{
 		//_keypoint_buffer.resize(4 * (_featureNum +align));
 		_keypoint_buffer.resize(4 * (_featureNum + GlobalUtil::_texMaxDim)); //11/19/2008
 	}
 	if(GlobalUtil::_DescriptorPPT)
 	{
-		//_descriptor_buffer.resize(128*(_featureNum + align));
+		//_descriptor_buffer.resize(128*(_featureNum + align)); 
 		_descriptor_buffer.resize(128 * _featureNum + 16 * GlobalUtil::_texMaxDim);//11/19/2008
 	}
 
@@ -232,7 +232,7 @@ int SiftPyramid:: GetRequiredOctaveNum(int inputsz)
     //[2 ^ i,  2 ^ (i + 1)) -> i - 3...
     //768 in [2^9, 2^10)  -> 6 -> smallest will be 768 / 32 = 24
     int num =  (int) floor (log ( inputsz * 2.0 / GlobalUtil::_texMinDim )/log(2.0));
-    return num <= 0 ? 1 : num;
+    return num <= 0 ? 1 : num; 
 }
 
 void SiftPyramid::CopyFeatureVector(float*keys, float *descriptors)
@@ -308,11 +308,11 @@ void SiftPyramid::SaveSIFT(const char * szFileName)
 			{
 				//in y, x, scale, orientation order
 				out<<setprecision(2) << pk[1]<<" "<<setprecision(2) << pk[0]<<" "
-					<<setprecision(3) << pk[2]<<" " <<setprecision(3) <<  pk[3]<< endl;
+					<<setprecision(3) << pk[2]<<" " <<setprecision(3) <<  pk[3]<< endl; 
 
 				////out << setprecision(12) << pk[1] <<  " " << pk[0] << " " << pk[2] << " " << pk[3] << endl;
 				pk+=4;
-				for(int k = 0; k < 128; k ++, pd++)
+				for(int k = 0; k < 128; k ++, pd++) 
 				{
 					if(GlobalUtil::_NormalizedSIFT)
 						out<< ((unsigned int)floor(0.5+512.0f*(*pd)))<<" ";
@@ -325,7 +325,7 @@ void SiftPyramid::SaveSIFT(const char * szFileName)
 				out<<endl;
 
 			}
-
+		
 		}else
 		{
 			out<<_featureNum<<" 0"<<endl;
@@ -384,18 +384,18 @@ void SiftPyramid::WriteTextureForDEBUG(GLTexImage * tex, const char *namet, ...)
 	//Tiffs saved with IL are flipped
 	for(int i = 0; i < height; i++)
 	{
-		memcpy(buffer2 + i * width * 4,
-			buffer1 + (height - i - 1) * width * 4,
+		memcpy(buffer2 + i * width * 4, 
+			buffer1 + (height - i - 1) * width * 4,  
 			width * 4 * sizeof(float));
 	}
 
 	//save data as floating point tiff file
 	ilGenImages(1, &imID);
-	ilBindImage(imID);
+	ilBindImage(imID); 
 	ilEnable(IL_FILE_OVERWRITE);
 	ilTexImage(width, height, 1, 4, IL_RGBA, IL_FLOAT, buffer2);
-	ilSave(IL_TIF, name);
-	ilDeleteImages(1, &imID);
+	ilSave(IL_TIF, name); 
+	ilDeleteImages(1, &imID); 
 
 	delete buffer1;
 	delete buffer2;
