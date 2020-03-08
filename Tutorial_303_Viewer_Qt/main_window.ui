@@ -130,7 +130,6 @@
     <addaction name="separator"/>
     <addaction name="actionOpenPointCloud"/>
     <addaction name="actionSavePointCloud"/>
-    <addaction name="actionCombinePointCloudFiles"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -155,22 +154,9 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionHelp"/>
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
-   </widget>
-   <widget class="QMenu" name="menuCamera">
-    <property name="title">
-     <string>Camera</string>
-    </property>
-    <addaction name="actionSnapshot"/>
-    <addaction name="separator"/>
-    <addaction name="actionCopyCamera"/>
-    <addaction name="actionPasteCamera"/>
-    <addaction name="separator"/>
-    <addaction name="actionSaveCameraToFile"/>
-    <addaction name="actionRestoreCameraFromFile"/>
    </widget>
    <widget class="QMenu" name="menuReconstruction">
     <property name="title">
@@ -183,7 +169,6 @@
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
-   <addaction name="menuCamera"/>
    <addaction name="menuReconstruction"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -350,8 +335,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/fullscreen.png</normaloff>:/Resources/fullscreen.png</iconset>
+    <iconset>
+     <normaloff>Resources/fullscreen.png</normaloff>Resources/fullscreen.png</iconset>
    </property>
    <property name="text">
     <string>Full Screen</string>
@@ -375,8 +360,8 @@
   </action>
   <action name="actionFitWindow">
    <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/home.png</normaloff>:/Resources/home.png</iconset>
+    <iconset>
+     <normaloff>Resources/home.png</normaloff>Resources/home.png</iconset>
    </property>
    <property name="text">
     <string>Fit Window</string>
@@ -390,8 +375,8 @@
   </action>
   <action name="actionSnapshot">
    <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/snap_shot.png</normaloff>:/Resources/snap_shot.png</iconset>
+    <iconset>
+     <normaloff>Resources/snap_shot.png</normaloff>Resources/snap_shot.png</iconset>
    </property>
    <property name="text">
     <string>Snapshot</string>
@@ -405,30 +390,11 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/perspective.png</normaloff>:/Resources/perspective.png</iconset>
+    <iconset>
+     <normaloff>Resources/perspective.png</normaloff>Resources/perspective.png</iconset>
    </property>
    <property name="text">
     <string>Perspective / Orthographic</string>
-   </property>
-  </action>
-  <action name="actionSaveCameraToFile">
-   <property name="text">
-    <string>Save Camera to File</string>
-   </property>
-   <property name="iconText">
-    <string>Save Camera State</string>
-   </property>
-   <property name="toolTip">
-    <string>Save Camera State</string>
-   </property>
-  </action>
-  <action name="actionRestoreCameraFromFile">
-   <property name="text">
-    <string>Restore Camera from File</string>
-   </property>
-   <property name="iconText">
-    <string>Load Camera State</string>
    </property>
   </action>
   <action name="actionShowCoordinateSystem">
@@ -439,8 +405,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/axis_and_label.png</normaloff>:/Resources/axis_and_label.png</iconset>
+    <iconset>
+     <normaloff>Resources/axis_and_label.png</normaloff>Resources/axis_and_label.png</iconset>
    </property>
    <property name="text">
     <string>Show Coordinate System</string>
@@ -456,42 +422,9 @@
     <string>Save Point Cloud</string>
    </property>
   </action>
-  <action name="actionTest">
-   <property name="text">
-    <string>Test</string>
-   </property>
-  </action>
   <action name="actionSetBackgroundColor">
    <property name="text">
     <string>Set Background Color</string>
-   </property>
-  </action>
-  <action name="actionHelp">
-   <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/help.png</normaloff>:/Resources/help.png</iconset>
-   </property>
-   <property name="text">
-    <string>Help</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+H</string>
-   </property>
-  </action>
-  <action name="actionCopyCamera">
-   <property name="text">
-    <string>Copy Camera</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+C</string>
-   </property>
-  </action>
-  <action name="actionPasteCamera">
-   <property name="text">
-    <string>Paste Camera</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+V</string>
    </property>
   </action>
   <action name="actionSparseReconstruction">
@@ -502,11 +435,6 @@
   <action name="actionDenseReconstruction">
    <property name="text">
     <string>Run Dense (MVS)</string>
-   </property>
-  </action>
-  <action name="actionCombinePointCloudFiles">
-   <property name="text">
-    <string>Combine Point Clouds</string>
    </property>
   </action>
   <action name="actionImageMatching">
@@ -555,8 +483,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/spheres.png</normaloff>:/Resources/spheres.png</iconset>
+    <iconset>
+     <normaloff>Resources/spheres.png</normaloff>Resources/spheres.png</iconset>
    </property>
    <property name="text">
     <string>Point As Sphere</string>
@@ -564,8 +492,8 @@
   </action>
   <action name="actionIncreasePointSize">
    <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/plus.png</normaloff>:/Resources/plus.png</iconset>
+    <iconset>
+     <normaloff>Resources/plus.png</normaloff>Resources/plus.png</iconset>
    </property>
    <property name="text">
     <string>Increase Point Size</string>
@@ -576,8 +504,8 @@
   </action>
   <action name="actionDecreasePointSize">
    <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/minus.png</normaloff>:/Resources/minus.png</iconset>
+    <iconset>
+     <normaloff>Resources/minus.png</normaloff>Resources/minus.png</iconset>
    </property>
    <property name="text">
     <string>Decrease Point Size</string>
@@ -594,8 +522,8 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset resource="../MVStudio/Resources/MVStudio.qrc">
-     <normaloff>:/Resources/lighting.png</normaloff>:/Resources/lighting.png</iconset>
+    <iconset>
+     <normaloff>Resources/lighting.png</normaloff>Resources/lighting.png</iconset>
    </property>
    <property name="text">
     <string>Lighting</string>
