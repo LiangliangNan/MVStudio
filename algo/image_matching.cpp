@@ -3,9 +3,10 @@
 
 #include "project.h"
 
-#include <easy3d/util/logging.h>
-#include <easy3d/util/file_system.h>
-#include <easy3d/util/stop_watch.h>
+#include "../basic/file_utils.h"
+#include "../basic/progress.h"
+#include "../basic/logger.h"
+#include "../basic/stop_watch.h"
 
 //include the header files for SiftGPU and SiftMatchGPU
 #include "../3rd_party/SiftGPU/SiftGPU.h"
@@ -14,7 +15,7 @@
 #include <algorithm>
 
 
-using namespace easy3d;
+
 
 ImageMatching::ImageMatching(Project* proj)
 	: project_(proj)
@@ -36,33 +37,33 @@ std::vector<ImageFeature>  image_features;
 
 void ImageMatching::apply() {
 	if (!project_ || !project_->is_valid()) {
-        LOG(WARNING) << "invalid project";
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return;
 	}
 
 	image_features.clear();
 	StopWatch w;
-    LOG(WARNING) << "extracting key points...";
+	Logger::out(title()) << "extracting key points..." << std::endl;
 	extract_key_points();
-    LOG(WARNING) << "done. time: " << w.elapsed_seconds();
+	Logger::out(title()) << "done. time: " << w.elapsed() << std::endl;
 
 	w.start();
-	LOG(INFO) << "matching the images..." << std::endl;
+	Logger::out(title()) << "matching the images..." << std::endl;
 	match_key_points();
-	LOG(INFO) << "done. time: " << w.elapsed_seconds() << std::endl;
+	Logger::out(title()) << "done. time: " << w.elapsed() << std::endl;
 }
 
 
 
 void ImageMatching::extract_key_points() {
 	if (!project_ || !project_->is_valid()) {
-        LOG(WARNING) << "invalid project";
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return;
 	}
 
 	std::ofstream output(project_->sfm_list_file.c_str());
 	if (output.fail()) {
-        LOG(WARNING) << "could not write focal length file \'" << project_->sfm_list_file << "\'";
+		Logger::err(title()) << "could not write focal length file \'" << project_->sfm_list_file << "\'" << std::endl;
 		return;
 	}
 
@@ -70,12 +71,12 @@ void ImageMatching::extract_key_points() {
 	//Create a context for computation, and SiftGPU will be initialized automatically 
 	//The same context can be used by SiftMatchGPU.
 	// Liangliang: I already have a OpenGL context. Just use it.
-	if (sift->CreateContextGL() == SiftGPU::SIFTGPU_NOT_SUPPORTED) {
-		LOG(ERROR) << "SiftGPU not supported" << std::endl;
-        return;
-	}
+	//if (sift->CreateContextGL() == SiftGPU::SIFTGPU_NOT_SUPPORTED) {
+	//	Logger::err(title()) << "SiftGPU not supported" << std::endl;
+	//	break;
+	//}
 
-	const char * argv[] = { "-fo", "-1", "-v", "0", "-tc2", "7680", "-b", "-nomc" };//
+	char * argv[] = { "-fo", "-1", "-v", "0", "-tc2", "7680", "-b", "-nomc" };//
 	//-fo -1    staring from -1 octave 
 	//-v 1      only print out # feature and overall time
 	//-tc <num> set a soft limit to number of detected features
@@ -93,37 +94,43 @@ void ImageMatching::extract_key_points() {
 
 	image_features.clear();
 
+	ProgressLogger progress(int(project_->images.size()));
 	for (std::size_t i = 0; i < project_->images.size(); ++i) {
+		if (progress.is_canceled()) {
+			image_features.clear();
+			delete sift;
+			return;
+		}
 		if (project_->images[i].ignored)
 			continue;
 
 		//Create a context for computation, and SiftGPU will be initialized automatically 
 		//The same context can be used by SiftMatchGPU.
 		// Liangliang: I already have a OpenGL context. Just use it.
-		if (sift->CreateContextGL() == SiftGPU::SIFTGPU_NOT_SUPPORTED) {
-			LOG(ERROR) << "SiftGPU not supported" << std::endl;
-			break;
-		}
+//		if (sift->CreateContextGL() == SiftGPU::SIFTGPU_NOT_SUPPORTED) {
+//			Logger::err(title()) << "SiftGPU not supported" << std::endl;
+//			break;
+//		}
 
 		const std::string& name = project_->images[i].file;
 		if (!sift->RunSIFT(name.c_str())) {
-			LOG(WARNING) << "processing image \'" << file_system::simple_name(name) << "\' failed";
+			Logger::warn(title()) << "processing image \'" << FileUtils::simple_name(name) << "\' failed" << std::endl;
 			project_->set_ignore_image(name, true);
 			continue;
 		}
 
-		std::string sift_file = project_->sfm_keys_dir + '/' + file_system::base_name(name) + ".key";
+		std::string sift_file = project_->sfm_keys_dir + '/' + FileUtils::base_name(name) + ".key";
 		sift->SaveSIFT(sift_file.c_str());
 
 		int image_width, image_height;
 		sift->GetImageDimension(image_width, image_height);
 		float focal_length_in_pixels = 1.2f * std::max(image_width, image_height);
-		output << file_system::absolute_path(project_->images[i].file)
+		output << FileUtils::get_absolute_path(project_->images[i].file) 
 			<< " w: " << image_width 
 			<< " h: " << image_height << " f: " << focal_length_in_pixels << std::endl;
 
 		int num = sift->GetFeatureNum();	// get feature count
-		LOG(INFO) << file_system::simple_name(name) << ": " << num << " key points" << std::endl;
+		Logger::out(title()) << FileUtils::simple_name(name) << ": " << num << " key points" << std::endl;
 
 		std::vector<SiftGPU::SiftKeypoint> keys;
 		std::vector<float> descriptors;
@@ -141,6 +148,8 @@ void ImageMatching::extract_key_points() {
 		feature.keys = keys;
 		feature.descriptors = descriptors;
 		image_features.push_back(feature);
+
+		progress.next();
 	}
 
 	delete sift;
@@ -149,7 +158,7 @@ void ImageMatching::extract_key_points() {
 
 void ImageMatching::match_key_points() {
 	if (!project_ || !project_->is_valid()) {
-		LOG(WARNING) << "invalid project";
+		Logger::warn(title()) << "invalid project" << std::endl;
 		return;
 	}
 
@@ -157,7 +166,7 @@ void ImageMatching::match_key_points() {
 	std::string match_table_file = project_->sfm_match_table_file;
 	std::ofstream output(match_table_file.c_str());
 	if (output.fail()) {
-		LOG(ERROR) << "could not write matches file \'" << match_table_file << "\'" << std::endl;
+		Logger::err(title()) << "could not write matches file \'" << match_table_file << "\'" << std::endl;
 		return;
 	}
 
@@ -171,6 +180,8 @@ void ImageMatching::match_key_points() {
 	//call matcher->SetMaxSift() to change the limit before calling setdescriptor
 
 	int num = (int)image_features.size();
+	ProgressLogger progress(num * (num - 1) / 2);
+
 	int count = 0;
 	for ( int i = 0; i < num; ++i) {
 		const std::vector<SiftGPU::SiftKeypoint>& keys1 = image_features[i].keys;
@@ -186,11 +197,16 @@ void ImageMatching::match_key_points() {
 			if (num2 == 0)
 				continue;
 
+			if (progress.is_canceled()) {
+				delete matcher;
+				return;
+			}
+
 			// If you already have an OpenGL Context, call matcher->VerifyContextGL() instead
 			//matcher->CreateContextGL();
 			// Liangliang: I already have a OpenGL context. Just use it.
 			if (matcher->VerifyContextGL() == SiftGPU::SIFTGPU_NOT_SUPPORTED) {
-				LOG(ERROR) << "SiftGPU not supported" << std::endl;
+				Logger::err(title()) << "SiftGPU not supported" << std::endl;
 				break;
 			}
 
@@ -201,7 +217,7 @@ void ImageMatching::match_key_points() {
 			matcher->SetDescriptors(1, num2, &descriptors2[0]); //image 2
 
 			//match and get result.    
-			uint32_t(*match_buf)[2] = new uint32_t[num1][2];
+            int(*match_buf)[2] = new int[num1][2];
 			//use the default thresholds. Check the declaration in SiftGPU.h
 			int num_match = matcher->GetSiftMatch(num1, match_buf);
 			output << i << "   " << j << std::endl << num_match << std::endl;
@@ -225,6 +241,8 @@ void ImageMatching::match_key_points() {
 			output << std::endl;
 
 			delete[] match_buf;
+
+			progress.next();
 		}
 	}
 
