@@ -1,9 +1,10 @@
 #include "sfm.h"
-#include "../basic/logger.h"
+#include <easy3d/util/logging.h>
 
 #include <queue>
 #include <cassert>
 
+using namespace easy3d;
 
 namespace sfm {
 
@@ -139,7 +140,7 @@ namespace sfm {
 				} /* while loop */
 
 				if (features.size() >= 2) {
-					//Logger::out(title()) << "point with " << features.size() << " projections found" << std::endl;
+					//LOG(INFO) << "point with " << features.size() << " projections found" << std::endl;
 					tracks.push_back(TrackData(features));
 					pt_idx++;
 				}
@@ -151,18 +152,18 @@ namespace sfm {
 			} /* for loop over features */
 		} /* for loop over images */
 
-		Logger::out(title()) << "found " << pt_idx << " points" << std::endl;
+		LOG(INFO) << "found " << pt_idx << " points" << std::endl;
 
 		if (pt_idx != (int)tracks.size()) {
-			Logger::err(title()) << "point count inconsistent" << std::endl;
+			LOG(ERROR) << "point count inconsistent" << std::endl;
 		}
 
 		/* Clear match lists */
-		Logger::out(title()) << "clearing match lists..." << std::endl;
+		LOG(INFO) << "clearing match lists..." << std::endl;
 
 
 		/* Create the new consistent match lists */
-		Logger::out(title()) << "creating consistent match lists..." << std::endl;
+		LOG(INFO) << "creating consistent match lists..." << std::endl;
 
 		int num_pts = pt_idx;
 		for (int i = 0; i < num_pts; i++) {
@@ -180,7 +181,7 @@ namespace sfm {
 		/* Save the tracks */
 		track_data_ = tracks;
 
-		Logger::out(title()) << "done" << std::endl;
+		LOG(INFO) << "done" << std::endl;
 
 		//////////////////////////////////////////////////////////////////////////
 
@@ -210,7 +211,7 @@ namespace sfm {
 
 
 	void SfM::set_tracks(int image) {
-		Logger::out(title()) << "setting tracks for image " << image << std::endl;
+		LOG(INFO) << "setting tracks for image " << image << std::endl;
 
 		ImageData &img_data = image_data_[image];
 		assert(img_data.keys_loaded);

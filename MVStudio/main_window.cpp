@@ -14,10 +14,10 @@
 #include "main_window.h"
 #include "paint_canvas.h"
 
-#include "../basic/logger.h"
-#include "../basic/file_utils.h"
-#include "../pointset/point_set.h"
-#include "../pointset/point_set_io.h"
+#include <easy3d/util/logging.h>
+#include <easy3d/util/file_system.h>
+#include "../pointCloud/point_set.h"
+#include "../pointCloud/point_set_io.h"
 
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
@@ -134,12 +134,6 @@ void MainWindow::createActionsForViewMenu() {
 
 
 void MainWindow::createActionsForCameraMenu() {
-	connect(actionCopyCamera, SIGNAL(triggered()), mainCanvas_, SLOT(copyCamera()));
-	connect(actionPasteCamera, SIGNAL(triggered()), mainCanvas_, SLOT(pasteCamera()));
-
-	connect(actionSaveCameraToFile, SIGNAL(triggered()), this, SLOT(saveCameraToFile()));
-	connect(actionRestoreCameraFromFile, SIGNAL(triggered()), this, SLOT(restoreCameraFromFile()));
-
 	connect(actionSnapshot, SIGNAL(triggered()), mainCanvas_, SLOT(snapshotScreen()));
 }
 
@@ -225,7 +219,7 @@ void MainWindow::updateStatusBar()
 {
 	QString vertices("");
 
-	PointSet* pset = mainCanvas_->pointSet();
+	PointCloud* pset = mainCanvas_->pointCloud();
 	if (pset) {
 		int num_vertices = pset->num_points();
 		vertices = QString("#vertices: %1").arg(num_vertices);
@@ -245,7 +239,7 @@ void MainWindow::setBackgroundColor() {
 	}
 }
 
-void MainWindow::showCoordinateUnderMouse(const vec3d& p, bool found) {
+void MainWindow::showCoordinateUnderMouse(const dvec3& p, bool found) {
 	QString coordString = "XYZ = [-, -, -]";
 	if (found)
 		coordString = QString("XYZ = [%1, %2, %3]").arg(p.x).arg(p.y).arg(p.z);
@@ -420,7 +414,7 @@ void MainWindow::openRecentFile()
 		if (mainCanvas_->loadProject(filename)) {
 			listWidgetImages->updateImageList();
 			setCurrentFile(filename);
-			Logger::out(title()) << "project loaded" << std::endl;
+			LOG(INFO) << "project loaded" << std::endl;
 		}
 	}
 }
@@ -494,14 +488,14 @@ bool MainWindow::openProject() {
 		return false;
 
 	if (fileName == curProjectFile_) {
-		Logger::warn(title()) << "project already opened" << std::endl;
+		LOG(WARNING) << "project already opened" << std::endl;
 		return false;
 	}
 
 	if (mainCanvas_->loadProject(fileName)) {
 		listWidgetImages->updateImageList();
 		setCurrentFile(fileName);
-		Logger::out(title()) << "project loaded" << std::endl;
+		LOG(INFO) << "project loaded" << std::endl;
 		return true;
 	}
 	else
@@ -510,12 +504,12 @@ bool MainWindow::openProject() {
 
 
 bool MainWindow::saveProject() {
-	if (!FileUtils::is_file(curProjectFile_.toStdString()))  {
+	if (!file_system::is_file(curProjectFile_.toStdString()))  {
 		return saveProjectAs();
 	}
 	else {
 		if (mainCanvas_->saveProject(curProjectFile_)) {
-			Logger::out(title()) << "project saved" << std::endl;
+			LOG(INFO) << "project saved" << std::endl;
 			setWindowModified(false);
 			return true;
 		}
@@ -536,7 +530,7 @@ bool MainWindow::saveProjectAs() {
 		return false;
 
 	if (mainCanvas_->saveProject(fileName)) {
-		Logger::out(title()) << "project saved" << std::endl;
+		LOG(INFO) << "project saved" << std::endl;
 		setWindowModified(false);
 		setCurrentFile(fileName);
 		return true;
@@ -548,7 +542,7 @@ bool MainWindow::saveProjectAs() {
 bool MainWindow::doOpenPointCloud(const QString &fileName)
 {
 	std::string name = fileName.toStdString();
-	PointSet* pset = PointSetIO::read(name);
+	PointCloud* pset = PointSetIO::read(name);
 
 	if (pset) {
 		mainCanvas_->setPointSet(pset, true);
@@ -565,7 +559,7 @@ bool MainWindow::doOpenPointCloud(const QString &fileName)
 
 bool MainWindow::doSavePointCloud(const QString &fileName)
 {
-	PointSet* pset = mainCanvas_->pointSet();
+	PointCloud* pset = mainCanvas_->pointCloud();
 	if (pset == nil)
 		return false;
 
@@ -661,7 +655,7 @@ void MainWindow::combinePointCloudFiles() {
 	// open file
 	std::ofstream output(output_file.toStdString().c_str(), std::fstream::binary);
 	if (output.fail()) {
-		Logger::err("MainWindow") << "could not open file\'" << output_file.toStdString() << "\'" << std::endl;
+		LOG(ERROR) << "could not open file\'" << output_file.toStdString() << "\'" << std::endl;
 		return;
 	}
 
@@ -672,18 +666,18 @@ void MainWindow::combinePointCloudFiles() {
 			break;
 
 		const std::string& in_file_name = fileNames[i].toStdString();
-		const std::string& simple_name = FileUtils::simple_name(in_file_name);
-		Logger::out("MainWindow") << "reading file " << i + 1 << "/" << fileNames.size() << ": " << simple_name << std::endl;
-		PointSet* pset = PointSetIO::read(in_file_name);
+		const std::string& simple_name = file_system::simple_name(in_file_name);
+		LOG(INFO) << "reading file " << i + 1 << "/" << fileNames.size() << ": " << simple_name << std::endl;
+		PointCloud* pset = PointSetIO::read(in_file_name);
 		if (!pset) 
 			continue;
 		else {
-			Logger::out("MainWindow") << "saving file " << i + 1 << "/" << fileNames.size() << std::endl;
+			LOG(INFO) << "saving file " << i + 1 << "/" << fileNames.size() << std::endl;
 
 			int num = pset->num_points();
-			float* points = &(const_cast<PointSet*>(pset)->points()[0].x);
-			float* normals = &(const_cast<PointSet*>(pset)->normals()[0].x);
-			float* colors = &(const_cast<PointSet*>(pset)->colors()[0].x);
+			float* points = &(const_cast<PointCloud*>(pset)->points()[0].x);
+			float* normals = &(const_cast<PointCloud*>(pset)->normals()[0].x);
+			float* colors = &(const_cast<PointCloud*>(pset)->colors()[0].x);
 
 			for (int i = 0; i < num; ++i) {
 				float* pt = points + (i * 3);	output.write((char*)pt, 12);
@@ -698,6 +692,6 @@ void MainWindow::combinePointCloudFiles() {
 		progress.next();
 	}
 
-	Logger::out("MainWindow") << "done! Total number: " << total_num << std::endl;
+	LOG(INFO) << "done! Total number: " << total_num << std::endl;
 }
 

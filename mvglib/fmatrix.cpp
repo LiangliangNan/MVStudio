@@ -9,6 +9,9 @@
 #define isnan _isnan
 #endif
 
+
+using namespace easy3d;
+
 /* Compute the epipoles of an F-matrix */
 void fmatrix_compute_epipoles(double *F, double *e1, double *e2) {
 	double Fout[9];
@@ -30,7 +33,7 @@ void fmatrix_compute_epipoles(double *F, double *e1, double *e2) {
 	e2[2] = VT[8];
 }
 
-double fmatrix_compute_residual(double *F, vec3d r, vec3d l) {
+double fmatrix_compute_residual(double *F, dvec3 r, dvec3 l) {
 	double Fl[3], Fr[3], pt;
 
 #if 1
@@ -57,14 +60,14 @@ double fmatrix_compute_residual(double *F, vec3d r, vec3d l) {
 
 
 /* Use RANSAC to estimate an F-matrix */
-int estimate_fmatrix_ransac_matches(int num_pts, vec3d *a_pts, vec3d *b_pts,
+int estimate_fmatrix_ransac_matches(int num_pts, dvec3 *a_pts, dvec3 *b_pts,
 	int num_trials, double threshold,
 	double success_ratio,
 	int essential, double *F)
 {
 	int i, j, k, idx;
 
-	vec3d l_pts_best[8], r_pts_best[8];
+	dvec3 l_pts_best[8], r_pts_best[8];
 
 	double Fbest[9];
 	double error_min;
@@ -97,7 +100,7 @@ int estimate_fmatrix_ransac_matches(int num_pts, vec3d *a_pts, vec3d *b_pts,
 	/* Estimate the F-matrix using RANSAC */
 	for (i = 0; i < num_trials; i++) {
 		int idxs[8];
-		vec3d l_pts[8], r_pts[8];
+		dvec3 l_pts[8], r_pts[8];
 		double Ftmp[9], e1_tmp[3], e2_tmp[3];
 		// double error;
 		int num_inliers = 0;
@@ -183,8 +186,8 @@ int estimate_fmatrix_ransac_matches(int num_pts, vec3d *a_pts, vec3d *b_pts,
 			if (num_inliers > inliers_max) {
 				inliers_max = num_inliers;
 				memcpy(Fbest, Ftmp, sizeof(double) * 9);
-				memcpy(l_pts_best, l_pts, sizeof(vec3d) * 8);
-				memcpy(r_pts_best, r_pts, sizeof(vec3d) * 8);
+				memcpy(l_pts_best, l_pts, sizeof(dvec3) * 8);
+				memcpy(r_pts_best, r_pts, sizeof(dvec3) * 8);
 			}
 		}
 
@@ -220,8 +223,8 @@ int double_compare(const void *a, const void *b) {
 		return 1;
 }
 
-static vec3d *global_ins = NULL;
-static vec3d *global_outs = NULL;
+static dvec3 *global_ins = NULL;
+static dvec3 *global_outs = NULL;
 static int global_num_matches = 0;
 static double global_scale;
 
@@ -257,7 +260,7 @@ void fmatrix_residuals(int *m, int *n, double *x, double *fvec, int *iflag) {
 
 
 /* Refine an F-matrix estimate using LM */
-void refine_fmatrix_nonlinear_matches(int num_pts, vec3d *r_pts, vec3d *l_pts,
+void refine_fmatrix_nonlinear_matches(int num_pts, dvec3 *r_pts, dvec3 *l_pts,
 	double *F0, double *Fout)
 {
 	double Ftmp[9];
@@ -349,20 +352,20 @@ int closest_rank2_matrix_ssv(double *Fin, double *Fout,
 }
 
 /* Use linear least-squares to estimate the fundamantal matrix */
-int estimate_fmatrix_linear(int num_pts, vec3d *r_pts, vec3d *l_pts,
+int estimate_fmatrix_linear(int num_pts, dvec3 *r_pts, dvec3 *l_pts,
 	int essential,
 	double *Fout, double *e1, double *e2)
 {
 	int i;
-	vec3d r_c, l_c;
+	dvec3 r_c, l_c;
 	double r_dist, l_dist, r_scale, l_scale;
 
-	vec3d *r_pts_new, *l_pts_new;
+	dvec3 *r_pts_new, *l_pts_new;
 
 	double *A, *b, X[8], F[9], H[9], H_p[9], tmp[9], F_new[9];
 	double U[9], VT[9];
 
-	vec3d r_pts_8pt[8], l_pts_8pt[8];
+	dvec3 r_pts_8pt[8], l_pts_8pt[8];
 	double A_8pt[64], b_8pt[8];
 
 	int success;
@@ -377,8 +380,8 @@ int estimate_fmatrix_linear(int num_pts, vec3d *r_pts, vec3d *l_pts,
 
 	/* First, compute the centroid of both sets of points */
 
-	r_c = vec3d(0.0, 0.0, 0.0);
-	l_c = vec3d(0.0, 0.0, 0.0);
+	r_c = dvec3(0.0, 0.0, 0.0);
+	l_c = dvec3(0.0, 0.0, 0.0);
 
 	for (i = 0; i < num_pts; i++) {
 		r_c = r_c + r_pts[i];
@@ -409,8 +412,8 @@ int estimate_fmatrix_linear(int num_pts, vec3d *r_pts, vec3d *l_pts,
 
 	/* Normalize the points with an affine transform */
 	if (num_pts > 8) {
-		r_pts_new = (vec3d *)malloc(sizeof(vec3d) * num_pts);
-		l_pts_new = (vec3d *)malloc(sizeof(vec3d) * num_pts);
+		r_pts_new = (dvec3 *)malloc(sizeof(dvec3) * num_pts);
+		l_pts_new = (dvec3 *)malloc(sizeof(dvec3) * num_pts);
 	}
 	else {
 		r_pts_new = r_pts_8pt;

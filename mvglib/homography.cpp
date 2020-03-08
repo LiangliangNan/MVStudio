@@ -3,12 +3,14 @@
 #include "../math/matrix_driver.h"
 
 
+using namespace easy3d;
 
-static vec3d* condition_points(int num_points, vec3d* pts, double *T) {
-	vec3d* pts_new = (vec3d*)malloc(sizeof(vec3d) * num_points);
 
-	// vec3d mean = v3_mean(num_points, pts);
-	vec3d mean(0, 0, 0);
+static dvec3* condition_points(int num_points, dvec3* pts, double *T) {
+	dvec3* pts_new = (dvec3*)malloc(sizeof(dvec3) * num_points);
+
+	// dvec3 mean = v3_mean(num_points, pts);
+	dvec3 mean(0, 0, 0);
 	for (int i = 0; i < num_points; ++i) {
 		mean = mean + pts[i];
 	}
@@ -31,7 +33,7 @@ static vec3d* condition_points(int num_points, vec3d* pts, double *T) {
 	for (i = 0; i < num_points; i++) {
 		double x = factor * (pts[i].x - mean.x);
 		double y = factor * (pts[i].y - mean.y);
-		pts_new[i] = vec3d(x, y, 1.0);
+		pts_new[i] = dvec3(x, y, 1.0);
 	}
 
 	T[0] = factor;  T[1] = 0.0;     T[2] = -factor * mean.x;
@@ -49,7 +51,7 @@ static vec3d* condition_points(int num_points, vec3d* pts, double *T) {
 * r_pts -- matches
 * l_pts -- initial points
 * Tout -- on return, contains the 3x3 transformation matrix */
-void align_homography(int num_pts, vec3d* r_pts, vec3d* l_pts,
+void align_homography(int num_pts, dvec3* r_pts, dvec3* l_pts,
 	double *Tout, int refine)
 {
 	int m = num_pts * 2;
@@ -66,12 +68,12 @@ void align_homography(int num_pts, vec3d* r_pts, vec3d* l_pts,
 #define _CONDITION_
 #ifdef _CONDITION_
 	/* Normalize the points */
-	vec3d* r_pts_norm = condition_points(num_pts, r_pts, T1);
-	vec3d* l_pts_norm = condition_points(num_pts, l_pts, T2);
+	dvec3* r_pts_norm = condition_points(num_pts, r_pts, T1);
+	dvec3* l_pts_norm = condition_points(num_pts, l_pts, T2);
 	double T1inv[9];
 #else
-	vec3d* r_pts_norm = r_pts;
-	vec3d* l_pts_norm = l_pts;
+	dvec3* r_pts_norm = r_pts;
+	dvec3* l_pts_norm = l_pts;
 #endif
 
 	for (i = 0; i < num_pts; i++) {
@@ -125,8 +127,8 @@ void align_homography(int num_pts, vec3d* r_pts, vec3d* l_pts,
 }
 
 static int global_num_pts;
-static vec3d* global_r_pts;
-static vec3d* global_l_pts;
+static dvec3* global_r_pts;
+static dvec3* global_l_pts;
 static int global_round;
 
 static void homography_resids(int *m, int *n, double *x, double *fvec, int *iflag)
@@ -180,7 +182,7 @@ static void homography_resids(int *m, int *n, double *x, double *fvec, int *ifla
 }
 
 /* Use non-linear least squares to refine a homography */
-void align_homography_non_linear(int num_pts, vec3d* r_pts, vec3d* l_pts,
+void align_homography_non_linear(int num_pts, dvec3* r_pts, dvec3* l_pts,
 	double *Tin, double *Tout)
 {
 	double x[8];

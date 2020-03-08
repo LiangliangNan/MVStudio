@@ -1,8 +1,6 @@
 #ifndef _SFM_H_
 #define _SFM_H_
 
-#include "sfm_export.h"
-
 #include "sfm_option.h"
 #include "image_data.h"
 #include "match_table.h"
@@ -20,14 +18,17 @@ enum SfMMethod {
 };
 
 
-class PointSet;
+namespace easy3d {
+    class PointCloud;
+}
+
 
 namespace sfm {
 
 	typedef std::pair<int, int> ImagePair;
 
 	
-	class SFM_API SfM
+	class SfM
 	{
 	public:
 		SfM(SfmOption opt);
@@ -38,7 +39,7 @@ namespace sfm {
 		// On return, 'pset' will also be filled with the computed sparse point cloud 
 		// if pset is not NULL. And meanwhile, the point cloud will also be saved in 
 		// the file specified by 'SfmOption.bundle_output_file'.  
-		void apply(PointSet* pset = nil);
+		void apply(easy3d::PointCloud* pset = nullptr);
 
 	private:
 
@@ -67,13 +68,13 @@ namespace sfm {
 		/* Dump an output file containing information about the current state of the scene */
 		void dump_output_file(const std::string& filename,
 			int num_images, int num_cameras, int num_points, int* added_order,
-			camera_params_t* cameras, vec3d* points, vec3i* colors,
+			camera_params_t* cameras, easy3d::dvec3* points, easy3d::ivec3* colors,
 			std::vector<ImageKeyVector>& pt_views);
 
 		/* Write points to a ply file */
 		void dump_points_to_ply(const std::string& filename,
 			int num_points, int num_cameras,
-			vec3d* points, vec3i* colors, camera_params_t* cameras);
+			easy3d::dvec3* points, easy3d::ivec3* colors, camera_params_t* cameras);
 
 
 		// ----------- matches  ------------
@@ -126,11 +127,11 @@ namespace sfm {
 
 
 		// ----------- bundle adjustment ------------
-		void  run_sfm(PointSet* pset);
+		void  run_sfm(easy3d::PointCloud* pset);
 
 		double run_bundle_adjustment(int num_pts, int num_cameras, int start_camera,
 			bool fix_points, camera_params_t *init_camera_params,
-			vec3d *init_pts, int *added_order, vec3i *colors,
+			easy3d::dvec3 *init_pts, int *added_order, easy3d::ivec3 *colors,
 			std::vector<ImageKeyVector> &pt_views, double eps2 = 1.0e-12,
 			double *S = NULL, double *U = NULL, double *V = NULL,
 			double *W = NULL, bool remove_outliers = true);
@@ -141,7 +142,7 @@ namespace sfm {
 			int *added_order,
 			int *added_order_inv,
 			camera_params_t *cameras,
-			vec3d *points, vec3i *colors,
+			easy3d::dvec3 *points, easy3d::ivec3 *colors,
 			std::vector<ImageKeyVector> &pt_views);
 
 		/* Find the camera with the most matches to existing points */
@@ -158,7 +159,7 @@ namespace sfm {
 			const std::vector<ImageKeyVector> &pt_views);
 
 		/* Triangulate a subtrack */
-		vec3d triangulate_n_views(const ImageKeyVector &views,
+		easy3d::dvec3 triangulate_n_views(const ImageKeyVector &views,
 			int *added_order, camera_params_t *cameras,
 			double &error, bool explicit_camera_centers);
 
@@ -166,7 +167,7 @@ namespace sfm {
 		int bundle_adjust_add_all_new_points(int num_points, int num_cameras,
 			int *added_order,
 			camera_params_t *cameras,
-			vec3d *points, vec3i *colors,
+			easy3d::dvec3 *points, easy3d::ivec3 *colors,
 			double reference_baseline,
 			std::vector<ImageKeyVector> &pt_views,
 			double max_reprojection_error = 16.0,
@@ -176,7 +177,7 @@ namespace sfm {
 		int remove_bad_points_and_cameras(int num_points, int num_cameras,
 			int *added_order,
 			camera_params_t *cameras,
-			vec3d *points, vec3i *colors,
+			easy3d::dvec3 *points, easy3d::ivec3 *colors,
 			std::vector<ImageKeyVector> &pt_views);
 
 		/* Pick a good initial pair of cameras to bootstrap the bundle
@@ -189,14 +190,14 @@ namespace sfm {
 			double &init_focal_length_0,
 			double &init_focal_length_1,
 			camera_params_t *cameras,
-			vec3d *points, vec3i *colors,
+			easy3d::dvec3 *points, easy3d::ivec3 *colors,
 			std::vector<ImageKeyVector> &pt_views);
 
 		/* Initialize an image for bundle adjustment */
 		camera_params_t bundle_initialize_image(ImageData &data,
 			int image_idx, int camera_idx,
 			int num_cameras, int num_points,
-			int *added_order, vec3d *points,
+			int *added_order, easy3d::dvec3 *points,
 			camera_params_t *parent,
 			camera_params_t *cameras,
 			std::vector<ImageKeyVector> &pt_views,
@@ -208,7 +209,7 @@ namespace sfm {
 		void set_focal_constraint(const ImageData &data, camera_params_t *params);
 
 		/* Refine a set of 3D points */
-		double refine_points(int num_points, vec3d *points, vec2d *projs,
+		double refine_points(int num_points, easy3d::dvec3 *points, easy3d::dvec2 *projs,
 			int *pt_idxs, camera_params_t *cameras,
 			int *added_order,
 			const std::vector<ImageKeyVector> &pt_views,
@@ -217,7 +218,7 @@ namespace sfm {
 		/* Refine a given camera and the points it observes */
 		std::vector<int> refine_camera_and_points(const ImageData &data,
 			int num_points,
-			vec3d *points, vec2d *projs,
+			easy3d::dvec3 *points, easy3d::dvec2 *projs,
 			int *pt_idxs,
 			camera_params_t *cameras,
 			int *added_order,
@@ -244,7 +245,7 @@ namespace sfm {
 		int				initial_pair_[2];   
 
 		/* Point constraint fields */
-		vec3d*	point_constraints_;
+		easy3d::dvec3*	point_constraints_;
 
 	};
 

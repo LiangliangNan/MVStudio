@@ -436,8 +436,11 @@ int svd(int m,int n,int withu,int withv,double eps,double tol,
 
 #include "matrix_driver.h"
 
+
+using namespace easy3d;
+
 /* Compute the mean of a set of vectors */
-void vec_svd(int n, const vec3d *v, double *U, double *S, double *VT) {
+void vec_svd(int n, const dvec3 *v, double *U, double *S, double *VT) {
 	double A[9] = { 0.0, 0.0, 0.0,
 		0.0, 0.0, 0.0,
 		0.0, 0.0, 0.0 };

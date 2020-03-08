@@ -5,13 +5,15 @@
 #include <iomanip>
 #include <thread>
 
-#include "../basic/basic_types.h"
-#include "../basic/logger.h"
-#include "../basic/file_utils.h"
+#include <easy3d/core/types.h>
+#include <easy3d/util/logging.h>
+#include <easy3d/util/file_system.h>
 #include "../image/image.h"
 #include "../image/image_io.h"
 #include "../math/matrix_driver.h"
 
+
+using namespace easy3d;
 
 namespace sfm {
 
@@ -365,7 +367,7 @@ namespace sfm {
 		const std::string &out)
 	{
 		//printf("Undistorting image %s\n", in.c_str());
-		Logger::out("SfM") << "Undistorting image " << FileUtils::simple_name(in) << std::endl;
+		LOG(INFO) << "Undistorting image " << file_system::simple_name(in) << std::endl;
 		fflush(stdout);
 
 		Image* img = ImageIO::read(in);

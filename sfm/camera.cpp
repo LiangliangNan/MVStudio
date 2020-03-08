@@ -1,9 +1,11 @@
 #include "camera.h"
 
-#include "../basic/basic_types.h"
-#include "../math/math_types.h"
+#include <easy3d/core/types.h>
+#include <easy3d/core/types.h>
 #include "../math/matrix_driver.h"
 
+
+using namespace easy3d;
 
 namespace sfm {
 
@@ -41,7 +43,7 @@ namespace sfm {
 
 
 	/* Compute the angle between two rays */
-	double compute_ray_angle(vec2d p, vec2d q,
+	double compute_ray_angle(dvec2 p, dvec2 q,
 		const camera_params_t &cam1,
 		const camera_params_t &cam2)
 	{
@@ -60,8 +62,8 @@ namespace sfm {
 		matrix_product331(K1_inv, p3, p3_norm);
 		matrix_product331(K2_inv, q3, q3_norm);
 
-		vec2d p_norm(p3_norm[0] / p3_norm[2], p3_norm[1] / p3_norm[2]);
-		vec2d q_norm(q3_norm[0] / q3_norm[2], q3_norm[1] / q3_norm[2]);
+		dvec2 p_norm(p3_norm[0] / p3_norm[2], p3_norm[1] / p3_norm[2]);
+		dvec2 q_norm(q3_norm[0] / q3_norm[2], q3_norm[1] / q3_norm[2]);
 
 		double R1_inv[9], R2_inv[9];
 		matrix_transpose(3, 3, (double *)cam1.R, R1_inv);
@@ -97,7 +99,7 @@ namespace sfm {
 
 
 	/* Check cheirality for a camera and a point */
-	bool check_cheirality(vec3d p, const camera_params_t &camera)
+	bool check_cheirality(dvec3 p, const camera_params_t &camera)
 	{
 		double pt[3] = { p.x, p.y, p.z };
 		double cam[3];
@@ -152,7 +154,7 @@ namespace sfm {
 	}
 
 
-	vec2d	 undistort_normalized_point(vec2d p, camera_params_t c) {
+	dvec2	 undistort_normalized_point(dvec2 p, camera_params_t c) {
 		double r = p.length();
 		if (r == 0.0)
 			return p;

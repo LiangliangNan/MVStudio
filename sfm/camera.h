@@ -2,9 +2,9 @@
 #ifndef _SFM_CAMERA_H_
 #define _SFM_CAMERA_H_
 
-#include "../math/math_types.h"
+#include <easy3d/core/types.h>
 
-
+using namespace easy3d;
 
 namespace sfm {
 
@@ -34,12 +34,12 @@ namespace sfm {
 	double camera_distance(const camera_params_t* cam1, const camera_params_t* cam2);
 
 	/* Compute the angle between two rays */
-	double compute_ray_angle(vec2d p, vec2d q, const camera_params_t &cam1, const camera_params_t &cam2);
+	double compute_ray_angle(easy3d::dvec2 p, easy3d::dvec2 q, const camera_params_t &cam1, const camera_params_t &cam2);
 
 	/* Check cheirality for a camera and a point */
-	bool	 check_cheirality(vec3d p, const camera_params_t &camera);
+	bool	 check_cheirality(easy3d::dvec3 p, const camera_params_t &camera);
 
-	vec2d	 undistort_normalized_point(vec2d p, camera_params_t c);
+	easy3d::dvec2	 undistort_normalized_point(easy3d::dvec2 p, camera_params_t c);
 
 	void   invert_distortion(int n_in, int n_out, double r0, double r1,
 		double *k_in, double *k_out);

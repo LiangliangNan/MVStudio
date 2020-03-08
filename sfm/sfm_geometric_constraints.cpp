@@ -2,12 +2,12 @@
 #include "epipolar.h"
 #include "register.h"
 
-#include "../basic/logger.h"
+#include <easy3d/util/logging.h>
 #include "../math/matrix_driver.h"
 
 #include <cassert>
 
-
+using namespace easy3d;
 namespace sfm {
 
 	void SfM::compute_geometric_constraints(int new_image_start) {
@@ -68,7 +68,7 @@ namespace sfm {
 	/* Compute epipolar geometry between a given pair of images */
 	bool SfM::compute_epipolar_geometry(int idx1, int idx2, bool remove_bad_matches) {
 		if (idx1 == idx2) {
-			Logger::warn(title()) << "computing epipolar geometry for identical images (ignored)" << std::endl;
+			LOG(WARNING) << "computing epipolar geometry for identical images (ignored)" << std::endl;
 			return false;
 		}
 
@@ -91,7 +91,7 @@ namespace sfm {
 
 		int num_inliers = (int)inliers.size();
 #ifdef _DEBUG
-		Logger::out(title()) << "inliers [" << idx1 << ", " << idx2 << "] = " << num_inliers << " out of " << list.size() << std::endl;
+		LOG(INFO) << "inliers [" << idx1 << ", " << idx2 << "] = " << num_inliers << " out of " << list.size() << std::endl;
 #endif // _DEBUG
 		if (remove_bad_matches) {
 			/* Refine the matches */
@@ -111,7 +111,7 @@ namespace sfm {
 
 			memcpy(transforms_[offset].fmatrix, F, 9 * sizeof(double));
 #ifdef _DEBUG
-			Logger::out(title()) << "inliers [" << idx1 << ", " << idx2 << "] = " << num_inliers << " out of " << list.size() << std::endl;
+			LOG(INFO) << "inliers [" << idx1 << ", " << idx2 << "] = " << num_inliers << " out of " << list.size() << std::endl;
 #endif // _DEBUG
 			return true;
 		}
@@ -179,7 +179,7 @@ namespace sfm {
 	/* Compute a transform between a given pair of images */
 	bool SfM::compute_transform(int idx1, int idx2, bool remove_bad_matches) {
 		if (idx1 == idx2) {
-			Logger::warn(title()) << "computing transform for identical images (ignored)" << std::endl;
+			LOG(WARNING) << "computing transform for identical images (ignored)" << std::endl;
 			return false;
 		}
 
@@ -201,7 +201,7 @@ namespace sfm {
 
 		int num_inliers = (int)inliers.size();
 #ifdef _DEBUG
-		Logger::out(title()) << "inliers [" << idx1 << ", " << idx2 << "] = " << num_inliers << " out of " << list.size() << std::endl;
+		LOG(INFO) << "inliers [" << idx1 << ", " << idx2 << "] = " << num_inliers << " out of " << list.size() << std::endl;
 #endif // _DEBUG
 		if (remove_bad_matches) {
 			/* Refine the matches */

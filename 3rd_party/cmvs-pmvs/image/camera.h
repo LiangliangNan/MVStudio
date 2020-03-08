@@ -38,8 +38,8 @@ class Ccamera {
 
   void setAxesScale(const float axesScale);
   
-  static void proj2q(Mat4& mat, double q[6]);
-  static void q2proj(const double q[6], Mat4& mat);  
+  static void proj2q(::Mat4& mat, double q[6]);
+  static void q2proj(const double q[6], ::Mat4& mat);
   static void setProjectionSub(double params[], std::vector<Vec4f>& projection,
 			       const int level);
 

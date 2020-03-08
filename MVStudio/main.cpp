@@ -6,9 +6,8 @@
 #include <QDebug>
 #include <QTime>
 #include <QSplashScreen>
-#include <QGLFormat>
+#include <QSurfaceFormat>
 
-#include "../basic/logger.h"
 #include "main_window.h"
 
 #include <time.h>
@@ -43,18 +42,16 @@ int main(int argc, char **argv)
 #endif
 
 	{
-		QGLFormat format = QGLFormat::defaultFormat();
-		format.setVersion(1, 2);
-		format.setProfile(QGLFormat::CompatibilityProfile);	// QSurfaceFormat::CoreProfile
-		// Request that deprecated functions be included in the OpenGL context profile. 
-		// If not specified, you should get a forward compatible context without support 
-		// functionality marked as deprecated. This requires OpenGL version 3.0 or higher.
-		format.setOption(QGL::DeprecatedFunctions);
-		//Liangliang: It is weired that multisamping in the Old QGLWidget will not work if depth buffer size is set to 32
-		format.setDepthBufferSize(24);
-		format.setStencilBufferSize(8);
-		format.setSamples(8);
-		QGLFormat::setDefaultFormat(format);
+        QSurfaceFormat format;
+        format.setDepthBufferSize(24);
+        format.setMajorVersion(3);
+        format.setMinorVersion(2);
+        format.setSamples(4);
+        format.setProfile(QSurfaceFormat::CoreProfile);
+#ifdef DEBUG
+        format.setOption(QSurfaceFormat::DebugContext);
+#endif
+        QSurfaceFormat::setDefaultFormat(format);
 	}
 
 	Application app(argc, argv);

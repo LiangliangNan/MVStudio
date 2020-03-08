@@ -6,7 +6,7 @@
 #define _MVGLIB_HOMOGRAPHY_H_
 
 
-#include "../math/math_types.h"
+#include "easy3d/core/types.h"
 
 
 
@@ -19,12 +19,12 @@
 * l_pts -- initial points
 * Tout -- on return, contains the 3x3 transformation matrix */
 void align_homography(
-	int num_pts, vec3d* r_pts, vec3d* l_pts, double* Tout, int refine
+	int num_pts, easy3d::dvec3* r_pts, easy3d::dvec3* l_pts, double* Tout, int refine
 	);
 
 /* Use non-linear least squares to refine a homography */
 void align_homography_non_linear(
-	int num_pts, vec3d* r_pts, vec3d* l_pts, double* Tin, double* Tout
+	int num_pts, easy3d::dvec3* r_pts, easy3d::dvec3* l_pts, double* Tin, double* Tout
 	);
 
 

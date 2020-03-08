@@ -1,6 +1,8 @@
 
 #include "image.h"
+#include <cmath>
 
+using namespace easy3d;
 
 Image::Image() {
 	bytes_per_pixel_ = 0 ;
@@ -11,7 +13,7 @@ Image::Image() {
 	factor_[0] = 0 ;
 	factor_[1] = 0 ;
 	factor_[2] = 0 ;
-	base_mem_ = nil ;
+	base_mem_ = nullptr ;
 }
 
 Image::Image(ColorEncoding color_rep, int size_x) {
@@ -91,6 +93,7 @@ void Image::acquire() {
 }
 
 Image::~Image() {
+    delete store_;
 }
 
 int Image::bytes_per_pixel_from_color_encoding(ColorEncoding rep) {
@@ -142,8 +145,8 @@ void flip_image(Image* image) {
 
 	for (int j = 0; j < h / 2; j++) {
 		// get a pointer to the two lines we will swap
-		Memory::pointer row1 = image->base_mem() + j * row_len;
-		Memory::pointer row2 = image->base_mem() + (h - 1 - j) * row_len;
+        easy3d::Memory::pointer row1 = image->base_mem() + j * row_len;
+		easy3d::Memory::pointer row2 = image->base_mem() + (h - 1 - j) * row_len;
 		// for each point on line, swap all the channels
 		for (int i = 0; i < w; i++) {
 			for (int k = 0; k < bpp; k++) {

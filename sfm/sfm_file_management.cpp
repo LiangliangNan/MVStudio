@@ -1,6 +1,6 @@
 #include "sfm.h"
-#include "../basic/logger.h"
-#include "../basic/file_utils.h"
+#include <easy3d/util/logging.h>
+#include <easy3d/util/file_system.h>
 #include "../math/matrix_driver.h"
 
 #include <fstream>
@@ -12,7 +12,7 @@ namespace sfm {
 	void SfM::load_image_names() {
 		std::ifstream input(option_.list_file.c_str());
 		if (input.fail()) {
-			Logger::warn(title()) << "could not open list file \'" << option_.list_file << "\'" << std::endl;
+			LOG(WARNING) << "could not open list file \'" << option_.list_file << "\'" << std::endl;
 			return;
 		}
 
@@ -36,14 +36,14 @@ namespace sfm {
 			if (stream.fail())
 				break;
 
-			if (!FileUtils::is_file(image_file)) {
-				Logger::warn(title()) << "image file \'" << FileUtils::simple_name(image_file) << "\' doesn't exist" << std::endl;
+			if (!file_system::is_file(image_file)) {
+				LOG(WARNING) << "image file \'" << file_system::simple_name(image_file) << "\' doesn't exist" << std::endl;
 				continue;
 			}
 				
-			std::string key_file = option_.key_directory + "/" + FileUtils::base_name(image_file) + ".key";
-			if (!FileUtils::is_file(key_file)) {
-				Logger::warn(title()) << "key file \'" << FileUtils::simple_name(key_file) << "\' doesn't exist" << std::endl;
+			std::string key_file = option_.key_directory + "/" + file_system::base_name(image_file) + ".key";
+			if (!file_system::is_file(key_file)) {
+				LOG(WARNING) << "key file \'" << file_system::simple_name(key_file) << "\' doesn't exist" << std::endl;
 				continue;
 			}
 
@@ -52,7 +52,7 @@ namespace sfm {
 			data.key_file = key_file;
 			data.has_init_focal = true;
 			data.init_focal = focal_length;
-			data.image_ = nil;
+			data.image_ = nullptr;
 			data.image_loaded = false;
 			data.keys_loaded = false;
 			data.camera.adjusted = false;
@@ -66,7 +66,7 @@ namespace sfm {
 	void SfM::load_match_table() {
 		std::ifstream input(option_.match_table_file.c_str());
 		if (input.fail()) {
-			Logger::warn(title()) << "could not open match table file \'" << option_.match_table_file << "\'" << std::endl;
+			LOG(WARNING) << "could not open match table file \'" << option_.match_table_file << "\'" << std::endl;
 			return;
 		}
 
@@ -110,8 +110,8 @@ namespace sfm {
 	/* Dump an output file containing information about the current state of the scene */
 	void SfM::dump_output_file(const std::string& filename, 
 		int num_images, int num_cameras, int num_points, 
-		int* added_order, camera_params_t* cameras, vec3d* points, 
-		vec3i* colors, std::vector<ImageKeyVector>& pt_views)
+		int* added_order, camera_params_t* cameras, easy3d::dvec3* points,
+		easy3d::ivec3* colors, std::vector<ImageKeyVector>& pt_views)
 	{
 		int num_visible_points = 0;
 		for (int i = 0; i < num_points; i++) {
@@ -123,7 +123,7 @@ namespace sfm {
 
 		std::ofstream output(filename.c_str());
 		if (output.fail()) {
-			Logger::warn(title()) << "could not create file \'" << filename << "\'" << std::endl;
+			LOG(WARNING) << "could not create file \'" << filename << "\'" << std::endl;
 			return;
 		}
 
@@ -221,7 +221,7 @@ namespace sfm {
 	void SfM::dump_points_to_ply(
 		const std::string& filename, 
 		int num_points, int num_cameras, 
-		vec3d* points, vec3i* colors, camera_params_t* cameras)
+		easy3d::dvec3* points, easy3d::ivec3* colors, camera_params_t* cameras)
 	{
 		int num_good_pts = 0;
 		for (int i = 0; i < num_points; i++) {
@@ -234,11 +234,11 @@ namespace sfm {
 
 		std::ofstream output(filename.c_str());
 		if (output.fail()) {
-			Logger::warn(title()) << "could not create file \'" << filename << "\'" << std::endl;
+			LOG(WARNING) << "could not create file \'" << filename << "\'" << std::endl;
 			return;
 		}
 
-		Logger::out(title()) << "dumping points to ply file (" 
+		LOG(INFO) << "dumping points to ply file ("
 			<< num_good_pts << " points)" << std::endl;
 
 		/* write the ply header */
@@ -295,14 +295,14 @@ namespace sfm {
 	void SfM::read_point_constraints(const std::string& file) {
 		std::ifstream input(file.c_str());
 		if (input.fail()) {
-			Logger::warn(title()) << "could not create file \'" << file << "\'" << std::endl;
+			LOG(WARNING) << "could not create file \'" << file << "\'" << std::endl;
 			return;
 		}
 
 		if (point_constraints_)
 			delete point_constraints_;
 		int num_points = (int)point_data_.size();
-		point_constraints_ = new vec3d[num_points];
+		point_constraints_ = new easy3d::dvec3[num_points];
 
 		std::string line;
 		while (!input.eof()) {
@@ -313,7 +313,7 @@ namespace sfm {
 			if (line[0] == ' ' || line[0] == '%' || line[0] == '#')
 				continue;  /* comment or whitespace */
 
-			vec3d p0, p;
+			easy3d::dvec3 p0, p;
 			std::istringstream string_stream(line);
 			string_stream >> p0 >> p0;
 			if (!string_stream.fail()) {
@@ -327,7 +327,7 @@ namespace sfm {
 					}
 				}
 
-				point_constraints_[pt_idx] = vec3d(p.x, p.y, -p.z);
+				point_constraints_[pt_idx] = easy3d::dvec3(p.x, p.y, -p.z);
 			}
 		}
 	}
@@ -336,7 +336,7 @@ namespace sfm {
 	void SfM::read_camera_constraints(const std::string& file) {
 		std::ifstream input(file.c_str());
 		if (input.fail()) {
-			Logger::warn(title()) << "could not create file \'" << file << "\'" << std::endl;
+			LOG(WARNING) << "could not create file \'" << file << "\'" << std::endl;
 			return;
 		}
 

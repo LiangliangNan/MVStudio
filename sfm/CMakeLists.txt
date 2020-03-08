@@ -1,19 +1,46 @@
-#
-# This file was genared by ./proj2cmake and will be overwritten on it's next run!
-# Please put all configurations in the cmake_conf/*.cmake files.
-#
+cmake_minimum_required(VERSION 3.1)
 
-cmake_minimum_required(VERSION 2.8)
+get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+project(${PROJECT_NAME})
 
 
-INCLUDE("sfm.cmake")
+set(${PROJECT_NAME}_HEADERS
+        bundle_adjustment.h
+        camera.h
+        epipolar.h
+        geometry.h
+        image_data.h
+        keys.h
+        match_table.h
+        register.h
+        sfm.h
+        sfm_option.h
+        sfm_util.h
+        )
 
-ADD_LIBRARY(sfm SHARED
-            ${sfm_SRC})
+set(${PROJECT_NAME}_SOURCES
+        bundle_adjustment.cpp
+        camera.cpp
+        epipolar.cpp
+        geometry.cpp
+        image_data.cpp
+        keys.cpp
+        match_table.cpp
+        register.cpp
+        sfm.cpp
+        sfm_bundle_adjustment.cpp
+        sfm_file_management.cpp
+        sfm_geometric_constraints.cpp
+        sfm_matches.cpp
+        sfm_option.cpp
+        sfm_tracks.cpp
+        sfm_util.cpp
+        )
 
-TARGET_LINK_LIBRARIES(sfm
-            ${sfm_DEPS}
-            ${sfm_ADDITIONAL_DEPS}
-            ${SOLUTION_SHARED_LIB_DEPS}
-            ${SOLUTION_GENERAL_DEPS})
 
+
+add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS} )
+
+target_link_libraries(${PROJECT_NAME} cminpack sba)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR})

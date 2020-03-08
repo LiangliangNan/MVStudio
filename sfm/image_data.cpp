@@ -1,5 +1,5 @@
 #include "image_data.h"
-#include "../basic/basic_types.h"
+#include <easy3d/core/types.h>
 #include "../image/image.h"
 #include "../image/image_io.h"
 
@@ -7,7 +7,7 @@
 namespace sfm {
 
 	ImageData::ImageData()
-		: image_(nil)
+		: image_(nullptr)
 		, ignore_in_bundle(false)
 		, image_loaded(false)
 		, keys_loaded(false)
@@ -80,7 +80,7 @@ namespace sfm {
 			return;
 		
 		delete image_;
-		image_ = nil;
+		image_ = nullptr;
 
 		image_loaded = false;
 	}

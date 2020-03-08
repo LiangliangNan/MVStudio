@@ -2,25 +2,24 @@
 #ifndef _DENSE_RECONSTRUCTION_H_
 #define _DENSE_RECONSTRUCTION_H_
 
-#include "algo_common.h"
 #include "sparse_reconstruction.h"
 
 
 #include <string>
 #include <vector>
 
+namespace easy3d {
+    class PointCloud;
+}
 
-class PointSet;
 class Project;
 
-class ALGO_API DenseReconstruction {
+class  DenseReconstruction {
 public:
 	DenseReconstruction(Project* proj);
 	virtual ~DenseReconstruction();
 
-	static std::string title() { return "DenseRecon"; }
-
-	bool run_pmvs(PointSet* pset = nil);
+	bool run_pmvs(easy3d::PointCloud* pset = nullptr);
 
 private:
 	bool convert_bundler_to_pmvs();

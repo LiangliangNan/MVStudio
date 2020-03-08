@@ -9,8 +9,9 @@
 #include <algorithm>
 
 
+using namespace easy3d;
 
-void compute_nullspace_basis(int n, vec2d* a, vec2d* b, double *basis) {
+void compute_nullspace_basis(int n, dvec2* a, dvec2* b, double *basis) {
 	if (n < 5) {
 		fprintf(stderr, "[compute_nullspace_basis] n must be >= 5\n");
 		return;
@@ -281,7 +282,7 @@ void compute_Ematrices_Gb(double *At, double *basis, int *num_solns, double *E)
     *num_solns = real;
 }
 
-void generate_Ematrix_hypotheses(int n, vec2d* rt_pts, vec2d* left_pts, 
+void generate_Ematrix_hypotheses(int n, dvec2* rt_pts, dvec2* left_pts,
                                  int *num_poses, double *E) 
 {
     double basis[36], Gbasis[100], At[100];
@@ -330,7 +331,7 @@ void choose(int n, int k, int *arr)
     }
 }
 
-int evaluate_Ematrix(int n, vec2d* r_pts, vec2d* l_pts, double thresh_norm,
+int evaluate_Ematrix(int n, dvec2* r_pts, dvec2* l_pts, double thresh_norm,
                      double *F, int *best_inlier, double *score)
 {
     int num_inliers = 0;
@@ -339,8 +340,8 @@ int evaluate_Ematrix(int n, vec2d* r_pts, vec2d* l_pts, double thresh_norm,
     double likelihood = 0.0;
 
     for (i = 0; i < n; i++) {
-        vec3d r(r_pts[i].x, r_pts[i].y, 1.0);
-		vec3d l(l_pts[i].x, l_pts[i].y, 1.0);
+        dvec3 r(r_pts[i].x, r_pts[i].y, 1.0);
+		dvec3 l(l_pts[i].x, l_pts[i].y, 1.0);
 
         double resid = fmatrix_compute_residual(F, l, r);    
    
@@ -362,7 +363,7 @@ int evaluate_Ematrix(int n, vec2d* r_pts, vec2d* l_pts, double thresh_norm,
     return num_inliers;
 }
 
-int compute_pose_ransac(int n, vec2d* r_pts, vec2d* l_pts, 
+int compute_pose_ransac(int n, dvec2* r_pts, dvec2* l_pts,
                         double *K1, double *K2, 
                         double ransac_threshold, int ransac_rounds, 
                         double *R_out, double *t_out)
@@ -373,10 +374,10 @@ int compute_pose_ransac(int n, vec2d* r_pts, vec2d* l_pts,
     int max_inliers = 0;
     double min_score = DBL_MAX;
     double E_best[9];
-    vec2d r_best, l_best;
+    dvec2 r_best, l_best;
 
-	vec2d* r_pts_norm = new vec2d[n];
-	vec2d* l_pts_norm = new vec2d[n];
+	dvec2* r_pts_norm = new dvec2[n];
+	dvec2* l_pts_norm = new dvec2[n];
 
     matrix_invert(3, K1, K1_inv);
     matrix_invert(3, K2, K2_inv);
@@ -390,15 +391,15 @@ int compute_pose_ransac(int n, vec2d* r_pts, vec2d* l_pts,
         matrix_product331(K1_inv, r, r_norm);
         matrix_product331(K2_inv, l, l_norm);
 
-        r_pts_norm[i] = vec2d(-r_norm[0], -r_norm[1]);
-		l_pts_norm[i] = vec2d(-l_norm[0], -l_norm[1]);
+        r_pts_norm[i] = dvec2(-r_norm[0], -r_norm[1]);
+		l_pts_norm[i] = dvec2(-l_norm[0], -l_norm[1]);
     }
 
     thresh_norm = ransac_threshold * ransac_threshold;
 
     for (round = 0; round < ransac_rounds; round++) {
         /* Pick 5 random points */
-		vec2d r_pts_inner[5], l_pts_inner[5];
+		dvec2 r_pts_inner[5], l_pts_inner[5];
         int indices[5];
         int num_hyp;
         double E[90];

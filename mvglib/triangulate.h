@@ -4,46 +4,46 @@
 #ifndef _MVGlIB_TRIANGULATE_H_
 #define _MVGlIB_TRIANGULATE_H_
 
-#include "../math/math_types.h"
+#include "easy3d/core/types.h"
 
 
 
 /* Project a point onto an image */
-vec2d project(double *R, double *t0, double *P);
+easy3d::dvec2 project(double *R, double *t0, double *P);
 
 /* Find the point with the smallest squared projection error */
-vec3d triangulate(vec2d p, vec2d q,
+easy3d::dvec3 triangulate(easy3d::dvec2 p, easy3d::dvec2 q,
 	double *R0, double *t0,
 	double *R1, double *t1, double *error);
 
 /* Find the point with the smallest squared projection error */
-vec3d triangulate_n(int num_points,
-	vec2d *p, double *R, double *t, double *error_out);
+easy3d::dvec3 triangulate_n(int num_points,
+	easy3d::dvec2 *p, double *R, double *t, double *error_out);
 
 /* Find the point with the smallest squared projection error */
-vec3d triangulate_n_refine(vec3d pt, int num_points,
-	vec2d *p, double *R, double *t, double *error_out);
+easy3d::dvec3 triangulate_n_refine(easy3d::dvec3 pt, int num_points,
+	easy3d::dvec2 *p, double *R, double *t, double *error_out);
 
 /* Given an F matrix, two calibration matrices, and a point
 * correspondence, find R and t */
 void find_extrinsics(double *F, double *K1, double *K2,
-	vec2d p1, vec2d p2, double *R, double *t);
+	easy3d::dvec2 p1, easy3d::dvec2 p2, double *R, double *t);
 
 /* Given an E matrix and a point correspondence, find R and t */
-int find_extrinsics_essential(double *E, vec2d p1, vec2d p2,
+int find_extrinsics_essential(double *E, easy3d::dvec2 p1, easy3d::dvec2 p2,
 	double *R, double *t);
 
 int find_extrinsics_essential_multipt(double *E, int n,
-	vec2d *p1, vec2d *p2,
+	easy3d::dvec2 *p1, easy3d::dvec2 *p2,
 	double *R, double *t);
 
 /* Solve for a 3x4 projection matrix, given a set of 3D points and 2D
 * projections */
-int find_projection_3x4(int num_pts, vec3d *points, vec2d *projs, double *P);
+int find_projection_3x4(int num_pts, easy3d::dvec3 *points, easy3d::dvec2 *projs, double *P);
 
 /* Solve for a 3x4 projection matrix using RANSAC, given a set of 3D
 * points and 2D projections */
-int find_projection_3x4_ransac(int num_pts, vec3d *points, vec2d *projs,
+int find_projection_3x4_ransac(int num_pts, easy3d::dvec3 *points, easy3d::dvec2 *projs,
 	double *P,
 	int ransac_rounds, double ransac_threshold);
 

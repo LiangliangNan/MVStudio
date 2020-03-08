@@ -1,7 +1,8 @@
 #include "sfm.h"
-#include "../basic/logger.h"
+#include <easy3d/util/logging.h>
 
 
+using namespace easy3d;
 namespace sfm {
 
 
@@ -57,7 +58,7 @@ namespace sfm {
 				}
 
 				unsigned int j = iter->index; // first;
-				//Logger::out(title()) << "Pruned [" << i << ", " << j << "] = " << num_pruned << " / " << num_matches + num_pruned << std::endl;
+				//LOG(INFO) << "Pruned [" << i << ", " << j << "] = " << num_pruned << " / " << num_matches + num_pruned << std::endl;
 
 				if (num_matches < option_.min_num_feat_matches) {
 					/* Get rid of... */
@@ -68,7 +69,7 @@ namespace sfm {
 			for (unsigned int j = 0; j < remove.size(); j++) {
 				int idx2 = remove[j];
 				match_table_.remove_match(MatchIndex(i, idx2));
-				Logger::out(title()) << "Removing [" << i << ", " << idx2 << "]" << std::endl;
+				LOG(INFO) << "Removing [" << i << ", " << idx2 << "]" << std::endl;
 			}
 		}
 	}
@@ -145,7 +146,7 @@ namespace sfm {
 			}
 		}
 
-		Logger::out(title()) << "Removed " << num_removed << " matches from pair (" << i1 << ", " << i2 << ")" << std::endl;
+		LOG(INFO) << "Removed " << num_removed << " matches from pair (" << i1 << ", " << i2 << ")" << std::endl;
 	}
 
 	/* Remove matches close to the bottom edge of the two given images */
@@ -184,7 +185,7 @@ namespace sfm {
 			}
 		}
 
-		Logger::out(title()) << "Removed " << num_removed << " matches from pair (" << i1 << ", " << i2 << ")" << std::endl;
+		LOG(INFO) << "Removed " << num_removed << " matches from pair (" << i1 << ", " << i2 << ")" << std::endl;
 	}
 
 

@@ -1,5 +1,5 @@
 #include "sfm.h"
-#include "../basic/logger.h"
+#include <easy3d/util/logging.h>
 
 
 namespace sfm {
@@ -7,7 +7,7 @@ namespace sfm {
 
 	SfM::SfM(SfmOption opt)
 		: option_(opt)
-		, point_constraints_(nil)
+		, point_constraints_(nullptr)
 	{
 		initial_pair_[0] = -1;
 		initial_pair_[1] = -1;
@@ -19,19 +19,19 @@ namespace sfm {
 			delete point_constraints_;
 	}
 
-	void SfM::apply(PointSet* pset) {
+	void SfM::apply(easy3d::PointCloud* pset) {
 		if (option_.fixed_focal_length && option_.estimate_distortion) {
-			Logger::err(title()) << "\'fixed_focal_length\' and \'estimate_distortion\' are incompatible" << std::endl;
+			LOG(ERROR) << "\'fixed_focal_length\' and \'estimate_distortion\' are incompatible" << std::endl;
 			return;
 		}
 
-		Logger::out(title()) << "loading image names..." << std::endl;
+		LOG(INFO) << "loading image names..." << std::endl;
 		load_image_names();
 		if (image_data_.empty()) {
 			return;
 		}
 		int num_images = num_of_images();
-		Logger::out(title()) << "done. " << num_images << " images." << std::endl;
+		LOG(INFO) << "done. " << num_images << " images." << std::endl;
 
 		if (option_.use_camera_constraints)
 			read_camera_constraints(option_.camera_constraint_file);
@@ -42,11 +42,11 @@ namespace sfm {
 // 		}
 // 		else 
  		{
-			Logger::out(title()) << "loading match table..." << std::endl;
+			LOG(INFO) << "loading match table..." << std::endl;
 			load_match_table();
 			prune_multiple_matches();
 
-			Logger::out(title()) << "loading keys..." << std::endl;
+			LOG(INFO) << "loading keys..." << std::endl;
 			load_keys();
 
 			if (option_.keypoint_border_width > 0)

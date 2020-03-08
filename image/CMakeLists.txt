@@ -1,22 +1,36 @@
-#
-# This file was genared by ./proj2cmake and will be overwritten on it's next run!
-# Please put all configurations in the cmake_conf/*.cmake files.
-#
+cmake_minimum_required(VERSION 3.1)
 
-cmake_minimum_required(VERSION 2.8)
+get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+project(${PROJECT_NAME})
 
 
-INCLUDE("image.cmake")
+set(${PROJECT_NAME}_HEADERS
+        color.h
+        image.h
+        image_io.h
+        image_serializer.h
+        image_serializer_jpeg.h
+        image_serializer_png.h
+        image_store.h
+        )
 
-ADD_LIBRARY(image SHARED
-            ${image_SRC})
+set(${PROJECT_NAME}_SOURCES
+        image.cpp
+        image_io.cpp
+        image_serializer.cpp
+        image_serializer_jpeg.cpp
+        image_serializer_png.cpp
+        image_store.cpp
+        )
 
-TARGET_LINK_LIBRARIES(image
-            ${image_DEPS}
-            ${image_ADDITIONAL_DEPS}
-            ${SOLUTION_SHARED_LIB_DEPS}
-            ${SOLUTION_GENERAL_DEPS})
+
+
+add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS} )
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR})
 
 set(PNG_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/png)
 set(JPEG_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/jpeg ${MVSTUDIO_BUILD_DIR}/3rd_party/jpeg)
 target_include_directories(image PRIVATE ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIR})
+
+target_link_libraries(${PROJECT_NAME} png jpeg zlib)

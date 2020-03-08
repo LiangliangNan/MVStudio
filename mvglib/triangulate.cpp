@@ -3,8 +3,10 @@
 #include "../math/matrix_driver.h"
 #include "../math/svd.h"
 
+using namespace easy3d;
 
-static vec2d global_p, global_q;
+
+static dvec2 global_p, global_q;
 static double *global_R0, *global_t0, *global_R1, *global_t1;
 
 void quick_svd(double *E, double *U, double *S, double *VT) {
@@ -58,9 +60,9 @@ void quick_svd(double *E, double *U, double *S, double *VT) {
 }
 
 /* Project a point onto an image */
-vec2d project(double *R, double *t0, double *P) {
+dvec2 project(double *R, double *t0, double *P) {
 	double tmp[3], tmp2[3];
-	vec2d result;
+	dvec2 result;
 
 	/* Rigid transform */
 	matrix_product331(R, P, tmp);
@@ -77,8 +79,8 @@ void triangulation_residual(const int *m, const int *n, double *x,
 	double *fvec, double *iflag)
 {
 	/* Project the point into the two views */
-	vec2d p = project(global_R0, global_t0, x);
-	vec2d q = project(global_R1, global_t1, x);
+	dvec2 p = project(global_R0, global_t0, x);
+	dvec2 q = project(global_R1, global_t1, x);
 
 	fvec[0] = global_p.x - p.x;
 	fvec[1] = global_p.y - p.y;
@@ -89,7 +91,7 @@ void triangulation_residual(const int *m, const int *n, double *x,
 static int global_num_points;
 static double *global_Rs = NULL;
 static double *global_ts = NULL;
-static vec2d *global_ps;
+static dvec2 *global_ps;
 
 void triangulate_n_residual(const int *m, const int *n,
 	double *x, double *fvec, double *iflag)
@@ -101,7 +103,7 @@ void triangulate_n_residual(const int *m, const int *n,
 		int toff = 3 * i;
 
 		/* Project the point into the view */
-		vec2d p = project(global_Rs + Roff, global_ts + toff, x);
+		dvec2 p = project(global_Rs + Roff, global_ts + toff, x);
 
 		fvec[2 * i + 0] = global_ps[i].x - p.x;
 		fvec[2 * i + 1] = global_ps[i].y - p.y;
@@ -110,8 +112,8 @@ void triangulate_n_residual(const int *m, const int *n,
 
 
 /* Find the point with the smallest squared projection error */
-vec3d triangulate_n_refine(vec3d pt, int num_points,
-	vec2d *p, double *R, double *t, double *error_out)
+dvec3 triangulate_n_refine(dvec3 pt, int num_points,
+	dvec2 *p, double *R, double *t, double *error_out)
 {
 	int num_eqs = 2 * num_points;
 	int num_vars = 3;
@@ -153,13 +155,13 @@ vec3d triangulate_n_refine(vec3d pt, int num_points,
 		*error_out = error;
 	}
 
-	return vec3d(x[0], x[1], x[2]);
+	return dvec3(x[0], x[1], x[2]);
 }
 
 
 /* Find the point with the smallest squared projection error */
-vec3d triangulate_n(int num_points,
-	vec2d *p, double *R, double *t, double *error_out)
+dvec3 triangulate_n(int num_points,
+	dvec2 *p, double *R, double *t, double *error_out)
 {
 	int num_eqs = 2 * num_points;
 	int num_vars = 3;
@@ -171,7 +173,7 @@ vec3d triangulate_n(int num_points,
 	int i;
 	double error;
 
-	vec3d r;
+	dvec3 r;
 
 	for (i = 0; i < num_points; i++) {
 		int Roff = 9 * i;
@@ -248,7 +250,7 @@ vec3d triangulate_n(int num_points,
 		*error_out = error;
 	}
 
-	r = vec3d(x[0], x[1], x[2]);
+	r = dvec3(x[0], x[1], x[2]);
 
 	free(A);
 	free(b);
@@ -259,7 +261,7 @@ vec3d triangulate_n(int num_points,
 
 
 /* Find the point with the smallest squared projection error */
-vec3d triangulate(vec2d p, vec2d q,
+dvec3 triangulate(dvec2 p, dvec2 q,
 	double *R0, double *t0,
 	double *R1, double *t1, double *error)
 {
@@ -323,12 +325,12 @@ vec3d triangulate(vec2d p, vec2d q,
 		*error = dx1 * dx1 + dy1 * dy1 + dx2 * dx2 + dy2 * dy2;
 	}
 
-	return vec3d(x[0], x[1], x[2]);
+	return dvec3(x[0], x[1], x[2]);
 }
 
 /* Given an F matrix, two calibration matrices, and a point correspondence, find R and t */
 void find_extrinsics(double *F, double *K1, double *K2,
-	vec2d p1, vec2d p2, double *R, double *t) {
+	dvec2 p1, dvec2 p2, double *R, double *t) {
 	double E[9];
 	double K1_inv[9], K2_inv[9], tmp[9];
 
@@ -343,7 +345,7 @@ void find_extrinsics(double *F, double *K1, double *K2,
 }
 
 /* Given an E matrix and a point correspondence, find R and t */
-int find_extrinsics_essential(double *E, vec2d p1, vec2d p2,
+int find_extrinsics_essential(double *E, dvec2 p1, dvec2 p2,
 	double *R, double *t)
 {
 	double tmp[9], tmp2[3], Qv[3];
@@ -367,7 +369,7 @@ int find_extrinsics_essential(double *E, vec2d p1, vec2d p2,
 
 	double t0[3] = { 0.0, 0.0, 0.0 };
 
-	vec3d Q, PQ;
+	dvec3 Q, PQ;
 	double c1, c2;
 	double error;
 
@@ -400,7 +402,7 @@ int find_extrinsics_essential(double *E, vec2d p1, vec2d p2,
 	Qv[0] = Q.x, Qv[1] = Q.y, Qv[2] = Q.z;
 	matrix_product331(Ra, Qv, tmp);
 	matrix_sum(3, 1, 3, 1, tmp, tu, tmp2);
-	PQ = vec3d(tmp2[0], tmp2[1], tmp2[2]);
+	PQ = dvec3(tmp2[0], tmp2[1], tmp2[2]);
 
 	c1 = Q.z;
 	c2 = PQ.z;
@@ -425,7 +427,7 @@ int find_extrinsics_essential(double *E, vec2d p1, vec2d p2,
 		Qv[0] = Q.x, Qv[1] = Q.y, Qv[2] = Q.z;
 		matrix_product331(Rb, Qv, tmp);
 		matrix_sum(3, 1, 3, 1, tmp, tu, tmp2);
-		PQ = vec3d(tmp2[0], tmp2[1], tmp2[2]);
+		PQ = dvec3(tmp2[0], tmp2[1], tmp2[2]);
 
 		c1 = Q.z;
 		c2 = PQ.z;
@@ -460,7 +462,7 @@ int find_extrinsics_essential(double *E, vec2d p1, vec2d p2,
 
 /* Given an E matrix and a point correspondence, find R and t */
 int find_extrinsics_essential_multipt(double *E, int n,
-	vec2d *p1, vec2d *p2,
+	dvec2 *p1, dvec2 *p2,
 	double *R, double *t)
 {
 	double tmp[9], tmp2[3], Qv[3];
@@ -484,7 +486,7 @@ int find_extrinsics_essential_multipt(double *E, int n,
 
 	double t0[3] = { 0.0, 0.0, 0.0 };
 
-	vec3d Q, PQ;
+	dvec3 Q, PQ;
 	double c1, c2;
 	double error;
 
@@ -522,7 +524,7 @@ int find_extrinsics_essential_multipt(double *E, int n,
 		Qv[0] = Q.x, Qv[1] = Q.y, Qv[2] = Q.z;
 		matrix_product331(Ra, Qv, tmp);
 		matrix_sum(3, 1, 3, 1, tmp, tu, tmp2);
-		PQ = vec3d(tmp2[0], tmp2[1], tmp2[2]);
+		PQ = dvec3(tmp2[0], tmp2[1], tmp2[2]);
 
 		c1 = Q.z;
 		c2 = PQ.z;
@@ -563,7 +565,7 @@ int find_extrinsics_essential_multipt(double *E, int n,
 			Qv[0] = Q.x, Qv[1] = Q.y, Qv[2] = Q.z;
 			matrix_product331(Rb, Qv, tmp);
 			matrix_sum(3, 1, 3, 1, tmp, tu, tmp2);
-			PQ = vec3d(tmp2[0], tmp2[1], tmp2[2]);
+			PQ = dvec3(tmp2[0], tmp2[1], tmp2[2]);
 
 			c1 = Q.z;
 			c2 = PQ.z;
@@ -605,12 +607,12 @@ int find_extrinsics_essential_multipt(double *E, int n,
 }
 
 
-static vec3d *condition_points_3D(int num_points, vec3d *pts, double *T) {
-	vec3d *pts_new = (vec3d *)malloc(sizeof(vec3d) * num_points);
-	vec3d *pts_zero_mean = (vec3d *)malloc(sizeof(vec3d) * num_points);
+static dvec3 *condition_points_3D(int num_points, dvec3 *pts, double *T) {
+	dvec3 *pts_new = (dvec3 *)malloc(sizeof(dvec3) * num_points);
+	dvec3 *pts_zero_mean = (dvec3 *)malloc(sizeof(dvec3) * num_points);
 	double U[9], S[3], VT[9], U16[9], Sinv[16], Ttrans[16], action[16];
 
-	vec3d mean = Geom::vec_mean(num_points, pts);
+	dvec3 mean = geom::vec_mean(num_points, pts);
 
 	double total_dist = 0.0;
 	double avg_dist;
@@ -622,7 +624,7 @@ static vec3d *condition_points_3D(int num_points, vec3d *pts, double *T) {
 		double dy = pts[i].y - mean.y;
 		double dz = pts[i].z - mean.z;
 
-		pts_zero_mean[i] = vec3d(
+		pts_zero_mean[i] = dvec3(
 			pts[i].x - mean.x,
 			pts[i].y - mean.y,
 			pts[i].z - mean.z);
@@ -664,7 +666,7 @@ static vec3d *condition_points_3D(int num_points, vec3d *pts, double *T) {
 
 		matrix_product441(T, pt, Tpt);
 
-		pts_new[i] = vec3d(Tpt[0], Tpt[1], Tpt[2]);
+		pts_new[i] = dvec3(Tpt[0], Tpt[1], Tpt[2]);
 	}
 
 	free(pts_zero_mean);
@@ -672,10 +674,10 @@ static vec3d *condition_points_3D(int num_points, vec3d *pts, double *T) {
 	return pts_new;
 }
 
-static vec2d *condition_points_2D(int num_points, vec2d *pts, double *T) {
-	vec2d *pts_new = (vec2d *)malloc(sizeof(vec2d) * num_points);
+static dvec2 *condition_points_2D(int num_points, dvec2 *pts, double *T) {
+	dvec2 *pts_new = (dvec2 *)malloc(sizeof(dvec2) * num_points);
 
-	vec2d mean = Geom::vec_mean(num_points, pts);
+	dvec2 mean = geom::vec_mean(num_points, pts);
 	double total_dist = 0.0;
 	double avg_dist;
 	double factor;
@@ -693,7 +695,7 @@ static vec2d *condition_points_2D(int num_points, vec2d *pts, double *T) {
 	for (i = 0; i < num_points; i++) {
 		double x = factor * (pts[i].x - mean.x);
 		double y = factor * (pts[i].y - mean.y);
-		pts_new[i] = vec2d(x, y);
+		pts_new[i] = dvec2(x, y);
 	}
 
 	T[0] = factor;  T[1] = 0.0;     T[2] = -factor * mean.x;
@@ -705,7 +707,7 @@ static vec2d *condition_points_2D(int num_points, vec2d *pts, double *T) {
 
 /* Solve for a 3x4 projection matrix, given a set of 3D points and 2D
 * projections */
-int find_projection_3x4(int num_pts, vec3d *points, vec2d *projs, double *P) {
+int find_projection_3x4(int num_pts, dvec3 *points, dvec2 *projs, double *P) {
 	if (num_pts < 6) {
 		printf("[find_projection_3x4] Need at least 6 points!\n");
 		return -1;
@@ -715,16 +717,16 @@ int find_projection_3x4(int num_pts, vec3d *points, vec2d *projs, double *P) {
 		// #define _CONDITION_
 #ifdef _CONDITION_
 		double Tpoints[16];
-		vec3d *points_new = condition_points_3D(num_pts, points, Tpoints);
+		dvec3 *points_new = condition_points_3D(num_pts, points, Tpoints);
 
 		double Tprojs[9];
-		vec2d *projs_new = condition_points_2D(num_pts, projs, Tprojs);
+		dvec2 *projs_new = condition_points_2D(num_pts, projs, Tprojs);
 
 		double Tprojs_inv[9];
 		double Ptmp[12];
 #else
-		vec3d *points_new = points;
-		vec2d *projs_new = projs;
+		dvec3 *points_new = points;
+		dvec2 *projs_new = projs;
 #endif
 
 		int num_eqns = 2 * num_pts;
@@ -828,8 +830,8 @@ int find_projection_3x4(int num_pts, vec3d *points, vec2d *projs, double *P) {
 }
 
 static int global_num_pts;
-static vec3d *global_points;
-static vec2d *global_projs;
+static dvec3 *global_points;
+static dvec2 *global_projs;
 
 static void projection_residual(const int *m, const int *n, double *x,
 	double *fvec, double *iflag)
@@ -864,7 +866,7 @@ static void projection_residual(const int *m, const int *n, double *x,
 
 /* Solve for a 3x4 projection matrix, given a set of 3D points and 2D
 * projections using non-linear optimization */
-int find_projection_3x4_nonlinear(int num_pts, vec3d *points, vec2d *projs,
+int find_projection_3x4_nonlinear(int num_pts, dvec3 *points, dvec2 *projs,
 	double *Pin, double *Pout)
 {
 	if (num_pts < 6) {
@@ -893,7 +895,7 @@ int find_projection_3x4_nonlinear(int num_pts, vec3d *points, vec2d *projs,
 
 /* Solve for a 3x4 projection matrix using RANSAC, given a set of 3D
 * points and 2D projections */
-int find_projection_3x4_ransac(int num_pts, vec3d *points, vec2d *projs,
+int find_projection_3x4_ransac(int num_pts, dvec3 *points, dvec2 *projs,
 	double *P,
 	int ransac_rounds, double ransac_threshold)
 {
@@ -911,8 +913,8 @@ int find_projection_3x4_ransac(int num_pts, vec3d *points, vec2d *projs,
 		double max_error = 0.0;
 		double Pbest[12];
 		int num_inliers = 0, num_inliers_new = 0;
-		vec3d *pts_final = NULL;
-		vec2d *projs_final = NULL;
+		dvec3 *pts_final = NULL;
+		dvec2 *projs_final = NULL;
 		double Plinear[12];
 
 		double Rinit[9];
@@ -925,8 +927,8 @@ int find_projection_3x4_ransac(int num_pts, vec3d *points, vec2d *projs,
 		int num_inliers_polished = 0;
 
 		for (round = 0; round < ransac_rounds; round++) {
-			vec3d pts_inner[MIN_PTS];
-			vec2d projs_inner[MIN_PTS];
+			dvec3 pts_inner[MIN_PTS];
+			dvec2 projs_inner[MIN_PTS];
 			double Ptmp[12];
 
 			num_inliers = 0;
@@ -1069,8 +1071,8 @@ int find_projection_3x4_ransac(int num_pts, vec3d *points, vec2d *projs,
 #endif
 
 		num_inliers = 0;
-		pts_final = (vec3d *)malloc(sizeof(vec3d) * max_inliers);
-		projs_final = (vec2d *)malloc(sizeof(vec2d) * max_inliers);
+		pts_final = (dvec3 *)malloc(sizeof(dvec3) * max_inliers);
+		projs_final = (dvec2 *)malloc(sizeof(dvec2) * max_inliers);
 
 		for (i = 0; i < num_pts; i++) {
 			double pt[4] = { 

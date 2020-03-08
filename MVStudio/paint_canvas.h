@@ -3,13 +3,13 @@
 
 #include "GL/glew.h"
 #include "../3rd_party/QGLViewer/qglviewer.h"
-#include "../math/math_types.h"
+#include "easy3d/core/types.h"
 #include "../algo/sparse_reconstruction.h"
 #include "../algo/project.h"
 #include "../sfm/camera.h"
 #include "../basic/canvas.h"
 
-class PointSet;
+class PointCloud;
 class MainWindow;
 class PointSetRender;
 
@@ -33,16 +33,16 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 
 	MainWindow* mainWindow() const { return main_window_; }
-	void  setLightPosition(const vec3d& pos) ;
-	const vec3d& lightPosition() const { return light_pos_; }
+	void  setLightPosition(const dvec3& pos) ;
+	const dvec3& lightPosition() const { return light_pos_; }
 
-	vec2d projectionOf(const vec3d& p);          // point to screen
-	vec3d unProjectionOf(double winx, double winy, double winz);  // screen to point
+	dvec2 projectionOf(const dvec3& p);          // point to screen
+	dvec3 unProjectionOf(double winx, double winy, double winz);  // screen to point
 
 	//////////////////////////////////////////////////////////////////////////
 
-	PointSet* pointSet() const { return point_set_; }
-	void setPointSet(PointSet* pset, bool fit);
+	PointCloud* pointCloud() const { return point_set_; }
+	void setPointSet(PointCloud* pset, bool fit);
 
 	bool creatProject(const QString& project_file);
 	bool loadProject(const QString& file);
@@ -92,7 +92,7 @@ private :
 
 protected:
 	MainWindow*	main_window_;
-	vec3d		light_pos_;
+	dvec3		light_pos_;
 
 	int		coord_system_region_size_;
 	bool		show_coord_sys_;
@@ -100,7 +100,7 @@ protected:
 	Project*	project_;
 
 	PointSetRender*	render_;
-	PointSet*		point_set_;
+	PointCloud*		point_set_;
 	std::vector<sfm::camera_params_t> cameras_;
 };
 

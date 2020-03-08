@@ -211,7 +211,7 @@ bool predVec32(const TVec3<T>& lhs, const TVec3<T>& rhs) {
 
 typedef TVec3<double> Vec3;
 typedef TVec3<float>  Vec3f;
-typedef TVec3<int>    Vec3i;
+typedef TVec3<int>    Ivec3;
 
 template<class T>
 struct Svec3cmp {

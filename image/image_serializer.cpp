@@ -1,10 +1,12 @@
 
 #include "image_serializer.h"
 #include "image.h"
-#include "../basic/logger.h"
+#include <easy3d/util/logging.h>
+#include <easy3d/util/file_system.h>
 
 #include <fstream>
 
+using namespace easy3d;
 
 Image* ImageSerializer::serialize_read(const std::string& file_name) {
 
@@ -14,10 +16,10 @@ Image* ImageSerializer::serialize_read(const std::string& file_name) {
 
 	std::ifstream input(file_name.c_str(), mode) ;
 	if(!input) {
-		Logger::err("ImageSerializer") 
+		LOG(ERROR)
 			<< "could not open file\'" 
 			<< file_name << "\'" << std::endl ;
-		return nil ;
+		return nullptr ;
 	}
 	return serialize_read(input) ;
 }
@@ -33,7 +35,7 @@ bool ImageSerializer::serialize_write(
 	std::ofstream output(file_name.c_str(), mode) ;
 
 	if(!output) {
-	  Logger::err("ImageSerializer") 
+	  LOG(ERROR)
 		  << "could not open file\'" 
 		  << file_name << "\'" << std::endl ;
 	  return false ;
@@ -44,8 +46,8 @@ bool ImageSerializer::serialize_write(
 
 Image* ImageSerializer::serialize_read(std::istream& stream) {
 	bool implemented = false ;
-	ogf_assert(implemented) ;
-	return nil ;
+	assert(implemented) ;
+	return nullptr ;
 }
 
 bool ImageSerializer::serialize_write(
@@ -53,7 +55,7 @@ bool ImageSerializer::serialize_write(
 									  )
 {
 	bool implemented = false ;
-	ogf_assert(implemented) ;
+	assert(implemented) ;
 	return false ;
 }
 

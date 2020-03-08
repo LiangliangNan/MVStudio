@@ -74,15 +74,15 @@ Matrix<FT, DIM>::Matrix() {
 
 template <class FT, int DIM> inline 
 FT& Matrix<FT, DIM>::operator()(int i, int j) {
-	ogf_assert(i >= 0 && i < DIM) ;
-	ogf_assert(j >= 0 && j < DIM) ;
+	assert(i >= 0 && i < DIM) ;
+	assert(j >= 0 && j < DIM) ;
 	return coeff_[i][j] ;
 }
 
 template <class FT, int DIM> inline 
 const FT& Matrix<FT, DIM>::operator()(int i, int j) const {
-	ogf_assert(i >= 0 && i < DIM) ;
-	ogf_assert(j >= 0 && j < DIM) ;
+	assert(i >= 0 && i < DIM) ;
+	assert(j >= 0 && j < DIM) ;
 	return coeff_[i][j] ;
 }
 
@@ -227,7 +227,7 @@ Matrix<FT, DIM>::inverse() const {
 			}
 		}
 
-		ogf_assert(val != 0.0);
+		assert(val != 0.0);
 
 		for (j = 0; j != DIM; j++) {
 			tmp(i,j)    /= val;

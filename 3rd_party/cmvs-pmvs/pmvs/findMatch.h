@@ -20,7 +20,9 @@
 #include "optim.h"
 #include "option.h"
 
-class PointSet;
+namespace easy3d {
+    class PointCloud;
+}
 
 
 namespace PMVS3 {
@@ -34,7 +36,7 @@ class CfindMatch {
   void run(void);
 
   // fill pset with the points/normals/colors
-  void fillPointSet(PointSet* pset);
+  void fillPointSet(easy3d::PointCloud* pset);
 
   void write(const std::string prefix, bool bExportPatch, bool bExportPSet);
   

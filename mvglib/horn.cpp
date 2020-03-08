@@ -12,18 +12,20 @@
 //#define isinf _isinf
 #endif
 
+using namespace easy3d;
+
 /* Computes the closed-form least-squares solution to a rigid
 * body alignment.
 *
 * n: the number of points
 * right_pts: Target set of n points
 * left_pts:  Source set of n points */
-double align_horn(int n, vec3d *right_pts, vec3d *left_pts,
+double align_horn(int n, dvec3 *right_pts, dvec3 *left_pts,
 	double *R, double *T,
 	double *Tout, double *scale, double *weight) {
 	int i;
-	vec3d right_centroid(0.0, 0.0, 0.0);
-	vec3d left_centroid(0.0, 0.0, 0.0);
+	dvec3 right_centroid(0.0, 0.0, 0.0);
+	dvec3 left_centroid(0.0, 0.0, 0.0);
 	double M[2][2] = { { 0.0, 0.0 },
 	{ 0.0, 0.0 } };
 	double MT[2][2];
@@ -81,8 +83,8 @@ double align_horn(int n, vec3d *right_pts, vec3d *left_pts,
 	sum_num = sum_den = 0.0;
 
 	for (i = 0; i < n; i++) {
-		vec3d r = right_centroid - right_pts[i];
-		vec3d l = left_centroid - left_pts[i];
+		dvec3 r = right_centroid - right_pts[i];
+		dvec3 l = left_centroid - left_pts[i];
 
 		sum_num = r.length2();
 		sum_den = l.length2();
@@ -92,8 +94,8 @@ double align_horn(int n, vec3d *right_pts, vec3d *left_pts,
 
 	/* Fill in the matrix M */
 	for (i = 0; i < n; i++) {
-		vec3d r = right_centroid - right_pts[i];
-		vec3d l = left_centroid - left_pts[i];
+		dvec3 r = right_centroid - right_pts[i];
+		dvec3 l = left_centroid - left_pts[i];
 
 		if (weight != NULL) {
 			M[0][0] += r.x * l.x;
@@ -183,12 +185,12 @@ double align_horn(int n, vec3d *right_pts, vec3d *left_pts,
 	RMS_sum = 0.0;
 
 	for (i = 0; i < n; i++) {
-		vec3d r = (right_centroid - right_pts[i]);
-		vec3d l = (left_centroid - left_pts[i]);
-		vec3d resid;
+		dvec3 r = (right_centroid - right_pts[i]);
+		dvec3 l = (left_centroid - left_pts[i]);
+		dvec3 resid;
 
 		/* Rotate, scale l */
-		vec3d Rl, SRl;
+		dvec3 Rl, SRl;
 
 		Rl.x = R[0] * l.x + R[1] * l.y + R[2] * l.z;
 		Rl.y = R[3] * l.x + R[4] * l.y + R[5] * l.z;
@@ -209,11 +211,11 @@ double align_horn(int n, vec3d *right_pts, vec3d *left_pts,
 * n: the number of points
 * right_pts: Target set of n points
 * left_pts:  Source set of n points */
-double align_horn_3D(int n, vec3d *right_pts, vec3d *left_pts, int scale_xform,
+double align_horn_3D(int n, dvec3 *right_pts, dvec3 *left_pts, int scale_xform,
 	double *Tout) {
 	int i;
-	vec3d right_centroid(0.0, 0.0, 0.0);
-	vec3d left_centroid(0.0, 0.0, 0.0);
+	dvec3 right_centroid(0.0, 0.0, 0.0);
+	dvec3 left_centroid(0.0, 0.0, 0.0);
 	double M[3][3] = { { 0.0, 0.0, 0.0, },
 	{ 0.0, 0.0, 0.0, },
 	{ 0.0, 0.0, 0.0, } };
@@ -235,15 +237,15 @@ double align_horn_3D(int n, vec3d *right_pts, vec3d *left_pts, int scale_xform,
 	int perm[3];
 
 	/* Compute the centroid of both point sets */
-	right_centroid = Geom::vec_mean(n, right_pts);
-	left_centroid = Geom::vec_mean(n, left_pts);
+	right_centroid = geom::vec_mean(n, right_pts);
+	left_centroid = geom::vec_mean(n, left_pts);
 
 	/* Compute the scale */
 	sum_num = sum_den = 0.0;
 
 	for (i = 0; i < n; i++) {
-		vec3d r = (right_centroid - right_pts[i]);
-		vec3d l = (left_centroid - left_pts[i]);
+		dvec3 r = (right_centroid - right_pts[i]);
+		dvec3 l = (left_centroid - left_pts[i]);
 
 		sum_num += r.length2();
 		sum_den += l.length2();
@@ -253,8 +255,8 @@ double align_horn_3D(int n, vec3d *right_pts, vec3d *left_pts, int scale_xform,
 
 	/* Fill in the matrix M */
 	for (i = 0; i < n; i++) {
-		vec3d r = (right_centroid - right_pts[i]);
-		vec3d l = (left_centroid - left_pts[i]);
+		dvec3 r = (right_centroid - right_pts[i]);
+		dvec3 l = (left_centroid - left_pts[i]);
 
 		M[0][0] += r.x * l.x;
 		M[0][1] += r.x * l.y;
@@ -408,12 +410,12 @@ double align_horn_3D(int n, vec3d *right_pts, vec3d *left_pts, int scale_xform,
 * n: the number of points
 * right_pts: Target set of n points
 * left_pts:  Source set of n points */
-double align_horn_3D_2(int n, vec3d *right_pts, vec3d *left_pts, int scale_xform,
+double align_horn_3D_2(int n, dvec3 *right_pts, dvec3 *left_pts, int scale_xform,
 	double *Tout)
 {
 	int i;
-	vec3d right_centroid(0.0, 0.0, 0.0);
-	vec3d left_centroid(0.0, 0.0, 0.0);
+	dvec3 right_centroid(0.0, 0.0, 0.0);
+	dvec3 left_centroid(0.0, 0.0, 0.0);
 	double Tcenter[16] = { 1.0, 0.0, 0.0, 0.0,
 		0.0, 1.0, 0.0, 0.0,
 		0.0, 0.0, 1.0, 0.0,
@@ -424,21 +426,21 @@ double align_horn_3D_2(int n, vec3d *right_pts, vec3d *left_pts, int scale_xform
 
 	double sum_num, sum_den, scale, RMS_sum;
 
-	vec3d *left_pts_zm = new vec3d[n];
-	vec3d *right_pts_zm = new vec3d[n];
+	dvec3 *left_pts_zm = new dvec3[n];
+	dvec3 *right_pts_zm = new dvec3[n];
 
 	double error = 0.0;
 
 	/* Compute the centroid of both point sets */
-	right_centroid = Geom::vec_mean(n, right_pts);
-	left_centroid = Geom::vec_mean(n, left_pts);
+	right_centroid = geom::vec_mean(n, right_pts);
+	left_centroid = geom::vec_mean(n, left_pts);
 
 	/* Compute the scale */
 	sum_num = sum_den = 0.0;
 
 	for (i = 0; i < n; i++) {
-		vec3d r = right_centroid - right_pts[i];
-		vec3d l = left_centroid - left_pts[i];
+		dvec3 r = right_centroid - right_pts[i];
+		dvec3 l = left_centroid - left_pts[i];
 
 		sum_num += r.length2();
 		sum_den += l.length2();
@@ -447,8 +449,8 @@ double align_horn_3D_2(int n, vec3d *right_pts, vec3d *left_pts, int scale_xform
 	scale = sqrt(sum_num / sum_den);
 
 	for (i = 0; i < n; i++) {
-		vec3d r = right_centroid - right_pts[i];
-		vec3d l = left_centroid - left_pts[i];
+		dvec3 r = right_centroid - right_pts[i];
+		dvec3 l = left_centroid - left_pts[i];
 
 		right_pts_zm[i] = r;
 		left_pts_zm[i] = scale * l;
@@ -513,7 +515,7 @@ double align_horn_3D_2(int n, vec3d *right_pts, vec3d *left_pts, int scale_xform
 }
 
 /* Align two sets of points with a 3D rotation */
-double align_3D_rotation(int n, vec3d *r_pts, vec3d *l_pts, double *R)
+double align_3D_rotation(int n, dvec3 *r_pts, dvec3 *l_pts, double *R)
 {
 	double A[9];
 	double U[9], S[3], V[9], VT[9], RT[9];
@@ -576,13 +578,13 @@ double align_3D_rotation(int n, vec3d *r_pts, vec3d *l_pts, double *R)
 	return error / n;
 }
 
-double align_2D(int n, vec3d *right_pts, vec3d *left_pts,
+double align_2D(int n, dvec3 *right_pts, dvec3 *left_pts,
 	double *R, double *T,
 	double *Tout, double *scale, double *weight)
 {
 	int i;
-	vec3d right_centroid = Geom::vec_mean(n, right_pts);
-	vec3d left_centroid = Geom::vec_mean(n, left_pts);
+	dvec3 right_centroid = geom::vec_mean(n, right_pts);
+	dvec3 left_centroid = geom::vec_mean(n, left_pts);
 	double Ttmp[3][3], Tcenter[3][3];
 
 	/* Setup the matrix */
@@ -635,12 +637,12 @@ double align_2D(int n, vec3d *right_pts, vec3d *left_pts,
 	RMS_sum = 0.0;
 
 	for (i = 0; i < n; i++) {
-		vec3d r = (right_pts[i] - right_centroid);
-		vec3d l = (left_pts[i] - left_centroid);
-		vec3d resid;
+		dvec3 r = (right_pts[i] - right_centroid);
+		dvec3 l = (left_pts[i] - left_centroid);
+		dvec3 resid;
 
 		/* Rotate, scale l */
-		vec3d SRl;
+		dvec3 SRl;
 
 		SRl.x = R[0] * l.x + R[1] * l.y + R[2] * l.z;
 		SRl.y = R[3] * l.x + R[4] * l.y + R[5] * l.z;
@@ -659,13 +661,13 @@ double align_2D(int n, vec3d *right_pts, vec3d *left_pts,
 }
 
 /* Align two sets of points with a 2D similarity transform */
-int align_2D_ransac(int n, vec3d *r_pts, vec3d *l_pts,
+int align_2D_ransac(int n, dvec3 *r_pts, dvec3 *l_pts,
 	int num_ransac_rounds, double ransac_thresh,
 	double *Tret)
 {
 	int round;
 #define MIN_SUPPORT 2
-	vec3d *l_inliers, *r_inliers;
+	dvec3 *l_inliers, *r_inliers;
 	int num_inliers, max_inliers = 0;
 	double Tbest[9];
 
@@ -674,14 +676,14 @@ int align_2D_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 		return 0;
 	}
 
-	l_inliers = (vec3d *)malloc(sizeof(vec3d) * n);
-	r_inliers = (vec3d *)malloc(sizeof(vec3d) * n);
+	l_inliers = (dvec3 *)malloc(sizeof(dvec3) * n);
+	r_inliers = (dvec3 *)malloc(sizeof(dvec3) * n);
 
 	for (round = 0; round < num_ransac_rounds; round++) {
 		int support[MIN_SUPPORT];
 		int i, j;
-		vec3d r_mean, l_mean, r0, l0;
-		vec3d r_pts_small[MIN_SUPPORT], l_pts_small[MIN_SUPPORT];
+		dvec3 r_mean, l_mean, r0, l0;
+		dvec3 r_pts_small[MIN_SUPPORT], l_pts_small[MIN_SUPPORT];
 		double Rtmp[9], T1tmp[9], T2tmp[9], tmp[9], Tout[9];
 		double a, b;
 
@@ -762,13 +764,13 @@ int align_2D_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 }
 
 /* Align two sets of points with a 2D similarity transform */
-int align_horn_ransac(int n, vec3d *r_pts, vec3d *l_pts,
+int align_horn_ransac(int n, dvec3 *r_pts, dvec3 *l_pts,
 	int num_ransac_rounds, double ransac_thresh,
 	double *Tret)
 {
 	int round;
 #define MIN_SUPPORT 3
-	vec3d *l_inliers, *r_inliers;
+	dvec3 *l_inliers, *r_inliers;
 	int num_inliers, max_inliers = 0;
 	double Tbest[9];
 
@@ -777,13 +779,13 @@ int align_horn_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 		return 0;
 	}
 
-	l_inliers = (vec3d *)malloc(sizeof(vec3d) * n);
-	r_inliers = (vec3d *)malloc(sizeof(vec3d) * n);
+	l_inliers = (dvec3 *)malloc(sizeof(dvec3) * n);
+	r_inliers = (dvec3 *)malloc(sizeof(dvec3) * n);
 
 	for (round = 0; round < num_ransac_rounds; round++) {
 		int support[MIN_SUPPORT];
 		int i, j;
-		vec3d r_pts_small[MIN_SUPPORT], l_pts_small[MIN_SUPPORT];
+		dvec3 r_pts_small[MIN_SUPPORT], l_pts_small[MIN_SUPPORT];
 		double Rtmp[9], Ttmp[9], Tout[9], scale_tmp;
 
 		for (i = 0; i < MIN_SUPPORT; i++) {
@@ -863,13 +865,13 @@ int align_horn_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 }
 
 /* Align two sets of points with a 3D similarity transform */
-int align_horn_3D_ransac(int n, vec3d *r_pts, vec3d *l_pts,
+int align_horn_3D_ransac(int n, dvec3 *r_pts, dvec3 *l_pts,
 	int num_ransac_rounds, double ransac_thresh,
 	double *Tret)
 {
 	int round;
 #define MIN_SUPPORT 3
-	vec3d *l_inliers, *r_inliers;
+	dvec3 *l_inliers, *r_inliers;
 	double *Vp, *TVp;
 	int num_inliers, max_inliers = 0;
 	double Tbest[16];
@@ -884,8 +886,8 @@ int align_horn_3D_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 		return 0;
 	}
 
-	l_inliers = (vec3d *)malloc(sizeof(vec3d) * n);
-	r_inliers = (vec3d *)malloc(sizeof(vec3d) * n);
+	l_inliers = (dvec3 *)malloc(sizeof(dvec3) * n);
+	r_inliers = (dvec3 *)malloc(sizeof(dvec3) * n);
 
 	Vp = (double *)malloc(sizeof(double) * 4 * n);
 	TVp = (double *)malloc(sizeof(double) * 4 * n);
@@ -898,7 +900,7 @@ int align_horn_3D_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 	for (round = 0; round < num_ransac_rounds; round++) {
 		int support[MIN_SUPPORT];
 		int i, j;
-		vec3d r_pts_small[MIN_SUPPORT], l_pts_small[MIN_SUPPORT];
+		dvec3 r_pts_small[MIN_SUPPORT], l_pts_small[MIN_SUPPORT];
 		double Tout[16], ToutT[16];
 		int nan = 0;
 
@@ -1033,7 +1035,7 @@ int align_horn_3D_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 }
 
 /* Align two sets of points with a 3D rotation */
-int align_3D_rotation_ransac(int n, vec3d *r_pts, vec3d *l_pts,
+int align_3D_rotation_ransac(int n, dvec3 *r_pts, dvec3 *l_pts,
 	int num_ransac_rounds, double ransac_thresh,
 	double *R)
 {
@@ -1041,7 +1043,7 @@ int align_3D_rotation_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 	double error = 0.0;
 #define MIN_SUPPORT 3
 	// const int min_support = 3;
-	vec3d *l_inliers, *r_inliers;
+	dvec3 *l_inliers, *r_inliers;
 	int num_inliers, max_inliers = 0;
 	double Rbest[9];
 
@@ -1050,13 +1052,13 @@ int align_3D_rotation_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 		return 0;
 	}
 
-	l_inliers = (vec3d *)malloc(sizeof(vec3d) * n);
-	r_inliers = (vec3d *)malloc(sizeof(vec3d) * n);
+	l_inliers = (dvec3 *)malloc(sizeof(dvec3) * n);
+	r_inliers = (dvec3 *)malloc(sizeof(dvec3) * n);
 
 	for (round = 0; round < num_ransac_rounds; round++) {
 		int support[MIN_SUPPORT];
 		int i, j;
-		vec3d r_pts_small[MIN_SUPPORT], l_pts_small[MIN_SUPPORT];
+		dvec3 r_pts_small[MIN_SUPPORT], l_pts_small[MIN_SUPPORT];
 		double Rtmp[9];
 
 		for (i = 0; i < MIN_SUPPORT; i++) {

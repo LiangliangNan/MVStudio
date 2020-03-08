@@ -1,7 +1,7 @@
 #include "epipolar.h"
 
 #include "../mvglib/5point.h"
-#include "../math/math_types.h"
+#include <easy3d/core/types.h>
 #include "../math/matrix_driver.h"
 
 #include "../mvglib/fmatrix.h"
@@ -78,11 +78,11 @@ namespace sfm {
 			return inliers;
 		}
 
-		vec3d* k1_pts = new vec3d[num_pts];
-		vec3d* k2_pts = new vec3d[num_pts];
+		easy3d::dvec3* k1_pts = new easy3d::dvec3[num_pts];
+		easy3d::dvec3* k2_pts = new easy3d::dvec3[num_pts];
 
-		vec3d* k1_pts_in = new vec3d[num_pts];
-		vec3d* k2_pts_in = new vec3d[num_pts];
+		easy3d::dvec3* k1_pts_in = new easy3d::dvec3[num_pts];
+		easy3d::dvec3* k2_pts_in = new easy3d::dvec3[num_pts];
 
 		for (int i = 0; i < num_pts; i++) {
 			int idx1 = matches[i].key_idx1;
@@ -91,8 +91,8 @@ namespace sfm {
 			assert(idx1 < (int)k1.size());
 			assert(idx2 < (int)k2.size());
 
-			k1_pts[i] = vec3d(k1[idx1].x, k1[idx1].y, 1.0);
-			k2_pts[i] = vec3d(k2[idx2].x, k2[idx2].y, 1.0);
+			k1_pts[i] = easy3d::dvec3(k1[idx1].x, k1[idx1].y, 1.0);
+			k2_pts[i] = easy3d::dvec3(k2[idx2].x, k2[idx2].y, 1.0);
 		}
 
 		estimate_fmatrix_ransac_matches(
@@ -165,15 +165,15 @@ namespace sfm {
 	{
 		int num_pts = (int)matches.size();
 
-		vec2d* k1_pts = new vec2d[num_pts];
-		vec2d* k2_pts = new vec2d[num_pts];
+		easy3d::dvec2* k1_pts = new easy3d::dvec2[num_pts];
+		easy3d::dvec2* k2_pts = new easy3d::dvec2[num_pts];
 
 		for (int i = 0; i < num_pts; i++) {
 			int idx1 = matches[i].key_idx1;
 			int idx2 = matches[i].key_idx2;
 
-			k1_pts[i] = vec2d(k1[idx1].x, k1[idx1].y);
-			k2_pts[i] = vec2d(k2[idx2].x, k2[idx2].y);
+			k1_pts[i] = easy3d::dvec2(k1[idx1].x, k1[idx1].y);
+			k2_pts[i] = easy3d::dvec2(k2[idx2].x, k2[idx2].y);
 		}
 
 		int num_inliers = compute_pose_ransac(

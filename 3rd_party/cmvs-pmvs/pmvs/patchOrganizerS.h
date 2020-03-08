@@ -5,7 +5,9 @@
 #include <queue>
 
 
-class PointSet;
+namespace easy3d {
+    class PointCloud;
+}
 
 namespace PMVS3 {
 
@@ -32,14 +34,14 @@ namespace PMVS3 {
 			P_compare>& pqpatches);
 		void collectNonFixPatches(const int index, std::vector<Patch::Ppatch>& ppatches);
 
-		void fillPointSet(PointSet* pset);
+		void fillPointSet(easy3d::PointCloud* pset);
 		void writePatches2(const std::string prefix, bool bExportPatch, bool bExportPSet);
 
-		void writePLY(PointSet* pset, const std::vector<Patch::Ppatch>& patches,
+		void writePLY(easy3d::PointCloud* pset, const std::vector<Patch::Ppatch>& patches,
 			const std::string filename);
 		void writePLY(const std::vector<Patch::Ppatch>& patches,
 			const std::string filename,
-			const std::vector<Vec3i>& colors);
+			const std::vector<Ivec3>& colors);
 
 		void readPatches(void);
 

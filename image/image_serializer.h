@@ -2,16 +2,16 @@
 #ifndef _IMAGE_IO_IMAGE_SERIALIZER_H_
 #define _IMAGE_IO_IMAGE_SERIALIZER_H_
 
-#include "image_common.h"
-#include "../basic/counted.h"
 
 #include <iostream>
 
 
 class Image ;
 
-class IMAGE_API ImageSerializer : public Counted {
+class ImageSerializer {
 public:
+    ImageSerializer() {}
+    virtual ~ImageSerializer() {}
 
 	virtual Image*	serialize_read(const std::string& file_name) ;
 	virtual bool	serialize_write(
@@ -63,8 +63,6 @@ public:
 	*/
 	virtual bool rgb_to_bgr(Image& image) const;
 } ; 
-
-typedef SmartPointer<ImageSerializer> ImageSerializer_var ;
 
 
 #endif
