@@ -2,7 +2,7 @@
 #ifndef __IMAGE_IO__
 #define __IMAGE_IO__
 
-#include "image_common.h"
+
 
 #include <string>
 
@@ -10,7 +10,7 @@
 class Image ;
 class ImageSerializer ;
 
-class IMAGE_API ImageIO
+class ImageIO
 {
 public:
 	static Image*	read(const std::string& file_name);

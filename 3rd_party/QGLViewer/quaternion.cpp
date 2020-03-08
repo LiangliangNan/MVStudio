@@ -244,7 +244,7 @@ qreal Quaternion::angle() const
 
  When output to a file, the resulting QDomElement will look like:
  \code
- <name q0=".." q1=".." q2=".." q3=".." />
+ <name q0=".." q1=".." q2=".." q3="..
  \endcode
 
  Use initFromDOMElement() to restore the Quaternion state from the resulting \c QDomElement. See
@@ -277,7 +277,7 @@ void Quaternion::initFromDOMElement(const QDomElement& element)
 }
 
 /*! Constructs a Quaternion from a \c QDomElement representing an XML code of the form
-  \code< anyTagName q0=".." q1=".." q2=".." q3=".." />\endcode
+  \code< anyTagName q0=".." q1=".." q2=".." q3="..\endcode
 
   If one of these attributes is missing or is not a number, a warning is displayed and the associated
   value is respectively set to 0, 0, 0 and 1 (identity Quaternion).

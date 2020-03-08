@@ -3,14 +3,14 @@
 #define _IMAGE_IMAGE_H_
 
 
-#include "image_common.h"
+
 #include "image_store.h"
 #include "color.h"
 #include "../basic/counted.h"
 
 
 
-class IMAGE_API Image : public Counted {
+class Image : public Counted {
 public:
 	enum ColorEncoding {
 		GRAY, INDEXED, RGB, BGR, RGBA,
@@ -156,10 +156,10 @@ typedef SmartPointer<Image> Image_var ;
 
 
 // function provided to flip an image vertically
-void   IMAGE_API flip_image(Image* img);
+void   flip_image(Image* img);
 
 // Interpolate the color for the point (x, y) in the given image
-Colorf IMAGE_API pixel_interpolate(Image *img, double x, double y);
+Colorf pixel_interpolate(Image *img, double x, double y);
 
 
 

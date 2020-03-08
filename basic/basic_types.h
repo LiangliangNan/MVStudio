@@ -2,7 +2,7 @@
 #ifndef _BASIC_TYPES_H_
 #define _BASIC_TYPES_H_
 
-#include "basic_common.h"
+
 #include <string>
 #include <vector>
 
@@ -95,48 +95,48 @@ namespace Numeric {
 
 	// -----------------------------------------------------------------
 
-	extern BASIC_API const float big_float ;
-	extern BASIC_API const float small_float ;
-	extern BASIC_API const double big_double ;
-	extern BASIC_API const double small_double ;
+	extern const float big_float ;
+	extern const float small_float ;
+	extern const double big_double ;
+	extern const double small_double ;
 
-	bool BASIC_API is_nan(float32 x) ;
-	bool BASIC_API is_nan(float64 x) ;
+	bool is_nan(float32 x) ;
+	bool is_nan(float64 x) ;
 
-	int32	BASIC_API random_int32() ;
-	float32	BASIC_API random_float32() ;
-	float64	BASIC_API random_float64() ;
+	int32	random_int32() ;
+	float32	random_float32() ;
+	float64	random_float64() ;
 } 
 
 //_______________________________________________________________________
 
 namespace String {
 
-	void BASIC_API split_string(
+	void split_string(
 		const std::string& in, 
 		char separator,
 		std::vector<std::string>& out,
 		bool skip_empty_fields = true ) ;
 
-	void BASIC_API join_strings(
+	void join_strings(
 		const std::vector<std::string>& in,
 		char separator,
 		std::string& out
 		) ;
 
-	void BASIC_API join_strings(
+	void join_strings(
 		const std::vector<std::string>& in,
 		const std::string& separator,
 		std::string& out
 		) ;
 
 
-	std::string BASIC_API join_strings(
+	std::string join_strings(
 		const std::vector<std::string>& in,
 		char separator
 		) ;
 
-	std::string BASIC_API join_strings(
+	std::string join_strings(
 		const std::vector<std::string>& in,
 		const std::string& separator
 		) ;
@@ -144,7 +144,7 @@ namespace String {
 	// return the number of substrings that have been replaced.
 	// NOTE: if 'isolated' set to true, only isolated (by spaces) 
 	//       substrings will be replaced.
-	int BASIC_API replace_substring(
+	int replace_substring(
 		std::string& in, 
 		const std::string& original_substring, 
 		const std::string& new_substring,
@@ -170,20 +170,20 @@ namespace String {
 
 	// -----------------------------------------------------------------
 
-	void BASIC_API to_lowercase(std::string& in) ;
-	void BASIC_API to_uppercase(std::string& in) ;
+	void to_lowercase(std::string& in) ;
+	void to_uppercase(std::string& in) ;
 
-	inline std::string BASIC_API char_to_string(char c) {
+	inline std::string char_to_string(char c) {
 		char s[2] ;
 		s[0] = c ;
 		s[1] = '\0' ;
 		return std::string(s) ;
 	}
 
-	std::string BASIC_API quote(const std::string& s, char quotes = '\"') ;
+	std::string quote(const std::string& s, char quotes = '\"') ;
 
 	// format example: "Fri Jan 09 11:39:32 2015"
-	std::string BASIC_API from_current_time() ;
+	std::string from_current_time() ;
 } 
 
 //_______________________________________________________________________

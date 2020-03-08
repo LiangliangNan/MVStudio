@@ -276,7 +276,7 @@ write_graphml(std::ostream& out, const Graph& g, VertexIndexMap vertex_index,
             << (i->second->key() == typeid(Graph*) ? "graph" : (i->second->key() == typeid(vertex_descriptor) ? "node" : "edge")) << "\""
             << " attr.name=\"" << i->first << "\""
             << " attr.type=\"" << type_name << "\""
-            << " />\n";
+            << \n";
     }
 
     out << "  <graph id=\"G\" edgedefault=\""

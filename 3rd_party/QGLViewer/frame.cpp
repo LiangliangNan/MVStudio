@@ -980,8 +980,8 @@ void Frame::getTransformOfFrom(const qreal src[3], qreal res[3], const Frame* co
  The resulting QDomElement looks like:
  \code
  <name>
-   <position x=".." y=".." z=".." />
-   <orientation q0=".." q1=".." q2=".." q3=".." />
+   <position x=".." y=".." z="..
+   <orientation q0=".." q1=".." q2=".." q3="..
  </name>
  \endcode
 

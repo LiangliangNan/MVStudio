@@ -2,7 +2,7 @@
 #ifndef _BINARY_STREAM_H_
 #define _BINARY_STREAM_H_
 
-#include "basic_common.h"
+
 #include "basic_types.h"
 
 #include <iostream>
@@ -33,7 +33,7 @@ namespace IO {
 	* to read files from PC softwares (such as 3DS binary files). 
 	*/
 
-	class BASIC_API BinaryStream  {
+	class BinaryStream  {
 
 	public:
 		BinaryStream(int stream_endian_in = IO_BIG_ENDIAN) ;
@@ -79,7 +79,7 @@ namespace IO {
 	* into account endian problems (see BinaryStream).
 	*/
 
-	class BASIC_API BinaryInputStream : public BinaryStream {
+	class BinaryInputStream : public BinaryStream {
 
 	public:
 		BinaryInputStream(
@@ -193,7 +193,7 @@ namespace IO {
 	* into account endian problems. 
 	*/
 
-	class BASIC_API BinaryOutputStream : public BinaryStream {
+	class BinaryOutputStream : public BinaryStream {
 
 	public:
 		BinaryOutputStream(

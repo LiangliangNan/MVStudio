@@ -125,7 +125,7 @@ private:
 
 #ifdef OGF_OS_WINDOWS
 // Fix for MSVC
-template class BASIC_API Array1d<double>;
+template class Array1d<double>;
 #endif
 
 //_________________________________________________________

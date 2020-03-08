@@ -2,13 +2,13 @@
 #ifndef _POINT_SET_RENDERER_H_
 #define _POINT_SET_RENDERER_H_
 
-#include "pointset_common.h"
+
 #include "point_as_sphere.h"
 
 
 class PointSet;
 
-class POINTSET_API PointSetRender : public PointAsSphere
+class PointSetRender : public PointAsSphere
 {
 public:
 	PointSetRender();

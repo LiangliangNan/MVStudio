@@ -69,7 +69,7 @@ Vec Vec::orthogonalVec() const
 }
 
 /*! Constructs a Vec from a \c QDomElement representing an XML code of the form
- \code< anyTagName x=".." y=".." z=".." />\endcode
+ \code< anyTagName x=".." y=".." z="..\endcode
 
 If one of these attributes is missing or is not a number, a warning is displayed and the associated
 value is set to 0.0.
@@ -94,7 +94,7 @@ Vec::Vec(const QDomElement& element)
 
  When output to a file, the resulting QDomElement will look like:
  \code
- <name x=".." y=".." z=".." />
+ <name x=".." y=".." z="..
  \endcode
 
  Use initFromDOMElement() to restore the Vec state from the resulting \c QDomElement. See also the

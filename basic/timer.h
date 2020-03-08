@@ -2,7 +2,7 @@
 #ifndef _BASIC_TIMER_H_
 #define _BASIC_TIMER_H_
 
-#include "basic_common.h"
+
 #include <cfloat>	// For the numerical limits
 
 
@@ -24,7 +24,7 @@
 // the last reset. If the reset occurs while the timer is running it counts 
 // as the first interval
 
-class BASIC_API Timer 
+class Timer
 {
 public:
 	Timer() : elapsed_(0.0), started_(0.0), interv_(0), running_(false) {}

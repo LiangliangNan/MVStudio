@@ -2,14 +2,14 @@
 #define _POINT_SET_H_
 
 
-#include "pointset_common.h"
+
 #include "../basic/basic_types.h"
 #include "../basic/object.h"
 #include "../math/math_types.h"
 
 #include <list>
 
-class POINTSET_API PointSet : public Object
+class PointSet : public Object
 {
 public:
 	PointSet();

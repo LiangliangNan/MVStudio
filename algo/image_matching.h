@@ -2,7 +2,7 @@
 #ifndef _IMAGE_MATCHING_H_
 #define _IMAGE_MATCHING_H_
 
-#include "algo_common.h"
+
 
 
 #include <string>
@@ -11,7 +11,7 @@
 
 class Project;
 
-class ALGO_API ImageMatching {
+class ImageMatching {
 public:
 	ImageMatching(Project* proj);
 	virtual ~ImageMatching();

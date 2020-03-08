@@ -2,7 +2,7 @@
 #ifndef _STOP_WATCH_H_
 #define _STOP_WATCH_H_
 
-#include "basic_common.h"
+
 
 
 #ifdef WIN32
@@ -30,7 +30,7 @@
 *   } 
 */
 
-class BASIC_API StopWatch 
+class StopWatch
 {
 public :
 	StopWatch() ; // the watch will automatically start in construction

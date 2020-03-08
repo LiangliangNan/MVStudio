@@ -2,11 +2,11 @@
 #ifndef _POINT_AS_SPHERE_H_
 #define _POINT_AS_SPHERE_H_
 
-#include "pointset_common.h"
+
 #include "../opengl/shader.h"
 
 
-class POINTSET_API PointAsSphere
+class PointAsSphere
 {
 public:
 	PointAsSphere();
