@@ -50,9 +50,6 @@ PaintCanvas::PaintCanvas(QWidget *parent)
 
 PaintCanvas::~PaintCanvas() {
 	delete render_;
-
-	// this is required by the following destruction of textures, shaders, etc.
-	makeCurrent();
 }
 
 
