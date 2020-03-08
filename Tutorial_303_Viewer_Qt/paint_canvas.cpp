@@ -993,8 +993,10 @@ void PaintCanvas::imageMatching() {
         return;
     }
 
+    makeCurrent();
     ImageMatching matching(project_);
     matching.apply();
+    doneCurrent();
 
     // some image could be ignored
     main_window_->listWidgetImages->updateImageList();
