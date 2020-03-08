@@ -32,10 +32,3 @@ target_link_libraries(${PROJECT_NAME}
         basic
         math
         )
-
-#set(MINIBOOST_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/miniBoost)
-#set(TINYCTHREAD_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/tinycthread)
-#target_include_directories(${PROJECT_NAME} PRIVATE
-#        ${MINIBOOST_INCLUDE_DIR}
-#        ${TINYCTHREAD_INCLUDE_DIR}
-#        )

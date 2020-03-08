@@ -3,11 +3,6 @@ cmake_minimum_required(VERSION 3.1)
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
-
-# specify the C++ standard
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
 ### Configuration
 set(MVSTUDIO_ROOT         ${CMAKE_CURRENT_LIST_DIR})
 set(MVSTUDIO_BUILD_DIR    ${CMAKE_CURRENT_BINARY_DIR})
@@ -19,7 +14,7 @@ ADD_SUBDIRECTORY("3rd_party/cmvs-pmvs")
 ADD_SUBDIRECTORY("3rd_party/graclus")
 ADD_SUBDIRECTORY("3rd_party/jpeg")
 ADD_SUBDIRECTORY("3rd_party/nlopt")
-ADD_SUBDIRECTORY("3rd_party/pba")
+#ADD_SUBDIRECTORY("3rd_party/pba")
 ADD_SUBDIRECTORY("3rd_party/png")
 ADD_SUBDIRECTORY("3rd_party/QGLViewer")
 ADD_SUBDIRECTORY("3rd_party/sba")
