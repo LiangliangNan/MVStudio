@@ -14,7 +14,7 @@ PointSetRender::PointSetRender() {
 	point_set_ = nil;
 	points_as_spheres_ = false;
 
-	point_size_ = 2 ;
+	point_size_ = 4 ;
 	lighting_ = true;
 }
 

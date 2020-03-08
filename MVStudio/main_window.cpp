@@ -15,7 +15,6 @@
 #include "paint_canvas.h"
 
 #include "../basic/logger.h"
-#include "../basic/file_utils.h"
 #include "../pointset/point_set.h"
 #include "../pointset/point_set_io.h"
 
@@ -29,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 	//////////////////////////////////////////////////////////////////////////
 
+    Logger::instance()->set_value(Logger::LOG_REGISTER_FEATURES, "*"); // log everything
 	Logger::instance()->set_value(Logger::LOG_FILE_NAME, "MVStudio.log");
 	Logger::instance()->register_client(this);
 	Progress::instance()->set_client(this);
