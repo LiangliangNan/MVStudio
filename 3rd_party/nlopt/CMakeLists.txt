@@ -80,13 +80,6 @@ MESSAGE(STATUS "NLOPT: Version number ${NLOPT_MAJOR_VERSION}.${NLOPT_MINOR_VERSI
 
 
 #==============================================================================
-# CREATE config.h
-#==============================================================================
-
-CONFIGURE_FILE( ${CMAKE_CURRENT_BINARY_DIR}/config.h IMMEDIATE )
-
-
-#==============================================================================
 # INCLUDE DIRECTORIES
 #==============================================================================
 SET(${INCLUDE_DIRECTORIES} "")
