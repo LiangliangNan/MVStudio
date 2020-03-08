@@ -8,7 +8,7 @@ class ImageItem : public QListWidgetItem
 {
 public:
 	ImageItem(QListWidget *parent = 0) {
-		static QIcon iconImage(":/Resources/building.png");
+		static QIcon iconImage("Resources/building.png");
 		QListWidgetItem::setIcon(iconImage);
 	}
 	~ImageItem() {}
