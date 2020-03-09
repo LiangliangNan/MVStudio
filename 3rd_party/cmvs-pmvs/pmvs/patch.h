@@ -17,6 +17,10 @@ class Cpatch {
     // dflag is initialized only once. if failed in one direction, we
     // never try that.
     m_dflag = 0;
+
+
+    m_dscale = 0;
+    m_ascale = 0;
   }
   
   //----------------------------------------------------------------------
