@@ -371,7 +371,7 @@ p_ply ply_open(const char *name, p_ply_error_cb error_cb,
 
 p_ply ply_open_from_file(FILE *fp, p_ply_error_cb error_cb,
         long idata, void *pdata) {
-    p_ply ply;
+    p_ply ply = 0;
     if (error_cb == NULL) error_cb = ply_error_cb;
     assert(fp);
     if (!ply_type_check()) {
@@ -474,7 +474,7 @@ p_ply ply_create(const char *name, e_ply_storage_mode storage_mode,
 
 p_ply ply_create_to_file(FILE *fp, e_ply_storage_mode storage_mode,
         p_ply_error_cb error_cb, long idata, void *pdata) {
-    p_ply ply;
+	p_ply ply = 0;
     assert(fp && storage_mode <= PLY_DEFAULT);
     if (!ply_type_check()) {
         error_cb(ply, "Incompatible type system");
@@ -1201,7 +1201,11 @@ static int ply_read_header_format(p_ply ply) {
         ply->idriver = &ply_idriver_binary;
     else ply->idriver = &ply_idriver_binary_reverse;
     if (!ply_read_word(ply)) return 0;
-    if (strcmp(BWORD(ply), "1.0")) return 0;
+
+    //Liangliang: to be robust to handle error like "format ascii 1.0textureless"
+    //if (strcmp(BWORD(ply), "1.0")) return 0;
+    if (strncmp(BWORD(ply), "1.0", 2)) return 0;
+
     if (!ply_read_word(ply)) return 0;
     return 1;
 }
@@ -1279,8 +1283,10 @@ static int ply_read_header_element(p_ply ply) {
 }
 
 static void ply_error_cb(p_ply ply, const char *message) {
+#ifndef NDEBUG
     (void) ply;
     fprintf(stderr, "RPly: %s\n", message);
+#endif
 }
 
 static void ply_ferror(p_ply ply, const char *fmt, ...) {

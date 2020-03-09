@@ -10,7 +10,6 @@ set(${PROJECT_NAME}_HEADERS
         point_set_io.h
         point_set_render.h
         point_set_serializer_ply.h
-        rply.h
         )
 
 set(${PROJECT_NAME}_SOURCES
@@ -19,16 +18,17 @@ set(${PROJECT_NAME}_SOURCES
         point_set_io.cpp
         point_set_render.cpp
         point_set_serializer_ply.cpp
-        rply.c
         )
 
 
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS} )
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR})
+set(RPLY_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/rply)
+target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR} ${RPLY_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME}
         opengl
         basic
         math
+        rply
         )
