@@ -153,8 +153,6 @@ void MainWindow::createActionForReconstructionMenu() {
 	connect(actionImageMatching, SIGNAL(triggered()), mainCanvas_, SLOT(imageMatching()));
 	connect(actionSparseReconstruction, SIGNAL(triggered()), mainCanvas_, SLOT(sparseReconstruction()));
 	connect(actionDenseReconstruction, SIGNAL(triggered()), mainCanvas_, SLOT(denseReconstruction()));
-	
-	connect(actionTest, SIGNAL(triggered()), mainCanvas_, SLOT(test()));
 }
 
 
