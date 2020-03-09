@@ -1,7 +1,7 @@
 #ifndef _SFM_H_
 #define _SFM_H_
 
-#include "sfm_export.h"
+
 
 #include "sfm_option.h"
 #include "image_data.h"
@@ -27,7 +27,7 @@ namespace sfm {
 	typedef std::pair<int, int> ImagePair;
 
 	
-	class SFM_API SfM
+	class SfM
 	{
 	public:
 		SfM(SfmOption opt);

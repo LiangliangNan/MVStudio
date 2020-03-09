@@ -2,8 +2,7 @@
 #ifndef _OPENGL_GLINFORMATION_H_
 #define _OPENGL_GLINFORMATION_H_
 
-#include "opengl_common.h"
-#include "glew.h"
+#include "GL/glew.h"
 
 #include <string>
 
@@ -17,7 +16,7 @@
 #define ogf_check_gl
 #endif
 
-class OPENGL_API GLInfo
+class  GLInfo
 {
 public:
 	/**

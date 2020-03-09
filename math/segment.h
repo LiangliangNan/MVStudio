@@ -3,7 +3,7 @@
 #ifndef _MATH_GEOMETRY_SEGMENT_H_
 #define _MATH_GEOMETRY_SEGMENT_H_
 
-#include "math_common.h"
+
 #include "vecg.h"
 #include "line.h"
 

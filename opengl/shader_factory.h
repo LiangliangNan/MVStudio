@@ -2,7 +2,7 @@
 #ifndef _OPENGL_SHADER_FACTORY_H_
 #define _OPENGL_SHADER_FACTORY_H_
 
-#include "opengl_common.h"
+
 
 #include <string>
 
@@ -12,7 +12,7 @@ class VertexShader;
 class FragmentShader;
 class GeometryShader;
 
-class OPENGL_API ShaderFactory
+class  ShaderFactory
 {
 public:
 	static std::string title() { return "ShaderFactory"; }

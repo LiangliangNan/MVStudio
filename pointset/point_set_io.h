@@ -1,14 +1,14 @@
 #ifndef _POINT_SET_IO_H_
 #define _POINT_SET_IO_H_
 
-#include "pointset_common.h"
+
 
 #include <string>
 
 
 class PointSet;
 
-class POINTSET_API PointSetIO
+class PointSetIO
 {
 public:
 	static std::string title() { return "PointSetIO"; }

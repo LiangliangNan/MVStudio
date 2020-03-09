@@ -1,7 +1,7 @@
 #ifndef _BASIC_PROGRESS_H_
 #define _BASIC_PROGRESS_H_
 
-#include "basic_common.h"
+
 #include "basic_types.h"
 
 
@@ -10,7 +10,7 @@ class ProgressClient;
 /**
 * For internal use, client code should use UserProgress.
 */
-class BASIC_API Progress {
+class Progress {
 public:
 	static void terminate();
 
@@ -42,7 +42,7 @@ protected:
 /**
 * For internal use, client code do not need to use this one.
 */
-class BASIC_API ProgressClient {
+class ProgressClient {
 public:
 	virtual void notify_progress(std::size_t new_val, bool show_text = true) = 0;
 	virtual ~ProgressClient();
@@ -50,7 +50,7 @@ public:
 
 //_________________________________________________________
 
-class BASIC_API ProgressLogger {
+class ProgressLogger {
 public:
 	ProgressLogger(std::size_t max_val = 100, const std::string& task_name = "", bool quiet = false);
 	virtual ~ProgressLogger();

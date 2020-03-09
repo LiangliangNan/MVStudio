@@ -2,11 +2,11 @@
 #ifndef __IMAGE_SERIALIZER_PNG__
 #define __IMAGE_SERIALIZER_PNG__
 
-#include "image_common.h"
+
 #include "image_serializer.h"
 
 
-class IMAGE_API ImageSerializer_png : public ImageSerializer {
+class ImageSerializer_png : public ImageSerializer {
 public:
 	virtual Image*	serialize_read(const std::string& file_name) ;
 	virtual bool	read_supported() const ;

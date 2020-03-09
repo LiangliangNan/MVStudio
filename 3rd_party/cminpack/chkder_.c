@@ -5,7 +5,7 @@
 
 #include "minpack.h"
 #include <math.h>
-#define real __minpack_real__
+#include "minpackP.h"
 
 #define log10e 0.43429448190325182765
 #define factor 100.

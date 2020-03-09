@@ -5,9 +5,7 @@
 
 #include "minpack.h"
 #include <math.h>
-#define real __minpack_real__
-
-#define max(a,b) ((a) >= (b) ? (a) : (b))
+#include "minpackP.h"
 
 __minpack_attr__
 void __minpack_func__(fdjac2)(__minpack_decl_fcn_mn__ const int *m, const int *n, real *x, 

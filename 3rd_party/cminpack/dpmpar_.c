@@ -4,18 +4,7 @@
 */
 
 #include "minpack.h"
-#include <float.h>
-#define real __minpack_real__
-
-#define double_EPSILON DBL_EPSILON
-#define double_MIN DBL_MIN
-#define double_MAX DBL_MAX
-#define float_EPSILON FLT_EPSILON
-#define float_MIN FLT_MIN
-#define float_MAX FLT_MAX
-#define half_EPSILON HALF_EPSILON
-#define half_MIN HALF_NRM_MIN
-#define half_MAX HALF_MAX
+#include "minpackP.h"
 
 #define DPMPAR(type,X) _DPMPAR(type,X)
 #define _DPMPAR(type,X) type ## _ ## X
@@ -188,11 +177,11 @@ real __minpack_func__(dpmpar)(const int *i)
 
     switch(*i) {
         case 1:
-            return DPMPAR(real,EPSILON); /* 2.2204460492503131e-16 | 1.19209290e-07F */
+            return DPMPAR(realm,EPSILON); /* 2.2204460492503131e-16 | 1.19209290e-07F */
         case 2:
-            return DPMPAR(real,MIN);    /* 2.2250738585072014e-308 | 1.17549435e-38F */
+            return DPMPAR(realm,MIN);    /* 2.2250738585072014e-308 | 1.17549435e-38F */
         default:
-            return DPMPAR(real,MAX);    /* 1.7976931348623157e+308 | 3.40282347e+38F */
+            return DPMPAR(realm,MAX);    /* 1.7976931348623157e+308 | 3.40282347e+38F */
     }
 
 /*     Last card of function dpmpar. */

@@ -225,7 +225,7 @@ namespace sfm {
 				// 1.0e-1 * num_points;
 			}
 
-			lmdif_driver2(camera_refine_residual,
+			lmdif_driver2((void*)camera_refine_residual,
 				2 * num_points + focal_constraint +
 				2 * estimate_distortion,
 				num_camera_params, x, 1.0e-12);
@@ -267,7 +267,7 @@ namespace sfm {
 			global_constrain_focal = 0;
 			global_constrain_focal_weight = 0.0;
 
-			lmdif_driver2(camera_refine_residual, 2 * num_points, 6, x, 1.0e-12);
+			lmdif_driver2((void*)camera_refine_residual, 2 * num_points, 6, x, 1.0e-12);
 
 			/* Copy out the parameters */
 			memcpy(params->t, x + 0, 3 * sizeof(double));

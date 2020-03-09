@@ -2,7 +2,7 @@
 #ifndef __MATH_COMPLEX__
 #define __MATH_COMPLEX__
 
-#include "math_common.h"
+
 #include "math_types.h"
 #include <cmath>
 

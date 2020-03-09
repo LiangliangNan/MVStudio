@@ -2,7 +2,7 @@
 #ifndef __BASIC_OS_TEXT_UTILS__
 #define __BASIC_OS_TEXT_UTILS__
 
-#include "basic_common.h"
+
 #include <string>
 #include <vector>
 #include <map>
@@ -12,7 +12,7 @@
 
 namespace TextUtils {
 
-	class BASIC_API Environment {
+	class Environment {
 	public:
 		bool has_variable(const std::string& name) const ;
 		std::string value(const std::string& name) const ;
@@ -35,22 +35,22 @@ namespace TextUtils {
 		return out ;
 	}
 
-	void BASIC_API read_environment_file(
+	void read_environment_file(
 		const std::string& file_name,
 		Environment& environment
 		) ;
 
-	void BASIC_API find_and_replace(
+	void find_and_replace(
 		std::istream& in, std::ostream& out,
 		const Environment& env
 		) ;
 
-	void BASIC_API concatenate(
+	void concatenate(
 		std::istream& in, std::ostream& out
 		) ;
 
 
-	void BASIC_API flip_slashes(std::string& s) ;
+	void flip_slashes(std::string& s) ;
 
 }
 

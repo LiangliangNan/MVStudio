@@ -18,7 +18,7 @@
 #include "svd.h"
 
 
-#ifdef MACOS
+#ifdef __APPLE__
   #include <sys/malloc.h> /* for array allocation */
 #else
   #include <malloc.h>

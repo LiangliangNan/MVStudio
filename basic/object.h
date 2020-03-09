@@ -1,13 +1,13 @@
 #ifndef _BASIC_OBJECT_H_
 #define _BASIC_OBJECT_H_
 
-#include "basic_common.h"
+
 #include <string>
 
 
 class Canvas;
 
-class BASIC_API Object 
+class Object
 {
 public:
 	Object() ;

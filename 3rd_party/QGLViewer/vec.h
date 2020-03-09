@@ -385,6 +385,6 @@ public:
 
 } // namespace
 
-std::ostream& operator<<(std::ostream& o, const qglviewer::Vec&);
+QGLVIEWER_EXPORT std::ostream& operator<<(std::ostream& o, const qglviewer::Vec&);
 
 #endif // QGLVIEWER_VEC_H

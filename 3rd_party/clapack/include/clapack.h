@@ -3,10 +3,6 @@
 #ifndef __CLAPACK_H
 #define __CLAPACK_H
 
-#ifdef __cplusplus 	
-extern "C" {	
-#endif		
-
 /* Subroutine */ int caxpy_(integer *n, complex *ca, complex *cx, integer *
 	incx, complex *cy, integer *incy);
 
@@ -2557,7 +2553,7 @@ doublereal dla_syrpvgrw__(char *uplo, integer *n, integer *info, doublereal *
 /* Subroutine */ int dla_wwaddw__(integer *n, doublereal *x, doublereal *y, 
 	doublereal *w);
 
-/* Subroutine */ int dlabad_(doublereal *small_, doublereal *large); // Liangliang: small is a micro defined somewhere
+/* Subroutine */ int dlabad_(doublereal *small, doublereal *large);
 
 /* Subroutine */ int dlabrd_(integer *m, integer *n, integer *nb, doublereal *
 	a, integer *lda, doublereal *d__, doublereal *e, doublereal *tauq, 
@@ -4331,7 +4327,7 @@ doublereal sla_syrpvgrw__(char *uplo, integer *n, integer *info, real *a,
 
 /* Subroutine */ int sla_wwaddw__(integer *n, real *x, real *y, real *w);
 
-/* Subroutine */ int slabad_(real *small_, real *large); // Liangliang: small is a micro defined somewhere
+/* Subroutine */ int slabad_(real *small, real *large);
 
 /* Subroutine */ int slabrd_(integer *m, integer *n, integer *nb, real *a, 
 	integer *lda, real *d__, real *e, real *tauq, real *taup, real *x, 
@@ -7253,10 +7249,6 @@ doublereal dlamc3_(doublereal *a, doublereal *b);
 
 integer ilaenv_(integer *ispec, char *name__, char *opts, integer *n1, 
 	integer *n2, integer *n3, integer *n4);
-
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif /* __CLAPACK_H */

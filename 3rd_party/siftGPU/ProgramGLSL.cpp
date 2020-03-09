@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
   
-#include "../../opengl/glew.h"
+#include "GL/glew.h"
 #include <string.h>
 #include <stdio.h>
 #include <iomanip>

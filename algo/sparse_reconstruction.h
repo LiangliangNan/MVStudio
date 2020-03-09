@@ -2,7 +2,7 @@
 #ifndef _SPARSE_RECONSTRUCTION_H_
 #define _SPARSE_RECONSTRUCTION_H_
 
-#include "algo_common.h"
+
 
 #include "../sfm/sfm.h"
 
@@ -14,7 +14,7 @@
 class PointSet;
 class Project;
 
-class ALGO_API SparseReconstruction {
+class SparseReconstruction {
 public:
 	SparseReconstruction(Project* proj);
 	virtual ~SparseReconstruction();

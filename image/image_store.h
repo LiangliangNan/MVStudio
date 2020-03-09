@@ -2,7 +2,7 @@
 #ifndef _IMAGE_IMAGE_STORE_H_
 #define _IMAGE_IMAGE_STORE_H_
 
-#include "image_common.h"
+
 #include "../basic/basic_types.h"
 #include "../basic/counted.h"
 
@@ -14,7 +14,7 @@
 * Images can share the same ImageStore.
 */
 
-class IMAGE_API ImageStore : public Counted {
+class ImageStore : public Counted {
 public:
 	ImageStore(int bytes_per_pixel, int dim_x) ;
 	ImageStore(int bytes_per_pixel, int dim_x, int dim_y) ;

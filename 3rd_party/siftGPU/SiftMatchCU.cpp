@@ -22,7 +22,7 @@
 
 #if defined(CUDA_SIFTGPU_ENABLED)
 
-#include "../../opengl/glew.h"
+#include "GL/glew.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>

@@ -1,7 +1,7 @@
 #ifndef PAINTCANVAS_H
 #define PAINTCANVAS_H
 
-#include "../opengl/glew.h"
+#include "GL/glew.h"
 #include "../3rd_party/QGLViewer/qglviewer.h"
 #include "../math/math_types.h"
 #include "../algo/sparse_reconstruction.h"
@@ -75,7 +75,6 @@ public Q_SLOTS:
 	void setProjectionMode(bool);
 	void showCoordinateSystem(bool);
 
-	void showPointAsSphere(bool b);
 	void increasePointSize();
 	void decreasePointSize();
 	
@@ -84,8 +83,6 @@ public Q_SLOTS:
 	void imageMatching();
 	void sparseReconstruction();
 	void denseReconstruction();
-
-	void test();
 
 private :
 	void drawCornerAxis();

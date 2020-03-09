@@ -833,6 +833,10 @@ qreal Camera::pixelGLRatio(const Vec& position) const
 	return 1.0;
 }
 
+float Camera::pixelGLRatio(float x, float y, float z) const {
+	return pixelGLRatio(Vec(x, y, z));
+}
+
 /*! Changes the Camera fieldOfView() so that the entire scene (defined by QGLViewer::sceneCenter()
  and QGLViewer::sceneRadius()) is visible from the Camera position().
 

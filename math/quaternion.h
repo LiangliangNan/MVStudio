@@ -1,7 +1,7 @@
 #ifndef _MATH_QUATERNION_H_
 #define _MATH_QUATERNION_H_
 
-#include "math_common.h"
+
 #include "math_types.h"
 
 /*The Quaternion class represents 3D rotations and orientations.
@@ -26,7 +26,7 @@ Note that certain implementations place the cosine term in first position (inste
 The Quaternion is always normalized, so that its inverse() is actually its conjugate.
 */
 
-class MATH_API Quaternion
+class Quaternion
 {
 public:
 	/* Defining a Quaternion */
@@ -139,7 +139,7 @@ public:
 	rotate() performs an inverse transformation. Same as inverse().rotate(v). */
 	vec3d inverse_rotate(const vec3d& v) const;
 
-	/* Inversion *
+	/* Inversion */
 	/* Returns the inverse Quaternion (inverse rotation).
 	Result has a negated axis() direction and the same angle(). A composition (see operator*()) of a
 	Quaternion and its inverse() results in an identity function.

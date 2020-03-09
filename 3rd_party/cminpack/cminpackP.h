@@ -53,10 +53,6 @@ int dgeqrf_(__CLPK_integer *m, __CLPK_integer *n, __CLPK_doublereal *a, __CLPK_i
 #endif
 #endif
 
-#define real __cminpack_real__
-#define min(a,b) ((a) <= (b) ? (a) : (b))
-#define max(a,b) ((a) >= (b) ? (a) : (b))
-#define TRUE_ (1)
-#define FALSE_ (0)
+#include "minpackP.h"
 
 #endif /* !__CMINPACKP_H__ */

@@ -8,14 +8,8 @@
 #include <algorithm>
 #include <string>
 
-#ifndef WIN32
-#include <ext/hash_map>
-#include <ext/hash_set>
-#else
 #include <unordered_map>
 #include <unordered_set>
-#endif
-
 
 
 namespace sfm {
@@ -42,8 +36,12 @@ namespace sfm {
 	{
 	public:
 		MatchIndex(int img1, int img2) : std::pair<unsigned long, unsigned long>(img1, img2) {}
-	};
 
+        // [Liangliang]: to be able to use std::unordered_map
+        struct Hash {
+            std::size_t operator()(const MatchIndex& x) const { return x.first * 1529 + x.second; }
+        };
+	};
 
 
 	class MatchTable
@@ -91,47 +89,12 @@ namespace sfm {
 
 
 
-#ifdef WIN32
-namespace stdext {
-	template<>
-	class hash_compare < sfm::MatchIndex > {
-	public:
-		static const size_t bucket_size = 4;
-		static const size_t min_buckets = 8;
-		size_t operator()(const sfm::MatchIndex &__x) const {
-			return __x.first * 1529 + __x.second;
-		}
-
-		bool operator()(const sfm::MatchIndex &__x1, const sfm::MatchIndex &__x2) const {
-			return (__x1.first < __x2.first) || (__x1.first == __x2.first && __x1.second < __x2.second);
-		}
-	};
-}
-#else
-namespace __gnu_cxx {
-	template<>
-	struct hash < MatchIndex > {
-		size_t
-			operator()(MatchIndex __x) const
-		{
-			return __x.first * 1529 + __x.second;
-		}
-	};
-}
-#endif
-
-
-#ifndef WIN32
-typedef __gnu_cxx::hash_set<int>	HashSetInt;
-#else
 typedef std::unordered_set<int>		HashSetInt;
-#endif
 
 
 namespace sfm {
-	class TransformHashMap : public std::unordered_map < sfm::MatchIndex, sfm::Transform, stdext::hash_compare< sfm::MatchIndex > >
-	{
-	};
+    class TransformHashMap : public std::unordered_map<sfm::MatchIndex, sfm::Transform, sfm::MatchIndex::Hash> {
+    };
 }
 
 

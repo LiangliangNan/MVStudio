@@ -5,11 +5,7 @@
 
 #include "minpack.h"
 #include <math.h>
-#define real __minpack_real__
-
-#define abs(x) ((x) >= 0 ? (x) : -(x))
-#define TRUE_ (1)
-#define FALSE_ (0)
+#include "minpackP.h"
 
 __minpack_attr__
 void __minpack_func__(r1updt)(const int *m, const int *n, real *s, const int *

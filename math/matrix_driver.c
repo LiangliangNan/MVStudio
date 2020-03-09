@@ -10,7 +10,7 @@
 #include "../3rd_party/clapack/include/clapack.h"
 
 
-
+#define NO_CBLAS
 
 
 /* Fill a given matrix with an n x n identity matrix */

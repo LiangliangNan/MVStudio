@@ -3,7 +3,7 @@
 #ifndef _MATH_GEOMETRY_ORIENTED_LINE__
 #define _MATH_GEOMETRY_ORIENTED_LINE__
 
-#include "math_common.h"
+
 #include "math_types.h"
 
 /**

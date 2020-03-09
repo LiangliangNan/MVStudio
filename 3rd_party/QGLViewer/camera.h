@@ -195,6 +195,7 @@ public:
 	int screenHeight() const { return screenHeight_; }
 	void getViewport(GLint viewport[4]) const;
 	qreal pixelGLRatio(const Vec& position) const;
+	float pixelGLRatio(float x, float y, float z) const;
 
 	/*! Returns the coefficient which is used to set zNear() when the Camera is inside the sphere
 	defined by sceneCenter() and zClippingCoefficient() * sceneRadius().
@@ -267,7 +268,9 @@ public Q_SLOTS:
 	/*! Sets the zClippingCoefficient() value. */
 	void setZClippingCoefficient(qreal coef) { zClippingCoef_ = coef; projectionMatrixIsUpToDate_ = false; }
 	//@}
-
+	
+	double orthoCoefficient() const { return orthoCoef_; }
+	void setOrthoCoefficient(double coef) { orthoCoef_ = coef; }
 
 	/*! @name Scene radius and center */
 	//@{

@@ -27,9 +27,9 @@ public:
 	const T* get() const { return pointer_; }
 
 	/**
-	* Makes the current instance a nil pointer ("forgets" the
+	* Makes the current instance a nullptr pointer ("forgets" the
 	* current reference). 'p.forget();' is a shorthand for
-	* 'p = nil;'
+	* 'p = nullptr;'
 	*/
 	void forget() ;
 
@@ -38,7 +38,7 @@ public:
 	operator T*() const ;
 
 	/**
-	* 'if(p.is_nil()) {...}' is a shorthand for 'if(p == nil) {...}'
+	* 'if(p.is_nil()) {...}' is a shorthand for 'if(p == nullptr) {...}'
 	*/
 	bool is_nil() const ;
 
@@ -50,7 +50,7 @@ private:
 //____________________________________________________________________________
 
 template <class T> inline 
-SmartPointer<T>::SmartPointer() : pointer_(nil) {
+SmartPointer<T>::SmartPointer() : pointer_(nullptr) {
 }
 
 template <class T> inline 
@@ -94,18 +94,18 @@ SmartPointer<T>& SmartPointer<T>::operator=(const SmartPointer<T>& rhs) {
 template <class T> inline
 void SmartPointer<T>::forget() {
 	T::unref(pointer_) ;
-	pointer_ = nil ;
+	pointer_ = nullptr ;
 }
 
 template <class T> inline
 T* SmartPointer<T>::operator->() const {
-	ogf_assert(pointer_ != nil) ;
+	ogf_assert(pointer_ != nullptr) ;
 	return pointer_ ;
 }
 
 template <class T> inline
 T& SmartPointer<T>::operator*() const {
-	ogf_assert(pointer_ != nil) ;
+	ogf_assert(pointer_ != nullptr) ;
 	return *pointer_ ;
 }
 
@@ -116,7 +116,7 @@ SmartPointer<T>::operator T*() const {
 
 template <class T> inline 
 bool SmartPointer<T>::is_nil() const {
-	return (pointer_ == nil) ;
+	return (pointer_ == nullptr) ;
 }
 
 

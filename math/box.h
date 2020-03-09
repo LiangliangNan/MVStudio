@@ -2,7 +2,7 @@
 #ifndef _MATH_GEOMETRY_BOX_H_
 #define _MATH_GEOMETRY_BOX_H_
 
-#include "math_common.h"
+
 #include "vecg.h"
 #include "../basic/assertions.h"
 
@@ -15,10 +15,10 @@ public:
 	bool initialized() const { return initialized_ ; }
 	void clear() { initialized_ = false ; }
 
-	T x_min() const { ogf_assert(initialized_); return x_min_ ; }
-	T y_min() const { ogf_assert(initialized_); return y_min_ ; }
-	T x_max() const { ogf_assert(initialized_); return x_max_ ; }
-	T y_max() const { ogf_assert(initialized_); return y_max_ ; }
+	T x_min() const { ogf_debug_assert(initialized_); return x_min_ ; }
+	T y_min() const { ogf_debug_assert(initialized_); return y_min_ ; }
+	T x_max() const { ogf_debug_assert(initialized_); return x_max_ ; }
+	T y_max() const { ogf_debug_assert(initialized_); return y_max_ ; }
 
 	T min(unsigned axis) const { return (axis==0)?x_min_:y_min_; }
 	T max(unsigned axis) const { return (axis==0)?x_max_:y_max_; }
@@ -76,12 +76,12 @@ public:
 	bool initialized() const { return initialized_ ; }
 	void clear() { initialized_ = false ; }
 
-	T x_min() const { ogf_assert(initialized_); return x_min_ ; }
-	T y_min() const { ogf_assert(initialized_); return y_min_ ; }
-	T z_min() const { ogf_assert(initialized_); return z_min_ ; }
-	T x_max() const { ogf_assert(initialized_); return x_max_ ; }
-	T y_max() const { ogf_assert(initialized_); return y_max_ ; }
-	T z_max() const { ogf_assert(initialized_); return z_max_ ; }
+	T x_min() const { ogf_debug_assert(initialized_); return x_min_ ; }
+	T y_min() const { ogf_debug_assert(initialized_); return y_min_ ; }
+	T z_min() const { ogf_debug_assert(initialized_); return z_min_ ; }
+	T x_max() const { ogf_debug_assert(initialized_); return x_max_ ; }
+	T y_max() const { ogf_debug_assert(initialized_); return y_max_ ; }
+	T z_max() const { ogf_debug_assert(initialized_); return z_max_ ; }
 
 	T min(unsigned axis) const { return (axis==0)?x_min_:((axis==1)?y_min_:z_min_); }
 	T max(unsigned axis) const { return (axis==0)?x_max_:((axis==1)?y_max_:z_max_); }

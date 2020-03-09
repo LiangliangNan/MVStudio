@@ -15,7 +15,6 @@
 #include "paint_canvas.h"
 
 #include "../basic/logger.h"
-#include "../basic/file_utils.h"
 #include "../pointset/point_set.h"
 #include "../pointset/point_set_io.h"
 
@@ -29,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 
 	//////////////////////////////////////////////////////////////////////////
 
+    Logger::instance()->set_value(Logger::LOG_REGISTER_FEATURES, "*"); // log everything
 	Logger::instance()->set_value(Logger::LOG_FILE_NAME, "MVStudio.log");
 	Logger::instance()->register_client(this);
 	Progress::instance()->set_client(this);
@@ -47,7 +47,13 @@ MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
 	createStatusBar();
 
 	readSettings();
-	setWindowTitle("MVStudio");
+
+#ifndef NDEBUG
+    setWindowTitle("MVStudio (Debug Version)");
+#else
+    setWindowTitle("MVStudio");
+#endif
+
 	setAcceptDrops(true);
 
 	setContextMenuPolicy(Qt::CustomContextMenu);
@@ -127,7 +133,6 @@ void MainWindow::createActionsForViewMenu() {
 
 	connect(actionSetBackgroundColor, SIGNAL(triggered()), this, SLOT(setBackgroundColor()));
 
-	connect(actionPointAsSphere, SIGNAL(toggled(bool)), mainCanvas_, SLOT(showPointAsSphere(bool)));
 	connect(actionIncreasePointSize, SIGNAL(triggered()), mainCanvas_, SLOT(increasePointSize()));
 	connect(actionDecreasePointSize, SIGNAL(triggered()), mainCanvas_, SLOT(decreasePointSize()));
 }
@@ -148,8 +153,6 @@ void MainWindow::createActionForReconstructionMenu() {
 	connect(actionImageMatching, SIGNAL(triggered()), mainCanvas_, SLOT(imageMatching()));
 	connect(actionSparseReconstruction, SIGNAL(triggered()), mainCanvas_, SLOT(sparseReconstruction()));
 	connect(actionDenseReconstruction, SIGNAL(triggered()), mainCanvas_, SLOT(denseReconstruction()));
-	
-	connect(actionTest, SIGNAL(triggered()), mainCanvas_, SLOT(test()));
 }
 
 
@@ -406,7 +409,11 @@ void MainWindow::setCurrentFile(const QString &fileName)
 		updateRecentFileActions();
 	}
 
-	setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("MVStudio")));
+#ifndef NDEBUG
+    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("MVStudio (Debug Version)")));
+#else
+    setWindowTitle(tr("%1[*] - %2").arg(shownName).arg(tr("MVStudio")));
+#endif
 }
 
 void MainWindow::openRecentFile()

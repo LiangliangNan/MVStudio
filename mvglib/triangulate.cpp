@@ -125,7 +125,7 @@ vec3d triangulate_n_refine(vec3d pt, int num_points,
 	global_num_points = num_points;
 	global_ps = p;
 	global_Rs = R;  global_ts = t;
-	lmdif_driver(triangulate_n_residual, num_eqs, num_vars, x, 1.0e-5);
+	lmdif_driver((void*)triangulate_n_residual, num_eqs, num_vars, x, 1.0e-5);
 
 	error = 0.0;
 	for (i = 0; i < num_points; i++) {
@@ -220,7 +220,7 @@ vec3d triangulate_n(int num_points,
 	global_num_points = num_points;
 	global_ps = p;
 	global_Rs = R;  global_ts = t;
-	lmdif_driver(triangulate_n_residual, num_eqs, num_vars, x, 1.0e-5);
+	lmdif_driver((void*)triangulate_n_residual, num_eqs, num_vars, x, 1.0e-5);
 
 	error = 0.0;
 	for (i = 0; i < num_points; i++) {
@@ -298,7 +298,7 @@ vec3d triangulate(vec2d p, vec2d q,
 	global_q = q;
 	global_R0 = R0;  global_t0 = t0;
 	global_R1 = R1;  global_t1 = t1;
-	lmdif_driver(triangulation_residual, 4, 3, x, 1.0e-10);
+	lmdif_driver((void*)triangulation_residual, 4, 3, x, 1.0e-10);
 
 	if (error != NULL) {
 		double pp[3], qp[3];
@@ -881,7 +881,7 @@ int find_projection_3x4_nonlinear(int num_pts, vec3d *points, vec2d *projs,
 		global_projs = projs;
 
 		memcpy(x, Pin, sizeof(double) * 11);
-		lmdif_driver(projection_residual, num_eqns, num_vars, x, 1.0e-5);
+		lmdif_driver((void*)projection_residual, num_eqns, num_vars, x, 1.0e-5);
 
 		memcpy(Pout, x, sizeof(double) * 11);
 		Pout[11] = 1.0;

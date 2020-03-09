@@ -51,3 +51,6 @@ x64
 .gitignore~
 *.user
 *.log
+
+cmake-build-*
+.idea

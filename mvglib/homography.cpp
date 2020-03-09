@@ -199,7 +199,7 @@ void align_homography_non_linear(int num_pts, vec3d* r_pts, vec3d* l_pts,
 	global_l_pts = l_pts;
 	global_round = 0;
 
-	lmdif_driver(homography_resids, 2 * num_pts, 8, x, 1.0e-4);
+	lmdif_driver((void*)homography_resids, 2 * num_pts, 8, x, 1.0e-4);
 
 	memcpy(Tout, x, 8 * sizeof(double));
 	Tout[8] = 1.0;

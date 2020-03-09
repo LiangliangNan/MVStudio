@@ -5,12 +5,7 @@
 
 #include "minpack.h"
 #include <math.h>
-#define real __minpack_real__
-
-#define min(a,b) ((a) <= (b) ? (a) : (b))
-#define max(a,b) ((a) >= (b) ? (a) : (b))
-#define TRUE_ (1)
-#define FALSE_ (0)
+#include "minpackP.h"
 
 __minpack_attr__
 void __minpack_func__(hybrd)(__minpack_decl_fcn_nn__ const int *n, real *x, real *

@@ -97,7 +97,6 @@
    <addaction name="actionShowCoordinateSystem"/>
    <addaction name="actionLighting"/>
    <addaction name="separator"/>
-   <addaction name="actionPointAsSphere"/>
    <addaction name="actionIncreasePointSize"/>
    <addaction name="actionDecreasePointSize"/>
   </widget>
@@ -107,7 +106,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -147,7 +146,6 @@
     <addaction name="separator"/>
     <addaction name="actionIncreasePointSize"/>
     <addaction name="actionDecreasePointSize"/>
-    <addaction name="actionPointAsSphere"/>
     <addaction name="separator"/>
     <addaction name="actionSetBackgroundColor"/>
    </widget>
@@ -456,11 +454,6 @@
     <string>Save Point Cloud</string>
    </property>
   </action>
-  <action name="actionTest">
-   <property name="text">
-    <string>Test</string>
-   </property>
-  </action>
   <action name="actionSetBackgroundColor">
    <property name="text">
     <string>Set Background Color</string>
@@ -548,18 +541,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
-   </property>
-  </action>
-  <action name="actionPointAsSphere">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="Resources/MVStudio.qrc">
-     <normaloff>:/Resources/spheres.png</normaloff>:/Resources/spheres.png</iconset>
-   </property>
-   <property name="text">
-    <string>Point As Sphere</string>
    </property>
   </action>
   <action name="actionIncreasePointSize">

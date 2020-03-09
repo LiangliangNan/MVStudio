@@ -2,7 +2,7 @@
 #ifndef _DENSE_RECONSTRUCTION_H_
 #define _DENSE_RECONSTRUCTION_H_
 
-#include "algo_common.h"
+
 #include "sparse_reconstruction.h"
 
 
@@ -13,7 +13,7 @@
 class PointSet;
 class Project;
 
-class ALGO_API DenseReconstruction {
+class DenseReconstruction {
 public:
 	DenseReconstruction(Project* proj);
 	virtual ~DenseReconstruction();

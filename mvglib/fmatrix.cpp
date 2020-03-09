@@ -270,7 +270,7 @@ void refine_fmatrix_nonlinear_matches(int num_pts, vec3d *r_pts, vec3d *l_pts,
 
 	memcpy(Ftmp, F0, sizeof(double) * 9);
 
-	lmdif_driver2(fmatrix_residuals, num_pts, 8, Ftmp, 1.0e-12);
+	lmdif_driver2((void *)fmatrix_residuals, num_pts, 8, Ftmp, 1.0e-12);
 
 	Ftmp[8] = global_scale;
 	//matrix_print(3, 3, Ftmp);
