@@ -18,9 +18,13 @@ class Cpatch {
     // never try that.
     m_dflag = 0;
 
-
-    m_dscale = 0;
-    m_ascale = 0;
+      // All non-class member variables need to be initialized so that
+      // they aren't just uninitialized memory.
+      m_flag = 0;
+      m_id = 0;
+      m_dscale = 0;
+      m_ascale = 0;
+      m_tmp = 0;
   }
   
   //----------------------------------------------------------------------
