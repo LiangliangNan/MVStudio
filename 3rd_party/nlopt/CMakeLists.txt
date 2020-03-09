@@ -293,12 +293,6 @@ endif ()
 
 add_subdirectory (src/api)
 
-if (NLOPT_PYTHON)
-  find_package (PythonInterp)
-  find_package (PythonLibs ${PYTHON_VERSION_STRING} EXACT)
-  find_package (NumPy)
-endif ()
-
 if (NOT DEFINED INSTALL_PYTHON_DIR AND PYTHONINTERP_FOUND)
   execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}'))"
                     OUTPUT_VARIABLE _ABS_PYTHON_MODULE_PATH
@@ -309,34 +303,6 @@ if (NOT DEFINED INSTALL_PYTHON_DIR AND PYTHONINTERP_FOUND)
 
   set (INSTALL_PYTHON_DIR "${_REL_PYTHON_MODULE_PATH}")
 
-endif ()
-
-if (NLOPT_GUILE)
-  find_package (Guile)
-endif ()
-
-if (NLOPT_SWIG)
-  find_package (SWIG)
-  if (SWIG_FOUND)
-    add_subdirectory (src/swig)
-  endif ()
-endif ()
-
-if (NLOPT_OCTAVE)
-  find_package (Octave)
-endif ()
-
-if (NLOPT_MATLAB)
-  find_package (Matlab COMPONENTS MX_LIBRARY MAIN_PROGRAM)
-endif ()
-
-if (OCTAVE_FOUND OR Matlab_FOUND)
-  add_subdirectory (src/octave)
-endif ()
-
-if (NLOPT_TESTS)
-  enable_testing ()
-  add_subdirectory (test)
 endif ()
 
 set (CPACK_PACKAGE_NAME          "${CMAKE_PROJECT_NAME}")
