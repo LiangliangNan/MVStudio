@@ -27,7 +27,7 @@ set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 2)
 set(CPACK_PACKAGE_VERSION_PATCH 1)
 include(CPack)
-export(TARGETS f2c blas lapack FILE clapack-targets.cmake)
+export(TARGETS f2c blas clapack FILE clapack-targets.cmake)
 configure_file(${CLAPACK_SOURCE_DIR}/clapack-config-version.cmake.in
   ${CLAPACK_BINARY_DIR}/clapack-config-version.cmake @ONLY)
 configure_file(${CLAPACK_SOURCE_DIR}/clapack-config.cmake.in

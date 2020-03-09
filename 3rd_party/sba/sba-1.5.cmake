@@ -12,4 +12,7 @@ SET(3rd_sba_SRC
    )
 
 SET(3rd_sba_DEPS
+        blas
+        f2c
+        clapack
    )

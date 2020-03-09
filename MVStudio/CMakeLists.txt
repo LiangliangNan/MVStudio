@@ -60,7 +60,7 @@ target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} Qt5::OpenGL)
 target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 
-target_link_libraries(${PROJECT_NAME} basic math pointset algo QGLViewer)
+target_link_libraries(${PROJECT_NAME} basic math pointset algo QGLViewer sift_gpu)
 
 # Note: On macOS, high-DPI support is enabled by settings in the Info.plist file. Make sure they are present.
 # For more information, see: http://doc.qt.io/qt-5/highdpi.html
@@ -69,6 +69,8 @@ if (APPLE)
     set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Mac/MVStudio.plist)
 endif ()
 
+
+set(CMAKE_CXX_FLAGS " -pthread ")
 
 set(GLEW_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/glew/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${GLEW_INCLUDE_DIR})

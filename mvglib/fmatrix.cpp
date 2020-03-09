@@ -6,7 +6,7 @@
 
 
 #ifdef WIN32
-#define isnan _isnan
+#define std::isnan _isnan
 #endif
 
 /* Compute the epipoles of an F-matrix */
@@ -150,7 +150,7 @@ int estimate_fmatrix_ransac_matches(int num_pts, vec3d *a_pts, vec3d *b_pts,
 			nan = 1;
 
 		for (j = 0; j < 9; j++) {
-			if (Ftmp[j] != Ftmp[j] /* isnan(Ftmp[j]) */) {
+			if (Ftmp[j] != Ftmp[j] /* std::isnan(Ftmp[j]) */) {
 				printf("[estimate_fmatrix_ransac_matches] nan encountered\n");
 				nan = 1;
 				break;
@@ -158,9 +158,9 @@ int estimate_fmatrix_ransac_matches(int num_pts, vec3d *a_pts, vec3d *b_pts,
 		}
 
 		/* Check for nan entries */
-		if (isnan(Ftmp[0]) || isnan(Ftmp[1]) || isnan(Ftmp[2]) ||
-			isnan(Ftmp[3]) || isnan(Ftmp[4]) || isnan(Ftmp[5]) ||
-			isnan(Ftmp[6]) || isnan(Ftmp[7]) || isnan(Ftmp[8])) {
+		if (std::isnan(Ftmp[0]) || std::isnan(Ftmp[1]) || std::isnan(Ftmp[2]) ||
+			std::isnan(Ftmp[3]) || std::isnan(Ftmp[4]) || std::isnan(Ftmp[5]) ||
+			std::isnan(Ftmp[6]) || std::isnan(Ftmp[7]) || std::isnan(Ftmp[8])) {
 			printf("[estimate_fmatrix_ransac_matches] "
 				"nan matrix encountered\n");
 			nan = 1;

@@ -925,7 +925,7 @@ int align_horn_3D_ransac(int n, vec3d *r_pts, vec3d *l_pts,
 
 #if 1
 		for (i = 0; i < 16; i++) {
-			if (isnan(Tout[i]) || Tout[i] != Tout[i]) {
+			if (std::isnan(Tout[i]) || Tout[i] != Tout[i]) {
 				nan = 1;
 				break;
 			}

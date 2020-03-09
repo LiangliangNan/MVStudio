@@ -33,3 +33,8 @@ add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_
 set(CIMG_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/cimg)
 target_include_directories(mvglib PRIVATE ${CIMG_INCLUDE_DIR})
 
+
+target_link_libraries(mvglib
+        basic
+        math
+        )

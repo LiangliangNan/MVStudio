@@ -3,6 +3,7 @@
 #include "basic_types.h"
 #include "assertions.h"
 
+#include <cstdarg>
 
 /*
 Disables the warning caused by passing 'this' as an argument while

@@ -8,6 +8,7 @@ cmake_minimum_required(VERSION 2.8)
 
 INCLUDE("tinycthread.cmake")
 
+
 ADD_LIBRARY(tinycthread STATIC
             ${3rd_tinycthread_SRC})
 

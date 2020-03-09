@@ -14,7 +14,6 @@
 #include <QFileDialog>
 #include <QMouseEvent>
 #include <QMessageBox>
-#include <QColorMap>
 #include <QColorDialog>
 
 #include <cassert>

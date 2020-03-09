@@ -1097,7 +1097,7 @@ namespace sfm {
 			vec3d pt = triangulate_n_views(new_tracks[i], added_order, cameras,
 				error, true);
 
-			if (isnan(error) || error > max_reprojection_error) {
+			if (std::isnan(error) || error > max_reprojection_error) {
 				num_high_reprojection++;
 				continue;
 			}

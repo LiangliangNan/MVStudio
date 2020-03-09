@@ -34,6 +34,7 @@ target_link_libraries(${PROJECT_NAME}
         jpeg
         png
         zlib
+        basic
         )
 
 set(PNG_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/png)

@@ -34,5 +34,5 @@ set(${PROJECT_NAME}_SOURCES
 
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS} )
 
-target_link_libraries(${PROJECT_NAME} basic cminpack)
+target_link_libraries(${PROJECT_NAME} basic cminpack f2c blas clapack)
 

@@ -26,4 +26,5 @@ SET(3rd_cmvs-pmvs_SRC
    )
 
 SET(3rd_cmvs-pmvs_DEPS
+        nlopt
    )
