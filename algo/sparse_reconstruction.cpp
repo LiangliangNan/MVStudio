@@ -24,14 +24,14 @@ bool SparseReconstruction::apply(PointSet* pset /* = nil */) {
 		return false;
 	}
 
-	std::string listfocal = project_->sfm_list_file;
-	std::string match_table = project_->sfm_match_table_file;
+	const std::string listfocal = project_->sfm_list_file;
+	const std::string match_table = project_->sfm_match_table_file;
 	if (!FileUtils::is_file(listfocal) || !FileUtils::is_file(match_table)) {
 		Logger::warn(title()) << "please run image matching first" << std::endl;
 		return false;
 	}
 
-	std::vector<ProjectImage>& images = project_->images;
+	const std::vector<ProjectImage>& images = project_->images;
 	for (std::size_t i = 0; i < images.size(); ++i) {
 		if (images[i].ignored)
 			continue;
