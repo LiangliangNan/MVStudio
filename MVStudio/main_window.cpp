@@ -133,7 +133,6 @@ void MainWindow::createActionsForViewMenu() {
 
 	connect(actionSetBackgroundColor, SIGNAL(triggered()), this, SLOT(setBackgroundColor()));
 
-	connect(actionPointAsSphere, SIGNAL(toggled(bool)), mainCanvas_, SLOT(showPointAsSphere(bool)));
 	connect(actionIncreasePointSize, SIGNAL(triggered()), mainCanvas_, SLOT(increasePointSize()));
 	connect(actionDecreasePointSize, SIGNAL(triggered()), mainCanvas_, SLOT(decreasePointSize()));
 }

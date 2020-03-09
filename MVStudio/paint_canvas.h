@@ -75,7 +75,6 @@ public Q_SLOTS:
 	void setProjectionMode(bool);
 	void showCoordinateSystem(bool);
 
-	void showPointAsSphere(bool b);
 	void increasePointSize();
 	void decreasePointSize();
 	
@@ -84,8 +83,6 @@ public Q_SLOTS:
 	void imageMatching();
 	void sparseReconstruction();
 	void denseReconstruction();
-
-	void test();
 
 private :
 	void drawCornerAxis();

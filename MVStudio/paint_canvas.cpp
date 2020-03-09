@@ -139,12 +139,6 @@ void PaintCanvas::setLightPosition(const vec3d& pos) {
 }
 
 
-void PaintCanvas::showPointAsSphere(bool b) {
-	render_->set_points_as_spheres(b);
-	update_graphics();
-}
-
-
 void PaintCanvas::increasePointSize() {
 	float size = render_->point_size();
 	++size;
@@ -533,10 +527,3 @@ void PaintCanvas::denseReconstruction() {
 	fitScreen();
 	update_all();
 }
-
-
-void PaintCanvas::test() {
-
-
-}
-
