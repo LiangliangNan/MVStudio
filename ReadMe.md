@@ -6,9 +6,10 @@
 ---
 
 ### Build
-MVStudio depends on some third-party libraries and **all dependencies are included** in the distribution. So you don't need to do anything about third-party libraries and it is ready to be built from the source. To build MVStudio, you need [CMake](https://cmake.org/download/) and, of course, a compiler:
+MVStudio depends on some third-party libraries and all dependencies (except for Qt) are included in the distribution. To build MVStudio, you need Qt, CMake, and of course, a compiler:
 
-- CMake `>= 3.1`
+- [Qt `>= 5.0`](http://download.qt.io/archive/qt/)
+- [CMake `>= 3.1`](https://cmake.org/download/)
 - a compiler that supports `>= C++11`
 
 MVStudio has been tested on macOS (Xcode >= 8), Windows (MSVC >=2015), and Linux (GCC >= 4.8, Clang >= 3.3). Machines 
