@@ -113,8 +113,6 @@ void MainWindow::createActionsForFileMenu() {
 	connect(actionOpenPointCloud, SIGNAL(triggered()), this, SLOT(openPointCloud()));
 	connect(actionSavePointCloud, SIGNAL(triggered()), this, SLOT(savePointCloud()));
 
-	connect(actionCombinePointCloudFiles, SIGNAL(triggered()), this, SLOT(combinePointCloudFiles()));
-
 	connect(actionExit, SIGNAL(triggered()), this, SLOT(close()));
 	actionExit->setShortcut(QString("Ctrl+Q"));
 }
@@ -170,7 +168,6 @@ void MainWindow::createActions() {
 	createActionForReconstructionMenu();
 
 	// about menu
-	connect(actionHelp, SIGNAL(triggered()), mainCanvas_, SLOT(help()));
 	connect(actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 	connect(actionAboutQt, SIGNAL(triggered()), this, SLOT(aboutQt()));
 }
@@ -182,17 +179,12 @@ void MainWindow::createStatusBar()
 	statusLabel_->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	statusBar()->addWidget(statusLabel_, 1);
 
-	int length = 220;
-
-	coordinateUnderMouseLabel_ = new QLabel("XYZ = [-, -, -]");
-	coordinateUnderMouseLabel_->setFixedWidth(length);
-	coordinateUnderMouseLabel_->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	statusBar()->addWidget(coordinateUnderMouseLabel_, 1);
 
 	QLabel* space1 = new QLabel;
 	statusBar()->addWidget(space1, 1);
 
-	numVerticesLabel_ = new QLabel;
+    const int length = 220;
+    numVerticesLabel_ = new QLabel;
 	numVerticesLabel_->setFixedWidth(length);
 	numVerticesLabel_->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
 	statusBar()->addPermanentWidget(numVerticesLabel_, 1);
@@ -207,11 +199,6 @@ void MainWindow::createStatusBar()
  	cancelButton->setFixedSize(20, 20);
  	statusBar()->addPermanentWidget(cancelButton, 1);
  	connect(cancelButton, SIGNAL(pressed()), this,  SLOT(cancelTask()));
-
-// 	int s = dockWidgetOutput->sizeHint().width();
-// 	std::cout << "dockWidgetOutput->sizeHint().width(): " << s << std::endl;
-// 	s = dockWidgetImages->sizeHint().width();
-// 	std::cout << "dockWidgetImages->sizeHint().width(): " << s << std::endl;
 
 	progress_bar_ = new QProgressBar;
 	progress_bar_->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
@@ -248,12 +235,6 @@ void MainWindow::setBackgroundColor() {
 	}
 }
 
-void MainWindow::showCoordinateUnderMouse(const vec3d& p, bool found) {
-	QString coordString = "XYZ = [-, -, -]";
-	if (found)
-		coordString = QString("XYZ = [%1, %2, %3]").arg(p.x).arg(p.y).arg(p.z);
-	coordinateUnderMouseLabel_->setText(coordString);
-}
 
 void MainWindow::about()
 {
@@ -652,59 +633,3 @@ QString MainWindow::strippedName(const QString &fullFileName)
 {
 	return QFileInfo(fullFileName).fileName();
 }
-
-
-void MainWindow::combinePointCloudFiles() {
-	QStringList fileNames = QFileDialog::getOpenFileNames(this,
-		tr("Please select files"), ".",
-		tr("Points (*.ply *.pnc *.bpnc)")
-		);
-
-	if (fileNames.isEmpty())
-		return;
-
-	QFileInfo info(fileNames[0]);
-	QString output_file = info.path() + "/combined_file.bpnc";
-	// open file
-	std::ofstream output(output_file.toStdString().c_str(), std::fstream::binary);
-	if (output.fail()) {
-		Logger::err("MainWindow") << "could not open file\'" << output_file.toStdString() << "\'" << std::endl;
-		return;
-	}
-
-	size_t total_num = 0;
-	ProgressLogger progress(fileNames.size());
-	for (int i = 0; i < fileNames.size(); ++i) {
-		if (progress.is_canceled())
-			break;
-
-		const std::string& in_file_name = fileNames[i].toStdString();
-		const std::string& simple_name = FileUtils::simple_name(in_file_name);
-		Logger::out("MainWindow") << "reading file " << i + 1 << "/" << fileNames.size() << ": " << simple_name << std::endl;
-		PointSet* pset = PointSetIO::read(in_file_name);
-		if (!pset) 
-			continue;
-		else {
-			Logger::out("MainWindow") << "saving file " << i + 1 << "/" << fileNames.size() << std::endl;
-
-			int num = pset->num_points();
-			float* points = &(const_cast<PointSet*>(pset)->points()[0].x);
-			float* normals = &(const_cast<PointSet*>(pset)->normals()[0].x);
-			float* colors = &(const_cast<PointSet*>(pset)->colors()[0].x);
-
-			for (int i = 0; i < num; ++i) {
-				float* pt = points + (i * 3);	output.write((char*)pt, 12);
-				float* nm = normals + (i * 3);	output.write((char*)nm, 12);
-				float* cl = colors + (i * 3);	output.write((char*)cl, 12);
-			}
-		}
-
-		if (pset)
-			delete pset;
-
-		progress.next();
-	}
-
-	Logger::out("MainWindow") << "done! Total number: " << total_num << std::endl;
-}
-

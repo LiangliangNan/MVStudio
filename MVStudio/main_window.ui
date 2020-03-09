@@ -129,7 +129,6 @@
     <addaction name="separator"/>
     <addaction name="actionOpenPointCloud"/>
     <addaction name="actionSavePointCloud"/>
-    <addaction name="actionCombinePointCloudFiles"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -153,8 +152,6 @@
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionHelp"/>
-    <addaction name="separator"/>
     <addaction name="actionAbout"/>
     <addaction name="actionAboutQt"/>
    </widget>
@@ -495,11 +492,6 @@
   <action name="actionDenseReconstruction">
    <property name="text">
     <string>Run Dense (MVS)</string>
-   </property>
-  </action>
-  <action name="actionCombinePointCloudFiles">
-   <property name="text">
-    <string>Combine Point Clouds</string>
    </property>
   </action>
   <action name="actionImageMatching">

@@ -29,8 +29,6 @@ public:
 
 	PaintCanvas* canvas() { return mainCanvas_; }
 
-	void showCoordinateUnderMouse(const vec3d& p, bool found);
-	
 	//////////////////////////////////////////////////////////////////////////
 
 	virtual void out_message(const std::string& msg) ;
@@ -65,10 +63,6 @@ public Q_SLOTS:
 	void aboutQt();
 
 	void setBackgroundColor();
-
-	//////////////////////////////////////////////////////////////////////////
-
-	void combinePointCloudFiles();
 
 private:
 	void createMenus();
@@ -109,7 +103,6 @@ private:
 	QProgressBar*	progress_bar_;
 
 	QLabel *statusLabel_,
-		*coordinateUnderMouseLabel_,
 		*numVerticesLabel_;
 
 	enum { MaxRecentFiles = 5 };
