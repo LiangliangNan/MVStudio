@@ -30,9 +30,9 @@ Don't have any experience with C/C++ programming? Have a look at [How to build M
 
 ### How to use MVStudio
 
-* Create a project
-  -  Goto _File_ -> _New Project_, choose a folder, fill in the project name and _Save_ the project file. The folder you choose will contain all (intermediate) results after reconstruction.
-  -  _Add Images_ to the project by right-clicking the image pannel (upper right corner of the program) and choosing the folder containing the images.
+* Create a project 
+  -  Goto menu _**File**_ -> _**New Project**_, choose a folder, fill in the project name and _Save_ the project file. The folder you choose will contain all (intermediate) results after reconstruction.
+  - Goto menu _**File**_ -> _**Add Images**_, choose the folder containing the images. This can also be done by right-clicking the image pannel (upper right corner of the program).
  
 * Reconstruction
   - *Runconstruct* -> *Image Matching*
