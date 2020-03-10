@@ -416,12 +416,10 @@ void MainWindow::openRecentFile()
 
 bool MainWindow::openPointCloud()
 {
-	QString fileName = QFileDialog::getOpenFileName(this,
-		tr("Open point cloud"), workingDirectory_,
-		tr(
-		"Point cloud format (*.ply *.pnc *.bpnc)\n"
-		"All format (*.*)")
-		);
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Open point cloud"), workingDirectory_,
+                                                    tr("Point cloud format (*.ply)")
+    );
 
 	if (fileName.isEmpty())
 		return false;
@@ -431,12 +429,10 @@ bool MainWindow::openPointCloud()
 
 bool MainWindow::savePointCloud()
 {
-	QString fileName = QFileDialog::getSaveFileName(this,
-		tr("Save point cloud"), workingDirectory_, 
-		tr(
-		"Point cloud format (*.ply *.pnc *.bpnc)\n"
-		"All format (*.*)")
-		);
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save point cloud"), workingDirectory_,
+                                                    tr("Point cloud format (*.ply)")
+    );
 
 	if (fileName.isEmpty())
 		return false;
@@ -449,10 +445,11 @@ bool MainWindow::newProject() {
 	if (!okToContinue())
 		return false;
 
-	QString fileName = QFileDialog::getSaveFileName(this,
-		tr("Please specify where to save your project file"), workingDirectory_,
-		tr("Project file (*.mvsproj)")
-		);
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Please specify where to save your project file"),
+                                                    workingDirectory_,
+                                                    tr("Project file (*.mvsproj)")
+    );
 
 	if (fileName.isEmpty())
 		return false;
@@ -471,12 +468,10 @@ bool MainWindow::openProject() {
 	if (!okToContinue())
 		return false;
 
-	QString fileName = QFileDialog::getOpenFileName(this,
-		tr("Open MVS project"), workingDirectory_,
-		tr(
-		"Project file (*.mvsproj)\n"
-		"All format (*.*)")
-		);
+    QString fileName = QFileDialog::getOpenFileName(this,
+                                                    tr("Open MVS project"), workingDirectory_,
+                                                    tr("Project file (*.mvsproj)")
+    );
 
 	if (fileName.isEmpty())
 		return false;
@@ -513,12 +508,10 @@ bool MainWindow::saveProject() {
 
 
 bool MainWindow::saveProjectAs() {
-	QString fileName = QFileDialog::getSaveFileName(this,
-		tr("Save project"), curProjectFile_,
-		tr(
-		"Project file (*.mvsproj)\n"
-		"All format (*.*)")
-		);
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save project"), curProjectFile_,
+                                                    tr("Project file (*.mvsproj)")
+    );
 
 	if (fileName.isEmpty())
 		return false;
