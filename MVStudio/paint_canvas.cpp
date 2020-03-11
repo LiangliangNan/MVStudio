@@ -1,7 +1,8 @@
 #include "paint_canvas.h"
 #include "main_window.h"
-#include "../3rd_party/QGLViewer/manipulatedCameraFrame.h"
-#include "../basic/file_utils.h"
+
+#include "../opengl/opengl_info.h"
+
 #include "../pointset/point_set.h"
 #include "../pointset/point_set_io.h"
 #include "../pointset/point_set_render.h"
@@ -9,14 +10,12 @@
 #include "../algo/image_matching.h"
 #include "../algo/sparse_reconstruction.h"
 #include "../algo/dense_reconstruction.h"
-#include "../sfm/sfm_util.h"
 
-#include <QFileDialog>
+#include "../3rd_party/QGLViewer/manipulatedCameraFrame.h"
+
 #include <QMouseEvent>
 #include <QMessageBox>
-#include <QColorDialog>
 
-#include <cassert>
 #include <fstream>
 
 using namespace sfm;
@@ -155,16 +154,19 @@ void PaintCanvas::decreasePointSize() {
 }
 
 void PaintCanvas::draw() {
+    ogf_check_gl;
 	if (show_coord_sys_)  {
 		glEnable(GL_MULTISAMPLE);
 		drawCornerAxis();
 	}
-	
+
+    ogf_check_gl;
 	if (point_set_) {
 		glDisable(GL_MULTISAMPLE);
 		render_->draw();
 	}
 
+    ogf_check_gl;
 	// drawCameras();
 }
 
