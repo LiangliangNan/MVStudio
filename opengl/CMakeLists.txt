@@ -7,17 +7,11 @@ project(${PROJECT_NAME})
 set(${PROJECT_NAME}_HEADERS
         opengl_info.h
         quick_text.h
-        shader.h
-        shader_factory.h
-        shader_program.h
         )
 
 set(${PROJECT_NAME}_SOURCES
         opengl_info.cpp
         quick_text.cpp
-        shader.cpp
-        shader_factory.cpp
-        shader_program.cpp
         )
 
 

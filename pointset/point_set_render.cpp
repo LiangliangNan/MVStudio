@@ -12,7 +12,6 @@
 
 PointSetRender::PointSetRender() {
 	point_set_ = nil;
-	points_as_spheres_ = false;
 
 	point_size_ = 4 ;
 	lighting_ = true;
@@ -31,9 +30,6 @@ void PointSetRender::draw() {
 	int num = target()->num_points();
 	if (num < 1)
 		return;
-
-	if (points_as_spheres_ && has_points_shaders_)
-		activate_points_shaders();
 
 	float* points = &(point_set_->points()[0].x);
 	float* colors = 0;
@@ -77,8 +73,5 @@ void PointSetRender::draw() {
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glEnable(GL_LIGHTING);
 	}
-
-	if (points_as_spheres_ && has_points_shaders_)
-		deactivate_points_shaders();
 }
 

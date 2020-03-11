@@ -5,7 +5,6 @@ project(${PROJECT_NAME})
 
 
 set(${PROJECT_NAME}_HEADERS
-        point_as_sphere.h
         point_set.h
         point_set_io.h
         point_set_render.h
@@ -13,7 +12,6 @@ set(${PROJECT_NAME}_HEADERS
         )
 
 set(${PROJECT_NAME}_SOURCES
-        point_as_sphere.cpp
         point_set.cpp
         point_set_io.cpp
         point_set_render.cpp

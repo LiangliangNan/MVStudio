@@ -3,12 +3,10 @@
 #define _POINT_SET_RENDERER_H_
 
 
-#include "point_as_sphere.h"
-
 
 class PointSet;
 
-class PointSetRender : public PointAsSphere
+class PointSetRender
 {
 public:
 	PointSetRender();

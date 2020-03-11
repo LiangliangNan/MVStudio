@@ -35,7 +35,7 @@ class ProgramGPU
 public:
 	//use a gpu program
 	virtual int     UseProgram() = 0;
-    virtual void*   GetProgramID() = 0;
+    virtual unsigned int GetProgramID() = 0;
 	//not used
 	virtual ~ProgramGPU(){};
 };

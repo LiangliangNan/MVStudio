@@ -17,7 +17,3 @@ Box3f PointSet::bounding_box() const {
 	}
 	return result;
 }
-
-void PointSet::delete_points(const std::vector<unsigned int>& indices) {
-
-}
