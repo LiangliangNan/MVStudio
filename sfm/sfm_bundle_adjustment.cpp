@@ -49,7 +49,7 @@ namespace sfm {
 		int i_best = -1, j_best = -1, max_matches = 0;
 		double max_score = 0.0;
 		int curr_num_cameras, curr_num_pts;
-		int pt_count;
+		int pt_count = 0;
 
 		if (num_init_cams == 0) {
 			bundle_pick_initial_pair(i_best, j_best, true);
@@ -71,8 +71,7 @@ namespace sfm {
 #endif // _DEBUG
 
 			/* Run sfm for the first time */
-			double error0;
-			error0 = run_bundle_adjustment(curr_num_pts, 2, 0, false, cameras, points, added_order, colors, pt_views);
+			double error0 = run_bundle_adjustment(curr_num_pts, 2, 0, false, cameras, points, added_order, colors, pt_views);
 			Logger::out(title()) << "focal lengths: " << cameras[0].f << ", " << cameras[1].f << std::endl;
 
 			if (pset) {
