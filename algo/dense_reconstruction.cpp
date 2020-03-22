@@ -108,14 +108,6 @@ bool DenseReconstruction::convert_bundler_to_pmvs() {
 	return true;
 }
 
-bool DenseReconstruction::convert_pba_to_pmvs() {
-	if (!project_ || !project_->is_valid()) {
-		Logger::warn(title()) << "invalid project" << std::endl;
-		return false;
-	}
-
-	return true;
-}
 
 bool DenseReconstruction::run_pmvs(PointSet* pset) {
 	if (!project_ || !project_->is_valid()) {
@@ -123,13 +115,7 @@ bool DenseReconstruction::run_pmvs(PointSet* pset) {
 		return false;
 	}
 
-	bool ready = false;
-	if (project_->sfm_method() == SFM_BUNDLER)
-		ready = convert_bundler_to_pmvs();
-	else
-		ready = convert_pba_to_pmvs();
-
-	if (ready) {
+	if (convert_bundler_to_pmvs()) {
 		Logger::out(title()) << "running PMVS..." << std::endl;
 		StopWatch w;
 
@@ -149,9 +135,10 @@ bool DenseReconstruction::run_pmvs(PointSet* pset) {
 		findMatch.fillPointSet(pset);
 
 		//Liangliang: change if you want to save intermediate results 
-		//bool export_patch = false;
-		//bool export_pSet = false;
-		//findMatch.write(project_->pmvs_models_dir, export_patch, export_pSet);
+		bool export_patch = true;
+		bool export_pSet = true;
+		findMatch.write(project_->pmvs_models_dir, export_patch, export_pSet);
+        Logger::out(title()) << "MVS intermediate results saved to: " << project_->pmvs_models_dir << std::endl;
 		
 		std::string ply_file = project_->pmvs_models_dir + "/dense.ply";
 		PointSetIO::save(ply_file, pset);

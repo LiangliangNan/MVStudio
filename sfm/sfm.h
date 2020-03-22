@@ -12,14 +12,6 @@
 #include <vector>
 
 
-
-
-enum SfMMethod {
-	SFM_BUNDLER,
-	SFM_PBA
-};
-
-
 class PointSet;
 
 namespace sfm {

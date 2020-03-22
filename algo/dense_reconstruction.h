@@ -24,7 +24,6 @@ public:
 
 private:
 	bool convert_bundler_to_pmvs();
-	bool convert_pba_to_pmvs();
 
 private:
 	Project* project_;

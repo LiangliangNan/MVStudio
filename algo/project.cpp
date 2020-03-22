@@ -4,10 +4,9 @@
 #include <fstream>
 
 
-bool Project::create(const std::string& proj_file, const std::string& img_dir, SfMMethod sfm) {
+bool Project::create(const std::string& proj_file, const std::string& img_dir) {
 	project_dir = FileUtils::dir_name(proj_file);
 	image_dir = img_dir;
-	sfm_method_ = sfm;
 
 	std::vector<std::string> entries;
 	FileUtils::get_directory_entries(image_dir, entries, false);
@@ -38,9 +37,8 @@ bool Project::create(const std::string& proj_file, const std::string& img_dir, S
 }
 
 
-bool Project::create(const std::string& proj_file, SfMMethod sfm) {
+bool Project::create(const std::string& proj_file) {
 	project_dir = FileUtils::dir_name(proj_file);
-	sfm_method_ = sfm;
 
 	images.clear();
 	initialize();
@@ -108,11 +106,6 @@ void Project::initialize() {
 	pmvs_visualize_dir = pmvs_dir + "/visualize";	if (!FileUtils::is_directory(pmvs_visualize_dir))	FileUtils::create_directory(pmvs_visualize_dir);
 	pmvs_vis_data_file = pmvs_dir + "/vis.dat";
 	pmvs_option_file = pmvs_dir + "/pmvs_options.txt";
-}
-
-
-void Project::set_sfm_method(SfMMethod sfm) {
-	sfm_method_ = sfm;
 }
 
 
@@ -186,17 +179,6 @@ bool Project::load(const std::string& file) {
 	std::string dummy;
 	getline(input, dummy);  // skip the comments
 
-	std::string sfm;
-	input >> dummy >> sfm;
-
-	if (sfm == "BUNDLER")
-		sfm_method_ = SFM_BUNDLER;
-	else if (sfm == "PBA")
-		sfm_method_ = SFM_PBA;
-	else {
-		Logger::warn(title()) << "unknown SfM method \'" << sfm << "\'. Use default \'BUNDLER\'" << std::endl;
-	}
-
 	//////////////////////////////////////////////////////////////////////////
 
 	input >> dummy >> image_dir;
@@ -238,11 +220,6 @@ bool Project::save(const std::string& file) const {
 	}
 
 	output << "# MVStudio Project File. Saved by liangliang.nan@gmail.com" << std::endl;
-
-	if (sfm_method_ == SFM_PBA)
-		output << std::endl << "[SfMMethod]: " << "PBA" << std::endl;
-	else
-		output << std::endl << "[SfMMethod]: " << "BUNDLER" << std::endl;
 	
 	output << std::endl << "[ImageDirectory]: " << image_dir << std::endl;
 	output << "[ImageNumber]: " << images.size() << std::endl;

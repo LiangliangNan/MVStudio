@@ -27,10 +27,10 @@ public:
 
 	// --------------- create -------------------
 	// create a project (providing images)
-	bool create(const std::string& proj_file, const std::string& img_dir, SfMMethod sfm = SFM_BUNDLER);
+	bool create(const std::string& proj_file, const std::string& img_dir);
 
 	// create empty project (without images)
-	bool create(const std::string& proj_file, SfMMethod sfm = SFM_BUNDLER); 
+	bool create(const std::string& proj_file);
 	// set images. Existing images will be replaced
 	bool add_images(const std::string& img_dir);	
 
@@ -42,9 +42,6 @@ public:
 
 	// ------------------------------------------------
 	bool is_valid();
-
-	SfMMethod sfm_method() const { return sfm_method_;  }
-	void set_sfm_method(SfMMethod sfm);
 
 public:
 	std::string  image_dir;
@@ -70,10 +67,6 @@ public:
 
 private:
 	void initialize();
-
-private:
-	SfMMethod	sfm_method_;
-
 };
 
 
