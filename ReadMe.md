@@ -35,9 +35,9 @@ Don't have any experience with C/C++ programming? Have a look at [How to build M
   - Goto menu _**File**_ -> _**Add Images**_, choose the folder containing the images. This can also be done by right-clicking the image pannel (upper right corner of the program).
  
 * Reconstruction
-  - *Runconstruct* -> *Image Matching*
-  - *Runconstruct* -> *Run Sparse (SfM)* and wait to see the sparse point cloud.
-  - *Runconstruct* -> *Run Dense (MVS)* and wait to see the dense point cloud.
+  - Menu _**Runconstruct**_ -> _**Image Matching**_
+  - Menu _**Runconstruct**_ -> _**Run Sparse (SfM)**_ and wait to see the sparse point cloud.
+  - Menu _**Runconstruct**_ -> _**Run Dense (MVS)**_ and wait to see the dense point cloud.
 
 ---
 
