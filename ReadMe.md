@@ -1,7 +1,16 @@
+<p align="right">
+    <b> <img src="https://img.shields.io/badge/Supported%20Platforms-Windows%20%7C%20macOS%20%7C%20Linux-green" title="Supported Platforms"/> </b> <br>
+    <b> <img src="https://img.shields.io/badge/license-GPL-blue" title="license-GPL"/> </b> <br> <br>
+</p>
+
+
+
 ### About
 **MVStudio** is a lightweight, easy to use, and integrated SfM (Structure from Motion) and MVS (Multi-View Stereo) solution. It is intended for learning/researching 3D computer vision.
 
-<img src="mvstudio.jpg" width="600"/>
+<p align="center"> 
+     <img src="mvstudio.jpg" width="600"> 
+</p>
 
 ---
 
