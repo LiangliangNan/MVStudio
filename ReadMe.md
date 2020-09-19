@@ -40,8 +40,8 @@ Don't have any experience with C/C++ programming? Have a look at [How to build M
 ### How to use MVStudio
 
 * Create a project 
-  -  Goto menu _**File**_ -> _**New Project**_, choose a folder, fill in the project name and _Save_ the project file. The folder you choose will contain all (intermediate) results after reconstruction.
-  - Goto menu _**File**_ -> _**Add Images**_, choose the folder containing the images. This can also be done by right-clicking the image pannel (upper right corner of the program).
+  -  Goto menu _**File**_ -> _**New Project**_, choose a folder, fill in the project name, and _Save_ the project file. The folder you choose will contain all (intermediate) results after reconstruction.
+  - Goto menu _**File**_ -> _**Add Images**_, choose the folder containing the images. This can also be done by right-clicking the image panel (upper right corner of the program).
  
 * Reconstruction
   - Menu _**Runconstruct**_ -> _**Image Matching**_
@@ -57,7 +57,7 @@ of the License or (at your option) any later version. The full text of the licen
 found in the accompanying 'License' file.
 
 
-Should you have any questions, comments, or suggestions, please contact me at: liangliang.nan@gmail.com
+Should you have any questions, comments, or suggestions, please contact me at _liangliang.nan@gmail.com_
 
 ---
 
