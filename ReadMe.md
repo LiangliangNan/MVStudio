@@ -14,7 +14,12 @@
 
 ---
 
-### Build
+### Pre-built Binaries
+
+Prebuilt executables (for **macOS**, **Linux**, and **Windows**) can be downloaded [here](https://github.com/LiangliangNan/MVStudio/releases). 
+
+### Build from Source
+
 MVStudio depends on some third-party libraries and all dependencies (except for Qt) are included in the distribution. To build MVStudio, you need Qt, CMake, and of course, a compiler:
 
 - [Qt `>= 5.0`](http://download.qt.io/archive/qt/)
