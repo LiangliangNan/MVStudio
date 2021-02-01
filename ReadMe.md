@@ -38,7 +38,9 @@ MVStudio. Then you should have obtained a usable project and just build. I recom
 - Option 3: Use CMake to generate Makefiles and then `make` (on Linux/macOS) or `nmake`(on Windows with Microsoft Visual Studio). For example, on Linux or macOS, you can simply
     ```
     $ cd MVStudio
-    $ cmake .
+    $ mkdir Release
+    $ cd Release
+    $ cmake -DCMAKE_BULID_TYPE=Release ..
     $ make
     ```
 
