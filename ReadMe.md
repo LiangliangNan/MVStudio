@@ -30,8 +30,12 @@ There are many options to build MVStudio. Choose one of the following (or whatev
 MVStudio. Then you should have obtained a usable project and just build. I recommend using 
 [CLion](https://www.jetbrains.com/clion/) or [QtCreator](https://www.qt.io/product).
 - Option 2: Use CMake to generate project files for your IDE. Then load the project to your IDE and build.
-- Option 3: Use CMake to generate Makefiles and then `make` (on Linux/macOS) or `nmake`(on Windows with Microsoft 
-  Visual Studio).
+- Option 3: Use CMake to generate Makefiles and then `make` (on Linux/macOS) or `nmake`(on Windows with Microsoft Visual Studio). For example, on Linux or macOS, you can simply
+    ```
+    $ cd MVStudio
+    $ cmake .
+    $ make
+    ```
 
 Don't have any experience with C/C++ programming? Have a look at [How to build MVStudio step by step](./HowToBuild.md).
 
