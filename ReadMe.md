@@ -40,7 +40,7 @@ MVStudio. Then you should have obtained a usable project and just build. I recom
     $ cd MVStudio
     $ mkdir Release
     $ cd Release
-    $ cmake -DCMAKE_BULID_TYPE=Release ..
+    $ cmake -DCMAKE_BUILD_TYPE=Release ..
     $ make
     ```
 
