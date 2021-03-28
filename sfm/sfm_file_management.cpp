@@ -10,9 +10,10 @@ namespace sfm {
 
 	/* Load a list of image names from a file */
 	void SfM::load_image_names() {
+        Logger::out(title()) << "list file: " << option_.list_file << std::endl;
 		std::ifstream input(option_.list_file.c_str());
 		if (input.fail()) {
-			Logger::warn(title()) << "could not open list file \'" << option_.list_file << "\'" << std::endl;
+			Logger::warn(title()) << "could not open list file" << std::endl;
 			return;
 		}
 
