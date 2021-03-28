@@ -28,6 +28,7 @@ namespace sfm {
 		Logger::out(title()) << "loading image names..." << std::endl;
 		load_image_names();
 		if (image_data_.empty()) {
+            Logger::err(title()) << "empty image data" << std::endl;
 			return;
 		}
 		int num_images = num_of_images();
