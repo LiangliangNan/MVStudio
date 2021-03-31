@@ -1,7 +1,7 @@
 
 /* pngpread.c - read a png file in push mode
  *
- * Last changed in libpng 1.6.24 [August 4, 2016]
+ * Last changed in libpng 1.6.32 [August 3, 2017]
  * Copyright (c) 1998-2002,2004,2006-2016 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -222,7 +222,22 @@ png_push_read_chunk(png_structrp png_ptr, png_inforp info_ptr)
       if ((png_ptr->mode & PNG_AFTER_IDAT) != 0)
          png_benign_error(png_ptr, "Too many IDATs found");
    }
-
+   
+   else
+   {
+      png_alloc_size_t limit = PNG_SIZE_MAX;
+# ifdef PNG_SET_USER_LIMITS_SUPPORTED
+      if (png_ptr->user_chunk_malloc_max > 0 &&
+          png_ptr->user_chunk_malloc_max < limit)
+         limit = png_ptr->user_chunk_malloc_max;
+# elif PNG_USER_CHUNK_MALLOC_MAX > 0
+      if (PNG_USER_CHUNK_MALLOC_MAX < limit)
+         limit = PNG_USER_CHUNK_MALLOC_MAX;
+# endif
+      if (png_ptr->push_length > limit)
+         png_chunk_error(png_ptr, "chunk data is too large");
+   }
+   
    if (chunk_name == png_IHDR)
    {
       if (png_ptr->push_length != 13)
