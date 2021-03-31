@@ -1,7 +1,7 @@
 
 /* pngrutil.c - utilities to read a PNG file
  *
- * Last changed in libpng 1.6.29 [March 16, 2017]
+ * Last changed in libpng 1.6.32 [August 3, 2017]
  * Copyright (c) 1998-2002,2004,2006-2017 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -181,6 +181,22 @@ png_read_chunk_header(png_structrp png_ptr)
    /* Check to see if chunk name is valid. */
    png_check_chunk_name(png_ptr, png_ptr->chunk_name);
 
+   /* Check for too-large chunk length */
+   if (png_ptr->chunk_name != png_IDAT)
+   {
+      png_alloc_size_t limit = PNG_SIZE_MAX;
+# ifdef PNG_SET_USER_LIMITS_SUPPORTED
+      if (png_ptr->user_chunk_malloc_max > 0 &&
+          png_ptr->user_chunk_malloc_max < limit)
+         limit = png_ptr->user_chunk_malloc_max;
+# elif PNG_USER_CHUNK_MALLOC_MAX > 0
+      if (PNG_USER_CHUNK_MALLOC_MAX < limit)
+         limit = PNG_USER_CHUNK_MALLOC_MAX;
+# endif
+      if (length > limit)
+         png_chunk_error(png_ptr, "chunk data is too large");
+   }
+   
 #ifdef PNG_IO_STATE_SUPPORTED
    png_ptr->io_state = PNG_IO_READING | PNG_IO_CHUNK_DATA;
 #endif
