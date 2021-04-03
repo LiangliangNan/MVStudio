@@ -11,6 +11,8 @@ namespace sfm {
 	/* Load a list of image names from a file */
 	void SfM::load_image_names() {
         Logger::out(title()) << "list file: " << option_.list_file << std::endl;
+
+#if 0 // It seems this can only handle short file paths on Mac
 		std::ifstream input(option_.list_file.c_str());
 		if (input.fail()) {
 			Logger::warn(title()) << "could not open list file" << std::endl;
@@ -24,10 +26,28 @@ namespace sfm {
 			getline(input, line);
 			if (input.fail())
 				break;
+#else
+        FILE *input = fopen(option_.list_file.c_str(), "r");
+        if (NULL == input) {
+            std::cerr << "could not open list file" << std::endl;
+            return;
+        }
 
-			std::istringstream stream(line);
-			if (stream.fail())
-				break;
+        image_data_.clear();
+
+#ifndef LINE_MAX
+#  define LINE_MAX 2048
+#endif
+        char line[LINE_MAX];
+
+        while (!feof(input)) {
+            if (fgets(line, LINE_MAX, input) == NULL)
+                break;
+#endif
+
+            std::istringstream stream(line);
+            if (stream.fail())
+                break;
 
 			std::string image_file, dummy;
 			int img_width, img_height;
