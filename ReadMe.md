@@ -6,7 +6,7 @@
 
 
 ### About
-**MVStudio** is a lightweight, easy to use, and integrated SfM (Structure from Motion) and MVS (Multi-View Stereo) solution. It is intended for learning/researching 3D computer vision.
+**MVStudio** is a lightweight, easy to use, and integrated SfM (Structure from Motion) and MVS (Multi-View Stereo) solution. It is intended for learning/researching 3D computer vision. The SfM implementation was taken from Noah's earlier version of [bundler](https://github.com/snavely/bundler_sfm) and the MVS implementation was from Yasu's [CMVS](https://www.di.ens.fr/cmvs/).
 
 <p align="center"> 
      <img src="mvstudio.jpg" width="600"> 
