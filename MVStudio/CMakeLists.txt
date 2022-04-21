@@ -38,7 +38,27 @@ set(${PROJECT_NAME}_RESOURCES
         )
 
 if (APPLE)
-    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${${PROJECT_NAME}_HEADERS} ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_FORMS} ${${PROJECT_NAME}_RESOURCES})
+    # This tells CMake where to find and install the ICON file
+    set(${PROJECT_NAME}_ICON ${CMAKE_CURRENT_SOURCE_DIR}/Resources/MVStudio.icns)
+
+    #Append the new files to the resources file list
+    list(APPEND ${PROJECT_NAME}_RESOURCES ${${PROJECT_NAME}_ICON})
+
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${${PROJECT_NAME}_ICON} ${${PROJECT_NAME}_HEADERS} ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_FORMS} ${${PROJECT_NAME}_RESOURCES})
+
+    set_source_files_properties(${${PROJECT_NAME}_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
+    ## Note: On macOS, high-DPI support is enabled by settings in the Info.plist file. Make sure they are present.
+    ## For more information, see: http://doc.qt.io/qt-5/highdpi.html
+    ## Enable high DPI support by using my Info.plist file in which I added NSHighResolutionCapable to be true.
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+            INSTALL_RPATH "@executable_path/../Frameworks"
+            MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME}
+            MACOSX_BUNDLE TRUE
+            MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/Mac/MVStudio.plist"
+            MACOSX_BUNDLE_ICON_FILE "MVStudio.icns"
+            MACOSX_BUNDLE_GUI_IDENTIFIER "MVStudio"
+            )
 else ()
     add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_HEADERS} ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_FORMS} ${${PROJECT_NAME}_RESOURCES})
 endif ()
@@ -61,14 +81,6 @@ target_link_libraries(${PROJECT_NAME} Qt5::OpenGL)
 target_link_libraries(${PROJECT_NAME} Qt5::Xml)
 
 target_link_libraries(${PROJECT_NAME} basic math pointset algo QGLViewer sift_gpu)
-
-# Note: On macOS, high-DPI support is enabled by settings in the Info.plist file. Make sure they are present.
-# For more information, see: http://doc.qt.io/qt-5/highdpi.html
-# Enable high DPI support by using my Info.plist file in which I added NSHighResolutionCapable to be true.
-if (APPLE)
-    set_target_properties(${PROJECT_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Mac/MVStudio.plist)
-endif ()
-
 
 set(CMAKE_CXX_FLAGS " -pthread ")
 
