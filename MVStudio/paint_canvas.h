@@ -3,11 +3,11 @@
 
 #include "GL/glew.h"
 #include "../3rd_party/QGLViewer/qglviewer.h"
-#include "../math/math_types.h"
-#include "../algo/sparse_reconstruction.h"
-#include "../algo/project.h"
-#include "../sfm/camera.h"
-#include "../basic/canvas.h"
+#include "../libs/math/math_types.h"
+#include "../libs/algo/sparse_reconstruction.h"
+#include "../libs/algo/project.h"
+#include "../libs/sfm/camera.h"
+#include "../libs/basic/canvas.h"
 
 class PointSet;
 class MainWindow;

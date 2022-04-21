@@ -40,8 +40,8 @@ using namespace std;
 #include "FrameBufferObject.h"
 #include "ShaderMan.h"
 
-#include "../../image/image.h"
-#include "../../image/image_io.h"
+#include "../../libs/image/image.h"
+#include "../../libs/image/image_io.h"
 
 
 //////////////////////////////////////////////////////////////////////

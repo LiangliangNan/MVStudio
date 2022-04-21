@@ -3,7 +3,7 @@
 #include "paint_canvas.h"
 #include "image_item.h"
 
-#include "../basic/file_utils.h"
+#include "../libs/basic/file_utils.h"
 
 #include <QMenu>
 #include <QFileDialog>

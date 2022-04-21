@@ -7,9 +7,9 @@
 #include <math.h>
 #include <string.h>
 
-#include "../3rd_party/cminpack/minpack.h"
-#include "../3rd_party/clapack/include/f2c.h"
-#include "../3rd_party/clapack/include/clapack.h"
+#include "../../3rd_party/cminpack/minpack.h"
+#include "../../3rd_party/clapack/include/f2c.h"
+#include "../../3rd_party/clapack/include/clapack.h"
 
 
 #define NO_CBLAS

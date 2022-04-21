@@ -14,9 +14,9 @@
 #include "main_window.h"
 #include "paint_canvas.h"
 
-#include "../basic/logger.h"
-#include "../pointset/point_set.h"
-#include "../pointset/point_set_io.h"
+#include "../libs/basic/logger.h"
+#include "../libs/pointset/point_set.h"
+#include "../libs/pointset/point_set_io.h"
 
 
 MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)

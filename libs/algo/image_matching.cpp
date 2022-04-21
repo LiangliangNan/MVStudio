@@ -9,8 +9,8 @@
 #include "../basic/stop_watch.h"
 
 //include the header files for SiftGPU and SiftMatchGPU
-#include "../3rd_party/SiftGPU/SiftGPU.h"
-#include "../3rd_party/SiftGPU/SiftMatch.h"
+#include "../../3rd_party/SiftGPU/SiftGPU.h"
+#include "../../3rd_party/SiftGPU/SiftMatch.h"
 
 #include <algorithm>
 

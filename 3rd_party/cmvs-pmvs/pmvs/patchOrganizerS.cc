@@ -4,7 +4,7 @@
 #include <string>
 #include "patchOrganizerS.h"
 #include "findMatch.h"
-#include "../../pointset/point_set.h"
+#include "../../libs/pointset/point_set.h"
 
 
 

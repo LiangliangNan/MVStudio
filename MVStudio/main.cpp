@@ -8,7 +8,7 @@
 #include <QSplashScreen>
 #include <QGLFormat>
 
-#include "../basic/logger.h"
+#include "../libs/basic/logger.h"
 #include "main_window.h"
 
 #include <time.h>

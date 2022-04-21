@@ -8,8 +8,8 @@
 #include "../basic/stop_watch.h"
 #include "../pointset/point_set_io.h"
 #include "../sfm/sfm_util.h"
-#include "../3rd_party/cmvs-pmvs/pmvs/findMatch.h"
-#include "../3rd_party/cmvs-pmvs/pmvs/option.h"
+#include "../../3rd_party/cmvs-pmvs/pmvs/findMatch.h"
+#include "../../3rd_party/cmvs-pmvs/pmvs/option.h"
 
 #include <cassert>
 #include <iomanip>

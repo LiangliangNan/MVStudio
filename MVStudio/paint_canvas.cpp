@@ -1,15 +1,15 @@
 #include "paint_canvas.h"
 #include "main_window.h"
 
-#include "../opengl/opengl_info.h"
+#include "../libs/opengl/opengl_info.h"
 
-#include "../pointset/point_set.h"
-#include "../pointset/point_set_io.h"
-#include "../pointset/point_set_render.h"
-#include "../opengl/opengl_info.h"
-#include "../algo/image_matching.h"
-#include "../algo/sparse_reconstruction.h"
-#include "../algo/dense_reconstruction.h"
+#include "../libs/pointset/point_set.h"
+#include "../libs/pointset/point_set_io.h"
+#include "../libs/pointset/point_set_render.h"
+#include "../libs/opengl/opengl_info.h"
+#include "../libs/algo/image_matching.h"
+#include "../libs/algo/sparse_reconstruction.h"
+#include "../libs/algo/dense_reconstruction.h"
 
 #include "../3rd_party/QGLViewer/manipulatedCameraFrame.h"
 

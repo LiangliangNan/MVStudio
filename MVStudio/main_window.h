@@ -4,9 +4,9 @@
 #include <QMainWindow>
 
 #include "ui_main_window.h"
-#include "../math/math_types.h"
-#include "../basic/logger.h"
-#include "../basic/progress.h"
+#include "../libs/math/math_types.h"
+#include "../libs/basic/logger.h"
+#include "../libs/basic/progress.h"
 
 
 class QLabel;

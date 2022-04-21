@@ -1,6 +1,6 @@
 #include "bundle_adjustment.h"
 #include "../math/matrix_driver.h"
-#include "../3rd_party/sba/sba.h"
+#include "../../3rd_party/sba/sba.h"
 
 
 
