@@ -3,7 +3,7 @@
 # Please put all configurations in the cmake_conf/*.cmake files.
 #
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.10)
 
 
 INCLUDE("graclus_1.2.cmake")

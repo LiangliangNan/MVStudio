@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <float.h>
+#include <math.h>
+#include <string.h>
 
-#include "../3rd_party/cminpack/cminpack.h"
+#include "../3rd_party/cminpack/minpack.h"
 #include "../3rd_party/clapack/include/f2c.h"
 #include "../3rd_party/clapack/include/clapack.h"
 

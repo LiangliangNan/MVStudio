@@ -56,3 +56,7 @@ set(GLEW_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/glew/include)
 target_include_directories(sift_gpu PRIVATE ${GLEW_INCLUDE_DIR})
 target_link_libraries(sift_gpu glew)
 target_compile_definitions(sift_gpu PRIVATE GLEW_STATIC)
+
+if (WIN32)
+    target_link_libraries(sift_gpu Winmm.lib)
+endif (WIN32)

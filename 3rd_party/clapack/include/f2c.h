@@ -7,6 +7,8 @@
 #ifndef F2C_INCLUDE
 #define F2C_INCLUDE
 
+#include <stdio.h>
+
 // Liangliang: to use the same type as SuperLU uses
 //typedef long int integer;
 typedef int integer;
