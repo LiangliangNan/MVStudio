@@ -48,9 +48,13 @@ using std::cout;
 #include "LiteWindow.h"
 
 #include "GL/glew.h"
-#include "GL/GLU.h"
 #include "GlobalUtil.h"
 
+#if defined(__APPLE__)
+#include <OpenGL/glu.h>
+#else
+#include <GL/glu.h>
+#endif
 
 //
 int GlobalParam::_verbose = 1;
