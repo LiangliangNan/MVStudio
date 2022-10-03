@@ -42,3 +42,5 @@ set(${PROJECT_NAME}_SOURCES
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS} )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR})
+
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "libs")

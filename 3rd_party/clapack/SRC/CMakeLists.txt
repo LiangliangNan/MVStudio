@@ -382,3 +382,5 @@ set_target_properties(clapack PROPERTIES FOLDER "3rd_party/clapack")
 
 set(CLAPACK_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/clapack/include)
 target_include_directories(clapack PRIVATE ${CLAPACK_INCLUDE_DIR})
+
+set_target_properties(clapack PROPERTIES FOLDER "3rd_party")

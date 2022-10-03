@@ -85,3 +85,5 @@ if ( BUILD_TESTS )
   mytest ( t6 jpegtran "-outfile testoutt.jpg ${_src}/testprog.jpg" ${_src}/testorig.jpg 
     testoutt.jpg )
 endif ()
+
+set_target_properties(jpeg PROPERTIES FOLDER "3rd_party")

@@ -17,3 +17,4 @@ TARGET_LINK_LIBRARIES(sba
             ${SOLUTION_STATIC_LIB_DEPS}
             ${SOLUTION_GENERAL_DEPS})
 
+set_target_properties(sba PROPERTIES FOLDER "3rd_party")

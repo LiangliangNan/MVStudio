@@ -8,6 +8,8 @@ endif ()
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 ### Configuration
 set(MVSTUDIO_ROOT         ${CMAKE_CURRENT_LIST_DIR})
 set(MVSTUDIO_BUILD_DIR    ${CMAKE_CURRENT_BINARY_DIR})

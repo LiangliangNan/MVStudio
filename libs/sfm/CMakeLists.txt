@@ -53,3 +53,5 @@ target_link_libraries(${PROJECT_NAME}
         math
         sba
         )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "libs")

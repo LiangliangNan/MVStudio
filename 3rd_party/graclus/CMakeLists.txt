@@ -19,3 +19,5 @@ TARGET_LINK_LIBRARIES(graclus
 
 set(METIS_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/graclus/metisLib)
 target_include_directories(graclus PRIVATE ${METIS_INCLUDE_DIR})
+
+set_target_properties(graclus PROPERTIES FOLDER "3rd_party")

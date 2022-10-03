@@ -65,3 +65,5 @@ add_library(f2c ${OFILES})
 
 set_target_properties(f2c PROPERTIES FOLDER "3rd_party/clapack")
 
+set_target_properties(f2c PROPERTIES FOLDER "3rd_party")
+

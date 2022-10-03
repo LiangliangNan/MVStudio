@@ -30,3 +30,5 @@ target_link_libraries(${PROJECT_NAME}
         math
         rply
         )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "libs")

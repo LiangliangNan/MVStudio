@@ -18,3 +18,4 @@ TARGET_LINK_LIBRARIES(tinycthread
             ${SOLUTION_STATIC_LIB_DEPS}
             ${SOLUTION_GENERAL_DEPS})
 
+set_target_properties(tinycthread PROPERTIES FOLDER "3rd_party")

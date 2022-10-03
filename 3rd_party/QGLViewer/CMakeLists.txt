@@ -108,3 +108,5 @@ set (OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 message(STATUS "OpenGL libraries: ${OPENGL_LIBRARIES}")
 target_link_libraries( ${PROJECT_NAME} ${OPENGL_LIBRARIES} )
+
+set_target_properties( ${PROJECT_NAME} PROPERTIES FOLDER "3rd_party")

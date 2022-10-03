@@ -142,8 +142,7 @@ if(UNIX)
 endif()
 target_link_libraries(blas f2c)
 
-set_target_properties(blas PROPERTIES FOLDER "3rd_party/clapack")
-
-
 set(CLAPACK_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/clapack/include)
 target_include_directories(blas PRIVATE ${CLAPACK_INCLUDE_DIR})
+
+set_target_properties(blas PROPERTIES FOLDER "3rd_party")

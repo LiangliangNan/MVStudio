@@ -247,3 +247,6 @@ endif()
 #    target_link_libraries(minigzip64 zlib)
 #    set_target_properties(minigzip64 PROPERTIES COMPILE_FLAGS "-D_FILE_OFFSET_BITS=64")
 #endif()
+
+
+set_target_properties(zlib PROPERTIES FOLDER "3rd_party")

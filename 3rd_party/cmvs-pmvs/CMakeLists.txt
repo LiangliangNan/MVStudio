@@ -34,3 +34,5 @@ target_include_directories(cmvs-pmvs PRIVATE
         ${TINYCTHREAD_INCLUDE_DIR}
         ${NLOPT_INCLUDE_DIR}
         )
+
+set_target_properties(cmvs-pmvs PROPERTIES FOLDER "3rd_party")

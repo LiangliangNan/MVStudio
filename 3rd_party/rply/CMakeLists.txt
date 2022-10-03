@@ -15,3 +15,5 @@ if (MSVC)
         _CRT_SECURE_NO_DEPRECATE
         )
 endif()
+
+set_target_properties( ${PROJECT_NAME} PROPERTIES FOLDER "3rd_party")

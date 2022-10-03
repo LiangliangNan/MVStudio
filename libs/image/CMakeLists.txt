@@ -40,3 +40,5 @@ target_link_libraries(${PROJECT_NAME}
 set(PNG_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/png)
 set(JPEG_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/jpeg ${MVSTUDIO_BUILD_DIR}/3rd_party/jpeg)
 target_include_directories(image PRIVATE ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIR})
+
+set_target_properties(image PROPERTIES FOLDER "libs")

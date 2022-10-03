@@ -347,3 +347,5 @@ install (FILES
           ${CMAKE_CURRENT_BINARY_DIR}/NLoptConfigVersion.cmake
          DESTINATION ${RELATIVE_INSTALL_CMAKE_DIR}
          COMPONENT Development)
+
+set_target_properties(${nlopt_lib} PROPERTIES FOLDER "3rd_party")

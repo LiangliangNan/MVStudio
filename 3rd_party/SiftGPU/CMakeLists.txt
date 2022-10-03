@@ -60,3 +60,5 @@ target_compile_definitions(sift_gpu PRIVATE GLEW_STATIC)
 if (WIN32)
     target_link_libraries(sift_gpu Winmm.lib)
 endif (WIN32)
+
+set_target_properties(sift_gpu PROPERTIES FOLDER "3rd_party")

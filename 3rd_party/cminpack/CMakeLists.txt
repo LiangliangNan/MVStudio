@@ -97,3 +97,5 @@ set_target_properties(cminpack PROPERTIES VERSION ${CMINPACK_VERSION} SOVERSION 
 
 add_subdirectory (cmake)
 #add_subdirectory (examples)
+
+set_target_properties(cminpack PROPERTIES FOLDER "3rd_party")

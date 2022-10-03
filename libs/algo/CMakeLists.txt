@@ -42,3 +42,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         ${MINIBOOST_INCLUDE_DIR}
         ${TINYCTHREAD_INCLUDE_DIR}
         )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "libs")

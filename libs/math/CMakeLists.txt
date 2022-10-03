@@ -36,3 +36,4 @@ add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_
 
 target_link_libraries(${PROJECT_NAME} basic cminpack f2c blas clapack)
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "libs")
