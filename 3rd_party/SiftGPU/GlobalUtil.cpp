@@ -25,8 +25,6 @@
 
 using std::cout;
 
-#include "GL/glew.h"
-#include "GlobalUtil.h"
 
 //for windows, the default timing uses timeGetTime, you can define TIMING_BY_CLOCK to use clock()
 //for other os, the timing uses gettimeofday
@@ -48,6 +46,11 @@ using std::cout;
 #endif
 
 #include "LiteWindow.h"
+
+#include "GL/glew.h"
+#include "GL/GLU.h"
+#include "GlobalUtil.h"
+
 
 //
 int GlobalParam::_verbose = 1;

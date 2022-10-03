@@ -5,9 +5,6 @@
 #include "../math/svd.h"
 
 
-#ifdef WIN32
-#define std::isnan _isnan
-#endif
 
 /* Compute the epipoles of an F-matrix */
 void fmatrix_compute_epipoles(double *F, double *e1, double *e2) {

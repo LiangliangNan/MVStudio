@@ -17,4 +17,5 @@ TARGET_LINK_LIBRARIES(png
             ${SOLUTION_STATIC_LIB_DEPS}
             ${SOLUTION_GENERAL_DEPS})
 
+target_include_directories(png PRIVATE ${MVSTUDIO_THIRD_PARTY}/zlib ${CMAKE_BINARY_DIR}/3rd_party/zlib)
 set_target_properties(png PROPERTIES FOLDER "3rd_party")
