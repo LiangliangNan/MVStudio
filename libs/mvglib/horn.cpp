@@ -4,7 +4,7 @@
 #include "../math/svd.h"
 
 #include <assert.h>
-
+#include <math.h>
 
 
 #ifdef WIN32
