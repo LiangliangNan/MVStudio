@@ -33,15 +33,27 @@ There are many options to build MVStudio. Choose one of the following (or whatev
 
 - Option 1: Use any IDE that can directly handle CMakeLists files to open the `CMakeLists.txt` in the root directory of 
 MVStudio. Then you should have obtained a usable project and just build. I recommend using 
-[CLion](https://www.jetbrains.com/clion/) or [QtCreator](https://www.qt.io/product).
-- Option 2: Use CMake to generate project files for your IDE. Then load the project to your IDE and build.
-- Option 3: Use CMake to generate Makefiles and then `make` (on Linux/macOS) or `nmake`(on Windows with Microsoft Visual Studio). For example, on Linux or macOS, you can simply
+[CLion](https://www.jetbrains.com/clion/) or [QtCreator](https://www.qt.io/product). For Windows users: your IDE must be set for `x64`.
+  
+- Option 2: Use CMake to generate project files for your IDE. Then load the project to your IDE and build. For Windows users: your IDE must be set for `x64`.
+  
+- Option 3 (purely on command line): Use CMake to generate Makefiles and then `make` (on Linux/macOS) or `nmake`(on Windows with Microsoft 
+  Visual Studio). 
+  - on Linux or macOS, you can simply
     ```
-    $ cd MVStudio
-    $ mkdir Release
-    $ cd Release
-    $ cmake -DCMAKE_BUILD_TYPE=Release ..
-    $ make
+        $ cd path-to-root-dir-of-MVStudio
+        $ mkdir Release
+        $ cd Release
+        $ cmake -DCMAKE_BUILD_TYPE=Release ..
+        $ make
+    ```
+  - On Windows with Microsoft Visual Studio, use `x64 Native Tools Command Prompt for VS XXXX` (**don't** use the x86 one), then
+    ```
+        $ cd path-to-root-dir-of-MVStudio
+        $ mkdir Release
+        $ cd Release
+        $ cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release ..
+        $ nmake
     ```
 
 Don't have any experience with C/C++ programming? Have a look at [How to build MVStudio step by step](./HowToBuild.md).
