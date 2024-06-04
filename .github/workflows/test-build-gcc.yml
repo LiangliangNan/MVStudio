@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: sudo apt-get update || true;
-             sudo apt-get install ${{ matrix.compilers }};
+             sudo apt-get install -y ${{ matrix.compilers }};
              sudo apt-get install build-essential libglu1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev;
              rm -rf Release;
              mkdir Release;
