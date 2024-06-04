@@ -15,7 +15,7 @@ jobs:
     strategy:
           fail-fast: false
           matrix:
-            compilers: [g++-7, g++-8, g++-9, g++-10, g++-11]
+            compilers: [g++-7, g++-8, g++-9, g++-10]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v1
