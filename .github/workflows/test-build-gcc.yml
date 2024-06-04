@@ -16,15 +16,24 @@ jobs:
           fail-fast: false
           matrix:
             compilers: [g++-7, g++-8, g++-9, g++-10, g++-11]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - run: sudo apt-get update || true;
+
+      - name: Install dependencies
+        run: sudo apt-get update || true;
              sudo apt-get install -y ${{ matrix.compilers }};
              sudo apt-get install build-essential libglu1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev;
-             rm -rf Release;
-             mkdir Release;
-             cd Release;
-             cmake -DCMAKE_CXX_COMPILER=${{ matrix.compilers }} -DCMAKE_BUILD_TYPE=Release ..;
-             make;
+      
+      - name: Set CXX environment variable
+        run: echo "${{ matrix.compilers }}" >> $GITHUB_ENV
+
+      - name: Configure CMake
+        run: cmake -DCMAKE_CXX_COMPILER=${{ matrix.compilers }} -DCMAKE_BUILD_TYPE=Release ..;
+
+      - name: Build
+        run:  rm -rf Release;
+              mkdir Release;
+              cd Release;
+              make;
              
