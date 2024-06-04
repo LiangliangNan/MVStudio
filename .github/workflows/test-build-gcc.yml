@@ -24,6 +24,9 @@ jobs:
         run: sudo apt-get update || true;
              sudo apt-get install -y ${{ matrix.compilers }};
              sudo apt-get install build-essential libglu1-mesa-dev mesa-common-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev;
+      
+      - name: Set CXX environment variable
+        run: echo ${{ matrix.compilers }} >> $GITHUB_ENV
 
       - name: Configure CMake
         run: cmake -DCMAKE_CXX_COMPILER=${{ matrix.compilers }} -DCMAKE_BUILD_TYPE=Release ..;
