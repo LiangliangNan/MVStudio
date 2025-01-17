@@ -66,10 +66,10 @@ jobs:
       - name: Configure (macOS)
         if: runner.os == 'macOS'
         run: |
-          # Pass the Homebrew Qt5 installation path to CMake
+          # Pass the full Homebrew Qt5 CMake installation path to CMake
           cmake -S . -B build/${{ matrix.build_type }} \
                 -G "Unix Makefiles" \
-                -DCMAKE_PREFIX_PATH="/opt/homebrew/opt/qt@5"
+                -DCMAKE_PREFIX_PATH="/opt/homebrew/opt/qt@5/lib/cmake"
 
       - name: Configure (Windows)
         if: runner.os == 'Windows'
