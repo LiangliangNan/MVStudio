@@ -42,6 +42,7 @@ PaintCanvas::PaintCanvas(QWidget *parent)
 	camera()->lookAt(sceneCenter());
 	camera()->setType(qglviewer::Camera::PERSPECTIVE);
 	camera()->showEntireScene();
+    ogf_check_gl;
 }
 
 
@@ -52,12 +53,13 @@ PaintCanvas::~PaintCanvas() {
 
 void PaintCanvas::init()
 {
+    ogf_check_gl;
 	Logger::out(title()) << "initializing..." << std::endl ;
 
  	//////////////////////////////////////////////////////////////////////////
  	GLenum err = glewInit();
  	if (GLEW_OK != err) {
- 		// Problem: glewInit failed, something is seriously wrong. 
+ 		// Problem: glewInit failed, something is seriously wrong.
  		Logger::err(title()) << glewGetErrorString(err) << std::endl ;
  	}
 	Logger::out(title()) << "Using GLEW: " << GLInfo::glew_version() << std::endl ;
@@ -72,12 +74,12 @@ void PaintCanvas::init()
 
 	setStateFileName("");
 
-	// Default value is 0.005, which is appropriate for most applications. 
-	// A lower value will prevent clipping of very close objects at the 
+	// Default value is 0.005, which is appropriate for most applications.
+	// A lower value will prevent clipping of very close objects at the
 	// expense of a worst Z precision.
 	camera()->setZNearCoefficient(0.005f);
 
-	// Default value is square root of 3.0 (so that a cube of size 
+	// Default value is square root of 3.0 (so that a cube of size
 	// sceneRadius() is not clipped).
 	camera()->setZClippingCoefficient(std::sqrt(3.0f));
 
@@ -107,16 +109,17 @@ void PaintCanvas::init()
 
 	QColor bkgrd_color = Qt::white;
 	setBackgroundColor(bkgrd_color);
-	
+
 	//////////////////////////////////////////////////////////////////////////
 
 	//float pos[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	float pos[] = {static_cast<float>(light_pos_.x), static_cast<float>(light_pos_.y), static_cast<float>(light_pos_.z), 0.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
-	glEnable(GL_LIGHT0);		
+	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_NORMALIZE);
+    ogf_check_gl;
 }
 
 void PaintCanvas::setLightPosition(const vec3d& pos) { 
@@ -133,7 +136,8 @@ void PaintCanvas::setLightPosition(const vec3d& pos) {
 	glPopMatrix();	
 
     doneCurrent();
-	update_graphics(); 
+	update_graphics();
+    ogf_check_gl;
 }
 
 
@@ -262,14 +266,17 @@ void PaintCanvas::pasteCamera() {
 void PaintCanvas::setLighting(bool b) {
 	render_->set_lighting(b);
 	update_graphics();
+    ogf_check_gl;
 }
 
 void PaintCanvas::fit() {
 	fitScreen();
+    ogf_check_gl;
 }
 
 void PaintCanvas::update_graphics() {
-	update();  
+	update();
+    ogf_check_gl;
 }
 
 void PaintCanvas::update_all() {
@@ -282,7 +289,8 @@ void PaintCanvas::update_all() {
 	// with delays to events. Furthermore the code is difficult to read and analyze, therefore this solution
 	// is only suited for short and simple problems that are to be processed in a single thread, such as 
 	// splash screens and the monitoring of short operations.
-	QCoreApplication::processEvents();  
+	QCoreApplication::processEvents();
+    ogf_check_gl;
 }
 
 
@@ -293,11 +301,13 @@ void PaintCanvas::setProjectionMode(bool b) {
 		camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
 
 	update_graphics();
+    ogf_check_gl;
 }
 
 void PaintCanvas::showCoordinateSystem(bool b) { 
 	show_coord_sys_= b;
 	update_graphics();
+    ogf_check_gl;
 }
 
 
@@ -314,6 +324,7 @@ void PaintCanvas::fitScreen() {
 		showEntireScene();
 		update_graphics();
 	}
+    ogf_check_gl;
 }
 
 
@@ -365,6 +376,7 @@ void PaintCanvas::drawCornerAxis()
 	// The viewport and the scissor are restored.
 	glScissor(scissor[0], scissor[1], scissor[2], scissor[3]);
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+    ogf_check_gl;
 }
 
 
@@ -390,6 +402,7 @@ void PaintCanvas::setPointSet(PointSet* pset, bool fit) {
 	render_->set_pointset(point_set_);
 	if (fit)
 		fitScreen();
+    ogf_check_gl;
 }
 
 
@@ -406,7 +419,7 @@ bool PaintCanvas::creatProject(const QString& file) {
 		update_graphics();
 		return true;
 	}
-
+    ogf_check_gl;
 	return false;
 }
 
@@ -421,9 +434,11 @@ bool PaintCanvas::loadProject(const QString& file) {
 		}
 		cameras_.clear();
 		update_graphics();
+        ogf_check_gl;
 		return true;
-	} 
+	}
 
+    ogf_check_gl;
 	return false;
 }
 
@@ -450,7 +465,7 @@ void PaintCanvas::imageMatching() {
 	ImageMatching matching(project_);
 	matching.apply();
     doneCurrent();
-
+    ogf_check_gl;
 	// some image could be ignored
 	main_window_->listWidgetImages->updateImageList();
 	main_window_->saveProject();
@@ -475,6 +490,7 @@ void PaintCanvas::sparseReconstruction() {
 	SparseReconstruction sparse(project_);
 	sparse.apply(point_set_);
 	update_all();
+    ogf_check_gl;
 }
 
 
@@ -497,4 +513,5 @@ void PaintCanvas::denseReconstruction() {
 	dense.run_pmvs(point_set_);
 	fitScreen();
 	update_all();
+    ogf_check_gl;
 }

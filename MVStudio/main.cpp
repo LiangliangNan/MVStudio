@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     //       that resource sharing between contexts stays functional as all internal
     //       contexts are created using the correct version and profile.
     QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-    format.setVersion(4, 3);
+    format.setVersion(4, 1);
     format.setProfile(QSurfaceFormat::CompatibilityProfile);
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);

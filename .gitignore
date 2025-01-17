@@ -51,6 +51,7 @@ x64
 .gitignore~
 *.user
 *.log
-
+*.DS_Store
 cmake-build-*
 .idea
+*/.DS_Store
