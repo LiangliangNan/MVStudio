@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.1)
-
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
@@ -39,4 +37,4 @@ target_link_libraries(mvglib
         math
         )
 
-set_target_properties(mvglib PROPERTIES FOLDER "3rd_party")
+set_target_properties(mvglib PROPERTIES FOLDER "libs")

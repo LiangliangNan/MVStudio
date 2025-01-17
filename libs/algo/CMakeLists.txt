@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.1)
-
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
@@ -24,13 +22,13 @@ add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_
 target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME}
-        clapack
-        nlopt
-        sift_gpu
-        blas
-        cmvs-pmvs
-        f2c
-        tinycthread
+        3rd_clapack
+        3rd_nlopt
+        3rd_sift_gpu
+        3rd_blas
+        3rd_cmvs-pmvs
+        3rd_f2c
+        3rd_tinycthread
         image
         sfm
         mvglib

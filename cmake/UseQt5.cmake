@@ -55,11 +55,11 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON) # As moc files are generated in the binary dir
 
 set(QT5_ROOT_PATH CACHE PATH "Qt5 root directory (i.e. where the 'bin' folder lies)")
 if (QT5_ROOT_PATH)
-    list(APPEND CMAKE_PREFIX_PATH ${QT5_ROOT_PATH})
+list(APPEND CMAKE_PREFIX_PATH ${QT5_ROOT_PATH})
 endif ()
 
 # find qt5 components
-find_package(Qt5 COMPONENTS Core Gui OpenGL Widgets)
+find_package(Qt5 COMPONENTS Core Gui OpenGL Widgets Xml)
 # or
 # find_package(Qt5Core QUIET)
 # find_package(Qt5Gui QUIET)
@@ -69,31 +69,31 @@ find_package(Qt5 COMPONENTS Core Gui OpenGL Widgets)
 # In the case no Qt5Config.cmake file could be found, cmake will explicitly ask the user for the QT5_DIR containing it!
 
 if (Qt5Core_FOUND AND Qt5Gui_FOUND AND Qt5OpenGL_FOUND AND Qt5Widgets_FOUND)
-    set(QT5_FOUND TRUE)
+set(QT5_FOUND TRUE)
 endif ()
 
 if (QT5_FOUND)
-    # Starting with the QtCore lib, find the bin and root directories
-    get_target_property(QT5_LIB_LOCATION Qt5::Core LOCATION_${CMAKE_BUILD_TYPE})
-    get_filename_component(QT_BINARY_DIR ${QT5_LIB_LOCATION} DIRECTORY)
+# Starting with the QtCore lib, find the bin and root directories
+get_target_property(QT5_LIB_LOCATION Qt5::Core LOCATION_${CMAKE_BUILD_TYPE})
+get_filename_component(QT_BINARY_DIR ${QT5_LIB_LOCATION} DIRECTORY)
 
-    if (APPLE)
-        # Apple uses frameworks - move up until we get to the base directory to set the bin directory properly
-        get_filename_component(QT_BINARY_DIR ${QT_BINARY_DIR} DIRECTORY)
-        set(QT_BINARY_DIR ${QT_BINARY_DIR}/bin)
-        set(MACDEPLOYQT ${QT_BINARY_DIR}/macdeployqt)
-        message(STATUS "macdeployqt: ${MACDEPLOYQT}")
-    elseif(WIN32)
-        set(WINDEPLOYQT ${QT_BINARY_DIR}/windeployqt.exe)
-        message(STATUS "windeployqt: ${WINDEPLOYQT}")
-    endif ()
+if (APPLE)
+# Apple uses frameworks - move up until we get to the base directory to set the bin directory properly
+get_filename_component(QT_BINARY_DIR ${QT_BINARY_DIR} DIRECTORY)
+set(QT_BINARY_DIR ${QT_BINARY_DIR}/bin)
+set(MACDEPLOYQT ${QT_BINARY_DIR}/macdeployqt)
+message(STATUS "macdeployqt: ${MACDEPLOYQT}")
+elseif(WIN32)
+set(WINDEPLOYQT ${QT_BINARY_DIR}/windeployqt.exe)
+message(STATUS "windeployqt: ${WINDEPLOYQT}")
+endif ()
 
-    # set QT5_ROOT_PATH if it wasn't set by the user
-    if (NOT QT5_ROOT_PATH)
-        get_filename_component(QT5_ROOT_PATH ${QT_BINARY_DIR} DIRECTORY)
-    endif ()
+# set QT5_ROOT_PATH if it wasn't set by the user
+if (NOT QT5_ROOT_PATH)
+get_filename_component(QT5_ROOT_PATH ${QT_BINARY_DIR} DIRECTORY)
+endif ()
 
-    # turn on QStringBuilder for more efficient string construction
-    #	see https://doc.qt.io/qt-5/qstring.html#more-efficient-string-construction
-    add_definitions(-DQT_USE_QSTRINGBUILDER)
+# turn on QStringBuilder for more efficient string construction
+#	see https://doc.qt.io/qt-5/qstring.html#more-efficient-string-construction
+add_definitions(-DQT_USE_QSTRINGBUILDER)
 endif ()

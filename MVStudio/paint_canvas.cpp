@@ -6,7 +6,6 @@
 #include "../libs/pointset/point_set.h"
 #include "../libs/pointset/point_set_io.h"
 #include "../libs/pointset/point_set_render.h"
-#include "../libs/opengl/opengl_info.h"
 #include "../libs/algo/image_matching.h"
 #include "../libs/algo/sparse_reconstruction.h"
 #include "../libs/algo/dense_reconstruction.h"
@@ -58,7 +57,7 @@ void PaintCanvas::init()
  	//////////////////////////////////////////////////////////////////////////
  	GLenum err = glewInit();
  	if (GLEW_OK != err) {
- 		// Problem: glewInit failed, something is seriously wrong. 
+ 		// Problem: glewInit failed, something is seriously wrong.
  		Logger::err(title()) << glewGetErrorString(err) << std::endl ;
  	}
 	Logger::out(title()) << "Using GLEW: " << GLInfo::glew_version() << std::endl ;
@@ -73,12 +72,12 @@ void PaintCanvas::init()
 
 	setStateFileName("");
 
-	// Default value is 0.005, which is appropriate for most applications. 
-	// A lower value will prevent clipping of very close objects at the 
+	// Default value is 0.005, which is appropriate for most applications.
+	// A lower value will prevent clipping of very close objects at the
 	// expense of a worst Z precision.
 	camera()->setZNearCoefficient(0.005f);
 
-	// Default value is square root of 3.0 (so that a cube of size 
+	// Default value is square root of 3.0 (so that a cube of size
 	// sceneRadius() is not clipped).
 	camera()->setZClippingCoefficient(std::sqrt(3.0f));
 
@@ -108,14 +107,14 @@ void PaintCanvas::init()
 
 	QColor bkgrd_color = Qt::white;
 	setBackgroundColor(bkgrd_color);
-	
+
 	//////////////////////////////////////////////////////////////////////////
 
 	//float pos[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	float pos[] = {static_cast<float>(light_pos_.x), static_cast<float>(light_pos_.y), static_cast<float>(light_pos_.z), 0.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
-	glEnable(GL_LIGHT0);		
+	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_NORMALIZE);
 }
@@ -132,8 +131,9 @@ void PaintCanvas::setLightPosition(const vec3d& pos) {
 	float p[] = {static_cast<float>(light_pos_.x), static_cast<float>(light_pos_.y), static_cast<float>(light_pos_.z), 0.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, p);
 	glPopMatrix();	
-	
-	update_graphics(); 
+
+    doneCurrent();
+	update_graphics();
 }
 
 
@@ -154,20 +154,15 @@ void PaintCanvas::decreasePointSize() {
 }
 
 void PaintCanvas::draw() {
-    ogf_check_gl;
-	if (show_coord_sys_)  {
-		glEnable(GL_MULTISAMPLE);
-		drawCornerAxis();
-	}
-
-    ogf_check_gl;
 	if (point_set_) {
 		glDisable(GL_MULTISAMPLE);
 		render_->draw();
 	}
 
-    ogf_check_gl;
-	// drawCameras();
+    if (show_coord_sys_)  {
+        glEnable(GL_MULTISAMPLE);
+        drawCornerAxis();
+    }
 }
 
 
@@ -218,7 +213,11 @@ void PaintCanvas::copyCamera() {
 void PaintCanvas::pasteCamera() {
 	// get the camera parameters from clipboard string
 	QString str = qApp->clipboard()->text();
-	QStringList list = str.split(" ", QString::SkipEmptyParts);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+	QStringList list = str.split(" ", Qt::SkipEmptyParts);
+#else
+    QStringList list = str.split(" ", QString::SkipEmptyParts);
+#endif
 	if(list.size() != 7) {
 		Logger::err(title()) << "camera not available in clipboard" << std::endl;
 		return;
@@ -267,7 +266,7 @@ void PaintCanvas::fit() {
 }
 
 void PaintCanvas::update_graphics() {
-	update();  
+	update();
 }
 
 void PaintCanvas::update_all() {
@@ -280,7 +279,7 @@ void PaintCanvas::update_all() {
 	// with delays to events. Furthermore the code is difficult to read and analyze, therefore this solution
 	// is only suited for short and simple problems that are to be processed in a single thread, such as 
 	// splash screens and the monitoring of short operations.
-	QCoreApplication::processEvents();  
+	QCoreApplication::processEvents();
 }
 
 
@@ -316,7 +315,7 @@ void PaintCanvas::fitScreen() {
 
 
 void PaintCanvas::drawCornerAxis()  
-{	
+{
 	glEnable(GL_MULTISAMPLE);
 
 	// The viewport and the scissor are changed to fit the lower left
@@ -350,19 +349,7 @@ void PaintCanvas::drawCornerAxis()
 	glMultMatrixd(camera()->orientation().inverse().matrix());
 
 	float axis_size = 0.9f; // other 0.2 space for drawing the x, y, z labels
-	drawAxis(axis_size); 
-
-	// Draw text id
-	glColor3f(0, 0, 0);
-
-	// Liangliang: It seems the renderText() func disables multi-sample.
-	// Is this a bug in Qt ?
-	GLboolean anti_alias = glIsEnabled(GL_MULTISAMPLE);
-	const_cast<PaintCanvas*>(this)->renderText(axis_size, 0, 0, "X");
-	const_cast<PaintCanvas*>(this)->renderText(0, axis_size, 0, "Y");
-	const_cast<PaintCanvas*>(this)->renderText(0, 0, axis_size, "Z");
-	if (anti_alias)
-		glEnable(GL_MULTISAMPLE);
+	drawAxis(axis_size);
 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
@@ -416,7 +403,6 @@ bool PaintCanvas::creatProject(const QString& file) {
 		update_graphics();
 		return true;
 	}
-
 	return false;
 }
 
@@ -432,7 +418,7 @@ bool PaintCanvas::loadProject(const QString& file) {
 		cameras_.clear();
 		update_graphics();
 		return true;
-	} 
+	}
 
 	return false;
 }
@@ -455,10 +441,11 @@ void PaintCanvas::imageMatching() {
 		Logger::warn(title()) << "invalid project" << std::endl;
 		return;
 	}
-	
+
+    makeCurrent();
 	ImageMatching matching(project_);
 	matching.apply();
-
+    doneCurrent();
 	// some image could be ignored
 	main_window_->listWidgetImages->updateImageList();
 	main_window_->saveProject();

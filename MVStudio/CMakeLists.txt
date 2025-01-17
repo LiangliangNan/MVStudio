@@ -1,18 +1,7 @@
-cmake_minimum_required(VERSION 3.1)
-
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
 include(../cmake/UseQt5.cmake)
-if (NOT QT5_FOUND)
-    message(WARNING "${PROJECT_NAME} requires Qt but Qt was not found. You can set 'Qt5_DIR' to the "
-            "directory containing 'Qt5Config.cmake' or 'qt5-config.cmake' in 'CMakeCache.txt'. "
-            "Optionally, you can set the Qt5 root directory 'QT5_ROOT_PATH' to the directory "
-            "containing the 'bin' folder.")
-    return()
-endif ()
-
-find_package(Qt5 COMPONENTS Xml)
 
 set(${PROJECT_NAME}_HEADERS
         main_window.h
@@ -74,17 +63,11 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "MVStudio")
 target_compile_definitions(${PROJECT_NAME} PRIVATE QT_DEPRECATED_WARNINGS)
 
 
-target_link_libraries(${PROJECT_NAME} Qt5::Core)
-target_link_libraries(${PROJECT_NAME} Qt5::Gui)
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets)
-target_link_libraries(${PROJECT_NAME} Qt5::OpenGL)
-target_link_libraries(${PROJECT_NAME} Qt5::Xml)
+target_link_libraries(${PROJECT_NAME} ${QtLibs})
 
-target_link_libraries(${PROJECT_NAME} basic math pointset algo QGLViewer sift_gpu)
-
-set(CMAKE_CXX_FLAGS " -pthread ")
+target_link_libraries(${PROJECT_NAME} basic math pointset algo 3rd_QGLViewer 3rd_sift_gpu)
 
 set(GLEW_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/glew/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${GLEW_INCLUDE_DIR})
-target_link_libraries(${PROJECT_NAME} glew)
+target_link_libraries(${PROJECT_NAME} 3rd_glew)
 target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)

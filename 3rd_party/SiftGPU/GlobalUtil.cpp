@@ -45,9 +45,6 @@ using std::cout;
 
 #endif
 
-#include "LiteWindow.h"
-
-#include "GL/glew.h"
 #include "GlobalUtil.h"
 
 #if defined(__APPLE__)
@@ -56,6 +53,7 @@ using std::cout;
 #include <GL/glu.h>
 #endif
 
+#include "LiteWindow.h"
 //
 int GlobalParam::_verbose = 1;
 int    GlobalParam::_timingS = 1;  //print out information of each step

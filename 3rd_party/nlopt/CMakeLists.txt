@@ -12,7 +12,6 @@
 # Benoit Scherrer, 2010 CRL, Harvard Medical School
 # Copyright (c) 2008-2009 Children's Hospital Boston
 #==============================================================================
-cmake_minimum_required(VERSION 2.10)
 
 if (NOT DEFINED CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release CACHE STRING "Build type")
@@ -230,7 +229,7 @@ endif ()
 
 install (FILES ${NLOPT_HEADERS} DESTINATION ${RELATIVE_INSTALL_INCLUDE_DIR})
 
-set (nlopt_lib nlopt)
+set (nlopt_lib 3rd_nlopt)
 add_library (${nlopt_lib} ${NLOPT_SOURCES})
 target_link_libraries (${nlopt_lib} ${M_LIBRARY})
 

@@ -43,6 +43,7 @@ void ImageMatching::apply() {
 
 	image_features.clear();
 	StopWatch w;
+
 	Logger::out(title()) << "extracting key points..." << std::endl;
 	extract_key_points();
 	Logger::out(title()) << "done. time: " << w.elapsed() << std::endl;
@@ -68,6 +69,7 @@ void ImageMatching::extract_key_points() {
 	}
 
 	SiftGPU* sift = CreateNewSiftGPU();
+
 	//Create a context for computation, and SiftGPU will be initialized automatically 
 	//The same context can be used by SiftMatchGPU.
 	// Liangliang: I already have a OpenGL context. Just use it.
@@ -131,7 +133,7 @@ void ImageMatching::extract_key_points() {
 
 		int num = sift->GetFeatureNum();	// get feature count
 		Logger::out(title()) << FileUtils::simple_name(name) << ": " << num << " key points" << std::endl;
-
+  
 		std::vector<SiftGPU::SiftKeypoint> keys;
 		std::vector<float> descriptors;
 
@@ -141,16 +143,18 @@ void ImageMatching::extract_key_points() {
 			//reading back feature vectors is faster than writing files
 			//if you don't need keys or descriptors, just put NULLs here
 			sift->GetFeatureVector(&keys[0], &descriptors[0]);
-			//this can be used to write your own sift file.  
+			//this can be used to write your own sift file.
 		}
 
 		ImageFeature feature;
+
 		feature.keys = keys;
 		feature.descriptors = descriptors;
 		image_features.push_back(feature);
 
 		progress.next();
 	}
+
 
 	delete sift;
 }
@@ -189,7 +193,7 @@ void ImageMatching::match_key_points() {
 		int num1 = (int)keys1.size();
 		if (num1 == 0)
 			continue;
-		
+
 		for ( int j = i+1; j < num; ++j) {
 			const std::vector<SiftGPU::SiftKeypoint>& keys2 = image_features[j].keys;
 			const std::vector<float>& descriptors2 = image_features[j].descriptors;
@@ -215,7 +219,7 @@ void ImageMatching::match_key_points() {
 			//call matcher->SetMaxSift() to change the limit before calling setdescriptor
 			matcher->SetDescriptors(0, num1, &descriptors1[0]); //image 1
 			matcher->SetDescriptors(1, num2, &descriptors2[0]); //image 2
-
+ 
 			//match and get result.    
             int(*match_buf)[2] = new int[num1][2];
 			//use the default thresholds. Check the declaration in SiftGPU.h

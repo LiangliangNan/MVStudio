@@ -21,6 +21,7 @@
 #ifndef _COMPILER_H_
 #define _COMPILER_H_
 
+
 /* note: intel's icc defines both __ICC & __INTEL_COMPILER.
  * Also, some compilers other than gcc define __GNUC__,
  * therefore gcc should be checked last
@@ -31,12 +32,7 @@
 #define inline // other than MSVC, ICC, GCC: define empty
 #endif
 
-#ifdef _MSC_VER
-#define SBA_FINITE _finite // MSVC
-#elif defined(__ICC) || defined(__INTEL_COMPILER) || defined(__GNUC__)
-#define SBA_FINITE finite // ICC, GCC
-#else
-#define SBA_FINITE finite // other than MSVC, ICC, GCC, let's hope this will work
-#endif 
+#define SBA_FINITE isfinite 
+
 
 #endif /* _COMPILER_H_ */

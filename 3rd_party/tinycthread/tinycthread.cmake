@@ -7,6 +7,3 @@ SET(3rd_tinycthread_SRC
     "rwmutex.cpp"
     "tinycthread.c"
    )
-
-SET(3rd_tinycthread_DEPS
-   )

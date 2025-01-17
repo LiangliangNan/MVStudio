@@ -1,18 +1,6 @@
-cmake_minimum_required(VERSION 3.1)
-
-get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-project(${PROJECT_NAME})
+set(PROJECT_NAME 3rd_QGLViewer)
 
 include(../../cmake/UseQt5.cmake)
-if (NOT QT5_FOUND)
-        message(WARNING "${PROJECT_NAME} requires Qt but Qt was not found. You can set 'Qt5_DIR' to the "
-                "directory containing 'Qt5Config.cmake' or 'qt5-config.cmake' in 'CMakeCache.txt'. "
-                "Optionally, you can set the Qt5 root directory 'QT5_ROOT_PATH' to the directory "
-                "containing the 'bin' folder.")
-        return()
-endif ()
-
-find_package(Qt5 COMPONENTS Xml)
 
 set(qglviewer_HEADERS
     camera.h

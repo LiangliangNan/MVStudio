@@ -3,19 +3,18 @@
 # Please put all configurations in the cmake_conf/*.cmake files.
 #
 
-cmake_minimum_required(VERSION 2.10)
-
-
 INCLUDE("pmvs.cmake")
 
-ADD_LIBRARY(cmvs-pmvs STATIC
+ADD_LIBRARY(3rd_cmvs-pmvs STATIC
             ${3rd_cmvs-pmvs_SRC})
 
-TARGET_LINK_LIBRARIES(cmvs-pmvs
-            ${3rd_cmvs-pmvs_DEPS}
-            ${3rd_cmvs-pmvs_ADDITIONAL_DEPS}
-            ${SOLUTION_STATIC_LIB_DEPS}
-            ${SOLUTION_GENERAL_DEPS})
+TARGET_LINK_LIBRARIES(3rd_cmvs-pmvs
+        3rd_nlopt
+        3rd_graclus
+        3rd_tinycthread
+        3rd_jpeg
+        3rd_clapack
+)
 
 
 
@@ -26,7 +25,7 @@ set(MINIBOOST_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/miniBoost)
 set(TINYCTHREAD_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/tinycthread)
 set(NLOPT_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/nlopt/src/api ${MVSTUDIO_BUILD_DIR}/3rd_party/nlopt/src/api)
 
-target_include_directories(cmvs-pmvs PRIVATE
+target_include_directories(3rd_cmvs-pmvs PRIVATE
         ${METIS_INCLUDE_DIR}
         ${CIMG_INCLUDE_DIR}
         ${JPEG_INCLUDE_DIR}
@@ -35,4 +34,4 @@ target_include_directories(cmvs-pmvs PRIVATE
         ${NLOPT_INCLUDE_DIR}
         )
 
-set_target_properties(cmvs-pmvs PROPERTIES FOLDER "3rd_party")
+set_target_properties(3rd_cmvs-pmvs PROPERTIES FOLDER "3rd_party")

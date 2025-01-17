@@ -189,7 +189,7 @@ set(ZLINTSTRFP  zchkrfp.c zdrvrfp.c zdrvrf1.c zdrvrf2.c zdrvrf3.c zdrvrf4.c zerr
 
 macro(add_lin_executable name )
   add_executable(${name} ${ARGN})
-  target_link_libraries(${name} tmglib lapack)
+  target_link_libraries(${name} 3rd_tmglib 3rd_lapack)
 endmacro(add_lin_executable)
 
 add_lin_executable(xlintsts ${ALINTST} ${SCLNTST} ${SLINTST} 

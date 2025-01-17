@@ -1,6 +1,6 @@
 #include "opengl_info.h"
 #include <iostream>
-
+#include "GL/glew.h"
 
 static const std::string err_msg = "error(null_string)";
 
