@@ -55,7 +55,7 @@ jobs:
         run: |
           conda install -y \
             ninja \
-            dsdale24::qt5 || exit 1
+            qt=5.* || exit 1
 
       # Set environment variables for macOS to locate Qt5
       - name: Set Qt5 Environment Variables (macOS)
@@ -74,10 +74,12 @@ jobs:
         if: runner.os == 'Windows'
         shell: bash -l {0}
         run: |
+          # Set CMAKE_PREFIX_PATH to the Conda environment's Qt5 installation
+          export CMAKE_PREFIX_PATH="$CONDA_PREFIX/Library"
           cmake -S . -B build/${{ matrix.build_type }} \
                 -G "Visual Studio 17 2022" \
                 -A x64 \
-                -DCMAKE_PREFIX_PATH="$CONDA_PREFIX/Library"
+                -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH"
 
       # Build the project
       - name: Build (Linux & macOS)
