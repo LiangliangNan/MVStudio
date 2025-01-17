@@ -2,9 +2,18 @@ if(NOT IS_MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
 
-set (OpenGL_GL_PREFERENCE GLVND)
+# prefer GLVND
+set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
-message(STATUS "OpenGL libraries: ${OPENGL_LIBRARIES}")
+if (OPENGL_opengl_LIBRARY)
+    set(FOUND_GL_LIBRARIES ${OPENGL_opengl_LIBRARY})
+else ()
+    set(FOUND_GL_LIBRARIES ${OPENGL_gl_LIBRARY})
+endif ()
+if (OPENGL_glx_LIBRARY)
+    list(APPEND FOUND_GL_LIBRARIES ${OPENGL_glx_LIBRARY})
+endif ()
+message(STATUS "OpenGL libraries: ${FOUND_GL_LIBRARIES}")
 
 add_definitions("-DSIFTGPU_NO_DEVIL")
 
@@ -52,7 +61,7 @@ endif()
 
 target_link_libraries(3rd_sift_gpu
     ${SIFT_GPU_LIBRARIES}
-    ${OPENGL_LIBRARIES}
+    ${FOUND_GL_LIBRARIES}
 )
 
 set(GLEW_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/glew/include)

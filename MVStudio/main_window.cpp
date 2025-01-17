@@ -228,7 +228,7 @@ void MainWindow::setBackgroundColor() {
 	if (color.isValid() && mainCanvas_) {
 		mainCanvas_->makeCurrent();
 		mainCanvas_->setBackgroundColor(color);
-
+        mainCanvas_->doneCurrent();
 		mainCanvas_->update_graphics();
 	}
 }

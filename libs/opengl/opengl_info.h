@@ -2,11 +2,7 @@
 #ifndef _OPENGL_GLINFORMATION_H_
 #define _OPENGL_GLINFORMATION_H_
 
-#include "GL/glew.h"
-
 #include <string>
-
-
 
 #ifndef NDEBUG
 #define ogf_check_gl {\
