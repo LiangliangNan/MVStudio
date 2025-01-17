@@ -30,7 +30,7 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y cmake build-essential libgl1-mesa-dev libglu1-mesa-dev \
               mesa-common-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev \
-              qt5-base-dev
+              qtbase5-dev
 
       - name: Install Dependencies (macOS)
         if: runner.os == 'macOS'
