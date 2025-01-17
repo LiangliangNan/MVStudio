@@ -36,7 +36,7 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew update || true
-          brew install cmake qt5
+          brew install cmake qt@5
 
       # Set up Conda on Windows
       - name: Set up Conda (Windows)
