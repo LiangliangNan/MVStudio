@@ -57,6 +57,13 @@ jobs:
             ninja \
             dsdale24::qt5 || exit 1
 
+      # Set environment variables for macOS to locate Qt5
+      - name: Set Qt5 Environment Variables (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          echo "LDFLAGS=-L/opt/homebrew/opt/qt@5/lib" >> $GITHUB_ENV
+          echo "CPPFLAGS=-I/opt/homebrew/opt/qt@5/include" >> $GITHUB_ENV
+
       # Configure the project
       - name: Configure (Linux & macOS)
         if: runner.os != 'Windows'
