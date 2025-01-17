@@ -55,7 +55,7 @@ jobs:
         run: |
           conda install -y \
             ninja \
-            conda-forge::qt5-main || exit 1
+            dsdale24::qt5 || exit 1
 
       # Configure the project
       - name: Configure (Linux & macOS)
