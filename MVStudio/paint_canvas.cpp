@@ -216,7 +216,11 @@ void PaintCanvas::copyCamera() {
 void PaintCanvas::pasteCamera() {
 	// get the camera parameters from clipboard string
 	QString str = qApp->clipboard()->text();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
 	QStringList list = str.split(" ", Qt::SkipEmptyParts);
+#else
+    QStringList list = str.split(" ", QString::SkipEmptyParts);
+#endif
 	if(list.size() != 7) {
 		Logger::err(title()) << "camera not available in clipboard" << std::endl;
 		return;
@@ -441,9 +445,11 @@ void PaintCanvas::imageMatching() {
 		Logger::warn(title()) << "invalid project" << std::endl;
 		return;
 	}
-	
+
+    makeCurrent();
 	ImageMatching matching(project_);
 	matching.apply();
+    doneCurrent();
 
 	// some image could be ignored
 	main_window_->listWidgetImages->updateImageList();
