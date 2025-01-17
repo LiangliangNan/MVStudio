@@ -26,19 +26,16 @@
 
 
 # ------------------------------------------------------------------------------
-# This file sets up Qt5 for CMake. When Qt5 was setup successfully, 'Qt5_FOUND'
-# will be set. If Qt5 is not found, it will stop the configuration and show an
-# error message.
-# If Qt5 is found, it will set QtLibs to the corresponding Qt libraries, e.g.,
-# Qt5Core, Qt5Gui, Qt5Widgets, Qt5OpenGL, Qt5Xml, etc.
+# This file sets up Qt5 for CMake. When Qt5 was setup successfuly, QT5_FOUND
+# will be set.
 #
-# To use Qt5 in your program, you only need to include this file and specifying
-# Qt libraries to link against, e.g.,
+# To use QT5_FOUND, you only need to include this file and specifying Qt libraries
+# to link against, e.g.,
 #       ------------------------------------------------------------------------
 #           project(${PROJECT_NAME})
-#           include( ../cmake/UseQt5.cmake )
+#           include( ../../cmake/UseQt5.cmake )
 #           add_executable(${PROJECT_NAME}, main.cpp)
-#           target_link_libraries(${PROJECT_NAME} ${QtLibs})
+#           target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL)
 #       ------------------------------------------------------------------------
 # NOTE: 'UseQt5.cmake' must be included after you define your project but before
 #       'add_executable()' or 'add_library()'.
@@ -49,25 +46,54 @@
 #   and links to the qtmain.lib library on Windows.
 # ------------------------------------------------------------------------------
 
-# Find includes in corresponding build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Instruct CMake to run moc automatically when needed.
-set(CMAKE_AUTOMOC ON)
-# Instruct CMake to run uic automatically when needed.
+
+# we will use cmake autouic/automoc/autorcc features
 set(CMAKE_AUTOUIC ON)
-# Instruct CMake to run rcc automatically when needed.
+set(CMAKE_AUTOMOC ON)  # Tell CMake to run moc when necessary
 set(CMAKE_AUTORCC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON) # As moc files are generated in the binary dir, tell CMake to always look for includes there
 
-# This will find the Qt files.
+set(QT5_ROOT_PATH CACHE PATH "Qt5 root directory (i.e. where the 'bin' folder lies)")
+if (QT5_ROOT_PATH)
+list(APPEND CMAKE_PREFIX_PATH ${QT5_ROOT_PATH})
+endif ()
 
-find_package(Qt5 COMPONENTS Core Widgets OpenGL Xml QUIET)
-if (Qt5_FOUND)
-    message(STATUS "Found Qt5 version: ${Qt5Core_VERSION}")
-    message(STATUS "Qt5 directory: ${Qt5_DIR}")
-    set(QtLibs Qt5::Core Qt5::Widgets Qt5::OpenGL Qt5::Xml)
-else()
-    message(FATAL_ERROR "${PROJECT_NAME} requires Qt but Qt was not found. You can set 'Qt5_DIR' to the "
-            "directory containing 'Qt5Config.cmake' or 'qt5-config.cmake' in 'CMakeCache.txt'. "
-            "Optionally, you can set the Qt5 root directory 'QT5_ROOT_PATH' to the directory "
-            "containing the 'bin' folder.")
-endif()
+# find qt5 components
+find_package(Qt5 COMPONENTS Core Gui OpenGL Widgets Xml)
+# or
+# find_package(Qt5Core QUIET)
+# find_package(Qt5Gui QUIET)
+# find_package(Qt5OpenGL QUIET)
+# find_package(Qt5Widgets QUIET)
+
+# In the case no Qt5Config.cmake file could be found, cmake will explicitly ask the user for the QT5_DIR containing it!
+
+if (Qt5Core_FOUND AND Qt5Gui_FOUND AND Qt5OpenGL_FOUND AND Qt5Widgets_FOUND)
+set(QT5_FOUND TRUE)
+endif ()
+
+if (QT5_FOUND)
+# Starting with the QtCore lib, find the bin and root directories
+get_target_property(QT5_LIB_LOCATION Qt5::Core LOCATION_${CMAKE_BUILD_TYPE})
+get_filename_component(QT_BINARY_DIR ${QT5_LIB_LOCATION} DIRECTORY)
+
+if (APPLE)
+# Apple uses frameworks - move up until we get to the base directory to set the bin directory properly
+get_filename_component(QT_BINARY_DIR ${QT_BINARY_DIR} DIRECTORY)
+set(QT_BINARY_DIR ${QT_BINARY_DIR}/bin)
+set(MACDEPLOYQT ${QT_BINARY_DIR}/macdeployqt)
+message(STATUS "macdeployqt: ${MACDEPLOYQT}")
+elseif(WIN32)
+set(WINDEPLOYQT ${QT_BINARY_DIR}/windeployqt.exe)
+message(STATUS "windeployqt: ${WINDEPLOYQT}")
+endif ()
+
+# set QT5_ROOT_PATH if it wasn't set by the user
+if (NOT QT5_ROOT_PATH)
+get_filename_component(QT5_ROOT_PATH ${QT_BINARY_DIR} DIRECTORY)
+endif ()
+
+# turn on QStringBuilder for more efficient string construction
+#	see https://doc.qt.io/qt-5/qstring.html#more-efficient-string-construction
+add_definitions(-DQT_USE_QSTRINGBUILDER)
+endif ()
