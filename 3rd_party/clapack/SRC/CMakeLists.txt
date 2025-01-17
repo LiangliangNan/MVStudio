@@ -375,12 +375,12 @@ endif()
 if(BUILD_COMPLEX16)
   set(ALLOBJ  ${ZLASRC} ${ALLAUX} ${DZLAUX})
 endif()
-add_library(clapack ${ALLOBJ} ${ALLXOBJ})
-target_link_libraries(clapack blas)
+add_library(3rd_clapack ${ALLOBJ} ${ALLXOBJ})
+target_link_libraries(3rd_clapack 3rd_blas)
 
-set_target_properties(clapack PROPERTIES FOLDER "3rd_party/clapack")
+set_target_properties(3rd_clapack PROPERTIES FOLDER "3rd_party/clapack")
 
 set(CLAPACK_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/clapack/include)
-target_include_directories(clapack PRIVATE ${CLAPACK_INCLUDE_DIR})
+target_include_directories(3rd_clapack PRIVATE ${CLAPACK_INCLUDE_DIR})
 
-set_target_properties(clapack PROPERTIES FOLDER "3rd_party")
+set_target_properties(3rd_clapack PROPERTIES FOLDER "3rd_party")

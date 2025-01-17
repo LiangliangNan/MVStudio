@@ -61,9 +61,9 @@ include_directories(${CLAPACK_SOURCE_DIR}/F2CLIBS/libf2c)
 include_directories(${CLAPACK_BINARY_DIR}/F2CLIBS/libf2c)
 
 #add_library(f2c ${OFILES} ${CMAKE_CURRENT_BINARY_DIR}/arith.h)
-add_library(f2c ${OFILES})
+add_library(3rd_f2c ${OFILES})
 
-set_target_properties(f2c PROPERTIES FOLDER "3rd_party/clapack")
+set_target_properties(3rd_f2c PROPERTIES FOLDER "3rd_party/clapack")
 
-set_target_properties(f2c PROPERTIES FOLDER "3rd_party")
+set_target_properties(3rd_f2c PROPERTIES FOLDER "3rd_party")
 

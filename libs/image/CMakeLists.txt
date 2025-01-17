@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.1)
-
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
@@ -31,9 +29,9 @@ add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_
 target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME}
-        jpeg
-        png
-        zlib
+        3rd_jpeg
+        3rd_png
+        3rd_zlib
         basic
         )
 

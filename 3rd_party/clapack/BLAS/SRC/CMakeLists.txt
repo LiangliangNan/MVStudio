@@ -136,13 +136,13 @@ if(BLAS_COMPLEX16)
 endif()
   
   
-add_library(blas ${ALLOBJ})
+add_library(3rd_blas ${ALLOBJ})
 if(UNIX)
-  target_link_libraries(blas m)
+  target_link_libraries(3rd_blas m)
 endif()
-target_link_libraries(blas f2c)
+target_link_libraries(3rd_blas 3rd_f2c)
 
 set(CLAPACK_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/clapack/include)
-target_include_directories(blas PRIVATE ${CLAPACK_INCLUDE_DIR})
+target_include_directories(3rd_blas PRIVATE ${CLAPACK_INCLUDE_DIR})
 
-set_target_properties(blas PROPERTIES FOLDER "3rd_party")
+set_target_properties(3rd_blas PROPERTIES FOLDER "3rd_party")

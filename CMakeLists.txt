@@ -1,12 +1,15 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.12)
 
 if (APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.12" CACHE STRING "Minimum OS X deployment version" FORCE)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum OS X deployment version" FORCE)
     message(STATUS "Minimum OS X deployment version: ${CMAKE_OSX_DEPLOYMENT_TARGET}")
 endif ()
 
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
@@ -17,6 +20,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 ### Configuration
 set(MVSTUDIO_ROOT         ${CMAKE_CURRENT_LIST_DIR})
+set(MVSTUDIO_INCLUDE_DIR  ${CMAKE_CURRENT_LIST_DIR}/libs)
 set(MVSTUDIO_BUILD_DIR    ${CMAKE_CURRENT_BINARY_DIR})
 set(MVSTUDIO_THIRD_PARTY  ${MVSTUDIO_ROOT}/3rd_party)
 

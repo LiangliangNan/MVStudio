@@ -11,7 +11,7 @@
 #include "../libs/algo/sparse_reconstruction.h"
 #include "../libs/algo/dense_reconstruction.h"
 
-#include "../3rd_party/QGLViewer/manipulatedCameraFrame.h"
+#include "../3rd_party/QGLViewer/QGLViewer/manipulatedCameraFrame.h"
 
 #include <QMouseEvent>
 #include <QMessageBox>
@@ -218,7 +218,7 @@ void PaintCanvas::copyCamera() {
 void PaintCanvas::pasteCamera() {
 	// get the camera parameters from clipboard string
 	QString str = qApp->clipboard()->text();
-	QStringList list = str.split(" ", QString::SkipEmptyParts);
+	QStringList list = str.split(" ", Qt::SkipEmptyParts);
 	if(list.size() != 7) {
 		Logger::err(title()) << "camera not available in clipboard" << std::endl;
 		return;

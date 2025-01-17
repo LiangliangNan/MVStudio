@@ -45,23 +45,23 @@ if(CUDA_ENABLED)
         SiftMatchCU.h
     )
 
-    COLMAP_ADD_STATIC_CUDA_LIBRARY(sift_gpu ${SIFT_GPU_SOURCE_FILES})
+    COLMAP_ADD_STATIC_CUDA_LIBRARY(3rd_sift_gpu ${SIFT_GPU_SOURCE_FILES})
 else()
-    add_library(sift_gpu STATIC ${SIFT_GPU_SOURCE_FILES})
+    add_library(3rd_sift_gpu STATIC ${SIFT_GPU_SOURCE_FILES})
 endif()
 
-target_link_libraries(sift_gpu
+target_link_libraries(3rd_sift_gpu
     ${SIFT_GPU_LIBRARIES}
     ${OPENGL_LIBRARIES}
 )
 
 set(GLEW_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/glew/include)
-target_include_directories(sift_gpu PRIVATE ${GLEW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
-target_link_libraries(sift_gpu glew)
-target_compile_definitions(sift_gpu PRIVATE GLEW_STATIC)
+target_include_directories(3rd_sift_gpu PRIVATE ${GLEW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+target_link_libraries(3rd_sift_gpu 3rd_glew)
+target_compile_definitions(3rd_sift_gpu PRIVATE GLEW_STATIC)
 
 if (WIN32)
-    target_link_libraries(sift_gpu Winmm.lib)
+    target_link_libraries(3rd_sift_gpu Winmm.lib)
 endif (WIN32)
 
-set_target_properties(sift_gpu PROPERTIES FOLDER "3rd_party")
+set_target_properties(3rd_sift_gpu PROPERTIES FOLDER "3rd_party")

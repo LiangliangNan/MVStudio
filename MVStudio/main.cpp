@@ -2,11 +2,10 @@
 #include <iostream>
 #include <QLocale>
 #include <QTranslator>
-#include <QTextCodec>
 #include <QDebug>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QSplashScreen>
-#include <QGLFormat>
+#include <QSurfaceFormat>
 
 #include "../libs/basic/logger.h"
 #include "main_window.h"
@@ -36,44 +35,50 @@ public:
 
 int main(int argc, char **argv)
 {
-	srand(time(0));
+    srand(time(nullptr));
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
-	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-#endif
-
-	{
-        QGLFormat format = QGLFormat::defaultFormat();
-        format.setProfile(QGLFormat::CompatibilityProfile);
-        format.setSampleBuffers(true); // you can also call setOption(QGL::SampleBuffers)
-        format.setSamples(8);  // 8 is enough
-	}
-
-	Application app(argc, argv);
-
-	//Locale management
-	{
-		//Force 'English' locale so as to get a consistent behavior everywhere
-		QLocale locale = QLocale(QLocale::English);
-		locale.setNumberOptions(QLocale::c().numberOptions());
-		QLocale::setDefault(locale);
+    //Locale management
+    //Force 'English' locale to get a consistent behavior everywhere
+    QLocale locale = QLocale(QLocale::English);
+    locale.setNumberOptions(QLocale::c().numberOptions());
+    QLocale::setDefault(locale);
 
 #ifdef Q_OS_UNIX
-		//We reset the numeric locale for POSIX functions
-		//See http://qt-project.org/doc/qt-5/qcoreapplication.html#locale-settings
-		setlocale(LC_NUMERIC, "C");
+    //We reset the numeric locale for POSIX functions
+    //See http://qt-project.org/doc/qt-5/qcoreapplication.html#locale-settings
+    setlocale(LC_NUMERIC, "C");
 #endif
-	}
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0) && (QT_VERSION < QT_VERSION_CHECK(6, 0, 0)))
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
+
+    // Note: Calling QSurfaceFormat::setDefaultFormat() before constructing the
+    //       QApplication instance is mandatory on some platforms(for example, macOS)
+    //       when an OpenGL core profile context is requested. This is to ensure
+    //       that resource sharing between contexts stays functional as all internal
+    //       contexts are created using the correct version and profile.
+    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+    format.setVersion(4, 3);
+    format.setProfile(QSurfaceFormat::CompatibilityProfile);
+    format.setDepthBufferSize(24);
+    format.setStencilBufferSize(8);
+    format.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+    format.setSamples(4);
+#ifndef NDEBUG
+    format.setOption(QSurfaceFormat::DebugContext);
+#endif
+    QSurfaceFormat::setDefaultFormat(format);
 
 #ifndef _DEBUG
 	// splash screen
 	QPixmap pixmap(":/Resources/splash.png");
 	QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
-	QTime splashTimer;
+    QElapsedTimer splashTimer;
 	splashTimer.start();
 	splash.show();
 	splash.showMessage("  Starting MVStudio...");
-	app.processEvents();
+    QApplication::processEvents();
 
 	//we want the splash screen to be visible a minimum amount of time (in milliseconds.)
 	while (splashTimer.elapsed() < 500) {
@@ -81,6 +86,8 @@ int main(int argc, char **argv)
 		QApplication::processEvents(); //to let the system breath!
 	}
 #endif
+
+    QApplication app(argc, argv);
 
 	MainWindow window;	
 	window.show();

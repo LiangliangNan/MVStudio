@@ -5,7 +5,6 @@
 # Please note that the package source code is licensed under its own license.
 
 project ( libjpeg C )
-cmake_minimum_required(VERSION 2.10)
 include ( cmake/dist.cmake )
 
 OPTION(BUILD_STATIC OFF)
@@ -36,9 +35,9 @@ set ( SRC jmemnobs.c jaricom.c jcapimin.c jcapistd.c jcarith.c jccoefct.c jccolo
   cdjpeg.h jdct.h jinclude.h jmemsys.h jpegint.h jversion.h transupp.h )
 
 if ( BUILD_STATIC )
-  add_library ( jpeg STATIC ${SRC} ${HEADERS} )
+  add_library ( 3rd_jpeg STATIC ${SRC} ${HEADERS} )
 else ()
-  add_library ( jpeg ${SRC} ${HEADERS} )
+  add_library ( 3rd_jpeg ${SRC} ${HEADERS} )
 endif()
 
 if ( BUILD_EXECUTABLES )
@@ -49,16 +48,16 @@ if ( BUILD_EXECUTABLES )
   add_executable ( jpegtran jpegtran.c cdjpeg.c rdswitch.c transupp.c )
   add_executable ( rdjpgcom rdjpgcom.c )
   add_executable ( wrjpgcom wrjpgcom.c )
-  target_link_libraries ( cjpeg jpeg )
-  target_link_libraries ( djpeg jpeg )
-  target_link_libraries ( jpegtran jpeg )
+  target_link_libraries ( cjpeg 3rd_jpeg )
+  target_link_libraries ( djpeg 3rd_jpeg )
+  target_link_libraries ( jpegtran 3rd_jpeg )
 endif ()
 
 if ( BUILD_EXECUTABLES )
   install_executable ( cjpeg djpeg jpegtran rdjpgcom wrjpgcom )
 endif ()
 
-install_library ( jpeg )
+install_library ( 3rd_jpeg )
 install_header ( ${HEADERS} )
 install_doc ( README install.txt usage.txt wizard.txt example.c libjpeg.txt structure.txt 
   coderules.txt filelist.txt change.log )
@@ -86,4 +85,4 @@ if ( BUILD_TESTS )
     testoutt.jpg )
 endif ()
 
-set_target_properties(jpeg PROPERTIES FOLDER "3rd_party")
+set_target_properties(3rd_jpeg PROPERTIES FOLDER "3rd_party")

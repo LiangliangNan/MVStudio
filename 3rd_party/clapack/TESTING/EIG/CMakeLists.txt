@@ -119,7 +119,7 @@ set(ZEIGTST  zchkee.c
 
 macro(add_eig_executable name )
   add_executable(${name} ${ARGN})
-  target_link_libraries(${name} tmglib lapack )
+  target_link_libraries(${name} 3rd_tmglib 3rd_lapack )
 endmacro(add_eig_executable)
 
 add_eig_executable(xeigtsts ${SEIGTST} ${SCIGTST} ${AEIGTST} 

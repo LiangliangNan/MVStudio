@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.1)
-
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
@@ -34,6 +32,6 @@ set(${PROJECT_NAME}_SOURCES
 
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS} )
 
-target_link_libraries(${PROJECT_NAME} basic cminpack f2c blas clapack)
+target_link_libraries(${PROJECT_NAME} basic 3rd_cminpack 3rd_f2c 3rd_blas 3rd_clapack)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "libs")

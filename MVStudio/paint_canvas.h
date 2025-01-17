@@ -1,8 +1,8 @@
 #ifndef PAINTCANVAS_H
 #define PAINTCANVAS_H
 
-#include "GL/glew.h"
-#include "../3rd_party/QGLViewer/qglviewer.h"
+#include "../3rd_party/glew/include/GL/glew.h"
+#include "../3rd_party/QGLViewer/QGLViewer/qglviewer.h"
 #include "../libs/math/math_types.h"
 #include "../libs/algo/sparse_reconstruction.h"
 #include "../libs/algo/project.h"

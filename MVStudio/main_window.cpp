@@ -1,26 +1,24 @@
 #include <QMessageBox>
-#include <QFileDialog>
 #include <QLabel>
 #include <QStatusBar>
 #include <QSettings>
 #include <QCloseEvent>
 #include <QPlainTextEdit>
-#include <QGroupBox>
 #include <QColorDialog>
 #include <QProgressBar>
 #include <QMimeData>
 #include <QPushButton>
+#include <QFileDialog>
 
 #include "main_window.h"
 #include "paint_canvas.h"
 
-#include "../libs/basic/logger.h"
 #include "../libs/pointset/point_set.h"
 #include "../libs/pointset/point_set_io.h"
 
 
-MainWindow::MainWindow(QWidget *parent, Qt::WindowFlags flags)
-: QMainWindow(parent, flags)
+MainWindow::MainWindow(QWidget *parent)
+: QMainWindow(parent)
 , workingDirectory_(".")
 {	
 	setupUi(this);

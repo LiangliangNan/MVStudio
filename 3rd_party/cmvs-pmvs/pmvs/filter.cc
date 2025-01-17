@@ -1,10 +1,11 @@
-#include "tinycthread.h"
-#include <numeric>
-#include <ctime>
+#include "filter.h"
+
 #include <time.h>
+
+#include "tinycthread.h"
 #include "../numeric/mylapack.h"
 #include "findMatch.h"
-#include "filter.h"
+
 
 using namespace Patch;
 using namespace PMVS3;

@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 2.10)
 project(CLAPACK C)
 #enable_testing()
 #include(CTest)
@@ -27,7 +26,7 @@ set(CPACK_PACKAGE_VERSION_MAJOR 3)
 set(CPACK_PACKAGE_VERSION_MINOR 2)
 set(CPACK_PACKAGE_VERSION_PATCH 1)
 include(CPack)
-export(TARGETS f2c blas clapack FILE clapack-targets.cmake)
+export(TARGETS 3rd_f2c 3rd_blas 3rd_clapack FILE clapack-targets.cmake)
 configure_file(${CLAPACK_SOURCE_DIR}/clapack-config-version.cmake.in
   ${CLAPACK_BINARY_DIR}/clapack-config-version.cmake @ONLY)
 configure_file(${CLAPACK_SOURCE_DIR}/clapack-config.cmake.in
