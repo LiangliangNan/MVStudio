@@ -37,4 +37,4 @@ target_link_libraries(mvglib
         math
         )
 
-set_target_properties(mvglib PROPERTIES FOLDER "3rd_party")
+set_target_properties(mvglib PROPERTIES FOLDER "libs")

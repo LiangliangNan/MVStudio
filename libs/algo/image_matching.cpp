@@ -7,7 +7,6 @@
 #include "../basic/progress.h"
 #include "../basic/logger.h"
 #include "../basic/stop_watch.h"
-#include "../opengl/opengl_info.h"
 
 //include the header files for SiftGPU and SiftMatchGPU
 #include "../../3rd_party/SiftGPU/SiftGPU.h"
@@ -44,16 +43,15 @@ void ImageMatching::apply() {
 
 	image_features.clear();
 	StopWatch w;
-    ogf_check_gl;
+
 	Logger::out(title()) << "extracting key points..." << std::endl;
 	extract_key_points();
 	Logger::out(title()) << "done. time: " << w.elapsed() << std::endl;
-    ogf_check_gl;
+
 	w.start();
 	Logger::out(title()) << "matching the images..." << std::endl;
 	match_key_points();
 	Logger::out(title()) << "done. time: " << w.elapsed() << std::endl;
-    ogf_check_gl;
 }
 
 
@@ -70,9 +68,8 @@ void ImageMatching::extract_key_points() {
 		return;
 	}
 
-    ogf_check_gl;
 	SiftGPU* sift = CreateNewSiftGPU();
-    ogf_check_gl;
+
 	//Create a context for computation, and SiftGPU will be initialized automatically 
 	//The same context can be used by SiftMatchGPU.
 	// Liangliang: I already have a OpenGL context. Just use it.
@@ -80,7 +77,7 @@ void ImageMatching::extract_key_points() {
 		Logger::err(title()) << "SiftGPU not supported" << std::endl;
         return;
 	}
-    ogf_check_gl;
+
 	char * argv[] = { "-fo", "-1", "-v", "0", "-tc2", "7680", "-b", "-nomc" };//
 	//-fo -1    staring from -1 octave 
 	//-v 1      only print out # feature and overall time
@@ -90,7 +87,7 @@ void ImageMatching::extract_key_points() {
 	int argc = sizeof(argv)/sizeof(char*);
 	sift->ParseParam(argc, argv);
 	//sift->SetMaxDimension(8000);
-    ogf_check_gl;
+
 	///////////////////////////////////////////////////////////////////////
 	//Only the following parameters can be changed after initialization (by calling ParseParam). 
 	//-dw, -ofix, -ofix-not, -fo, -unn, -maxd, -b
@@ -108,7 +105,7 @@ void ImageMatching::extract_key_points() {
 		}
 		if (project_->images[i].ignored)
 			continue;
-        ogf_check_gl;
+
 		//Create a context for computation, and SiftGPU will be initialized automatically 
 		//The same context can be used by SiftMatchGPU.
 		// Liangliang: I already have a OpenGL context. Just use it.
@@ -116,17 +113,17 @@ void ImageMatching::extract_key_points() {
 			Logger::err(title()) << "SiftGPU not supported" << std::endl;
 			break;
 		}
-        ogf_check_gl;
+
 		const std::string& name = project_->images[i].file;
 		if (!sift->RunSIFT(name.c_str())) {
 			Logger::warn(title()) << "processing image \'" << FileUtils::simple_name(name) << "\' failed" << std::endl;
 			project_->set_ignore_image(name, true);
 			continue;
 		}
-        ogf_check_gl;
+
 		std::string sift_file = project_->sfm_keys_dir + '/' + FileUtils::base_name(name) + ".key";
 		sift->SaveSIFT(sift_file.c_str());
-        ogf_check_gl;
+
 		int image_width, image_height;
 		sift->GetImageDimension(image_width, image_height);
 		float focal_length_in_pixels = 1.2f * std::max(image_width, image_height);
@@ -136,7 +133,7 @@ void ImageMatching::extract_key_points() {
 
 		int num = sift->GetFeatureNum();	// get feature count
 		Logger::out(title()) << FileUtils::simple_name(name) << ": " << num << " key points" << std::endl;
-        ogf_check_gl;
+  
 		std::vector<SiftGPU::SiftKeypoint> keys;
 		std::vector<float> descriptors;
 
@@ -147,19 +144,18 @@ void ImageMatching::extract_key_points() {
 			//if you don't need keys or descriptors, just put NULLs here
 			sift->GetFeatureVector(&keys[0], &descriptors[0]);
 			//this can be used to write your own sift file.
-            ogf_check_gl;
 		}
 
 		ImageFeature feature;
-        ogf_check_gl;
+
 		feature.keys = keys;
 		feature.descriptors = descriptors;
 		image_features.push_back(feature);
-        ogf_check_gl;
+
 		progress.next();
 	}
 
-    ogf_check_gl;
+
 	delete sift;
 }
 
@@ -177,9 +173,9 @@ void ImageMatching::match_key_points() {
 		Logger::err(title()) << "could not write matches file \'" << match_table_file << "\'" << std::endl;
 		return;
 	}
-    ogf_check_gl;
+
 	SiftMatchGPU* matcher = new SiftMatchGPU;
-    ogf_check_gl;
+
 	//Before initialization, you can choose between GLSL, and CUDA(if compiled). 
 	//matcher->SetLanguage(SiftMatchGPU::SIFTMATCH_CUDA); // +i for the (i+1)-th device
 
@@ -198,7 +194,6 @@ void ImageMatching::match_key_points() {
 		if (num1 == 0)
 			continue;
 
-        ogf_check_gl;
 		for ( int j = i+1; j < num; ++j) {
 			const std::vector<SiftGPU::SiftKeypoint>& keys2 = image_features[j].keys;
 			const std::vector<float>& descriptors2 = image_features[j].descriptors;
@@ -206,7 +201,6 @@ void ImageMatching::match_key_points() {
 			if (num2 == 0)
 				continue;
 
-            ogf_check_gl;
 			if (progress.is_canceled()) {
 				delete matcher;
 				return;
@@ -219,20 +213,18 @@ void ImageMatching::match_key_points() {
 				Logger::err(title()) << "SiftGPU not supported" << std::endl;
 				break;
 			}
-            ogf_check_gl;
 
 			//Set descriptors to match, the first argument must be either 0 or 1
 			//if you want to use more than 4096 or less than 4096
 			//call matcher->SetMaxSift() to change the limit before calling setdescriptor
 			matcher->SetDescriptors(0, num1, &descriptors1[0]); //image 1
 			matcher->SetDescriptors(1, num2, &descriptors2[0]); //image 2
-            ogf_check_gl;
+ 
 			//match and get result.    
             int(*match_buf)[2] = new int[num1][2];
 			//use the default thresholds. Check the declaration in SiftGPU.h
 			int num_match = matcher->GetSiftMatch(num1, match_buf);
 			output << i << "   " << j << std::endl << num_match << std::endl;
-            ogf_check_gl;
 
 			//enumerate all the feature matches
 			for (int k = 0; k < num_match; ++k) {
@@ -253,14 +245,11 @@ void ImageMatching::match_key_points() {
 			output << std::endl;
 
 			delete[] match_buf;
-            ogf_check_gl;
 
 			progress.next();
 		}
 	}
 
 	image_features.clear();
-    ogf_check_gl;
 	delete matcher;
-    ogf_check_gl;
 }

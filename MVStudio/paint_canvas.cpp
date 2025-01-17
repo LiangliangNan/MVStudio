@@ -10,7 +10,7 @@
 #include "../libs/algo/sparse_reconstruction.h"
 #include "../libs/algo/dense_reconstruction.h"
 
-#include "../3rd_party/QGLViewer/QGLViewer/manipulatedCameraFrame.h"
+#include "../3rd_party/QGLViewer/manipulatedCameraFrame.h"
 
 #include <QMouseEvent>
 #include <QMessageBox>
@@ -42,7 +42,6 @@ PaintCanvas::PaintCanvas(QWidget *parent)
 	camera()->lookAt(sceneCenter());
 	camera()->setType(qglviewer::Camera::PERSPECTIVE);
 	camera()->showEntireScene();
-    ogf_check_gl;
 }
 
 
@@ -53,7 +52,6 @@ PaintCanvas::~PaintCanvas() {
 
 void PaintCanvas::init()
 {
-    ogf_check_gl;
 	Logger::out(title()) << "initializing..." << std::endl ;
 
  	//////////////////////////////////////////////////////////////////////////
@@ -119,7 +117,6 @@ void PaintCanvas::init()
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
 	glEnable(GL_NORMALIZE);
-    ogf_check_gl;
 }
 
 void PaintCanvas::setLightPosition(const vec3d& pos) { 
@@ -137,7 +134,6 @@ void PaintCanvas::setLightPosition(const vec3d& pos) {
 
     doneCurrent();
 	update_graphics();
-    ogf_check_gl;
 }
 
 
@@ -158,7 +154,6 @@ void PaintCanvas::decreasePointSize() {
 }
 
 void PaintCanvas::draw() {
-    ogf_check_gl;
 	if (point_set_) {
 		glDisable(GL_MULTISAMPLE);
 		render_->draw();
@@ -168,8 +163,6 @@ void PaintCanvas::draw() {
         glEnable(GL_MULTISAMPLE);
         drawCornerAxis();
     }
-
-    ogf_check_gl;
 }
 
 
@@ -266,17 +259,14 @@ void PaintCanvas::pasteCamera() {
 void PaintCanvas::setLighting(bool b) {
 	render_->set_lighting(b);
 	update_graphics();
-    ogf_check_gl;
 }
 
 void PaintCanvas::fit() {
 	fitScreen();
-    ogf_check_gl;
 }
 
 void PaintCanvas::update_graphics() {
 	update();
-    ogf_check_gl;
 }
 
 void PaintCanvas::update_all() {
@@ -290,7 +280,6 @@ void PaintCanvas::update_all() {
 	// is only suited for short and simple problems that are to be processed in a single thread, such as 
 	// splash screens and the monitoring of short operations.
 	QCoreApplication::processEvents();
-    ogf_check_gl;
 }
 
 
@@ -301,13 +290,11 @@ void PaintCanvas::setProjectionMode(bool b) {
 		camera()->setType(qglviewer::Camera::ORTHOGRAPHIC);
 
 	update_graphics();
-    ogf_check_gl;
 }
 
 void PaintCanvas::showCoordinateSystem(bool b) { 
 	show_coord_sys_= b;
 	update_graphics();
-    ogf_check_gl;
 }
 
 
@@ -324,7 +311,6 @@ void PaintCanvas::fitScreen() {
 		showEntireScene();
 		update_graphics();
 	}
-    ogf_check_gl;
 }
 
 
@@ -376,7 +362,6 @@ void PaintCanvas::drawCornerAxis()
 	// The viewport and the scissor are restored.
 	glScissor(scissor[0], scissor[1], scissor[2], scissor[3]);
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
-    ogf_check_gl;
 }
 
 
@@ -402,7 +387,6 @@ void PaintCanvas::setPointSet(PointSet* pset, bool fit) {
 	render_->set_pointset(point_set_);
 	if (fit)
 		fitScreen();
-    ogf_check_gl;
 }
 
 
@@ -419,7 +403,6 @@ bool PaintCanvas::creatProject(const QString& file) {
 		update_graphics();
 		return true;
 	}
-    ogf_check_gl;
 	return false;
 }
 
@@ -434,11 +417,9 @@ bool PaintCanvas::loadProject(const QString& file) {
 		}
 		cameras_.clear();
 		update_graphics();
-        ogf_check_gl;
 		return true;
 	}
 
-    ogf_check_gl;
 	return false;
 }
 
@@ -465,7 +446,6 @@ void PaintCanvas::imageMatching() {
 	ImageMatching matching(project_);
 	matching.apply();
     doneCurrent();
-    ogf_check_gl;
 	// some image could be ignored
 	main_window_->listWidgetImages->updateImageList();
 	main_window_->saveProject();
@@ -490,7 +470,6 @@ void PaintCanvas::sparseReconstruction() {
 	SparseReconstruction sparse(project_);
 	sparse.apply(point_set_);
 	update_all();
-    ogf_check_gl;
 }
 
 
@@ -513,5 +492,4 @@ void PaintCanvas::denseReconstruction() {
 	dense.run_pmvs(point_set_);
 	fitScreen();
 	update_all();
-    ogf_check_gl;
 }

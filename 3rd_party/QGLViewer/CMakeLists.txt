@@ -1,48 +1,100 @@
 set(PROJECT_NAME 3rd_QGLViewer)
 
-include(../../cmake/UseQt.cmake)
+include(../../cmake/UseQt5.cmake)
 
-find_package(OpenGL REQUIRED)
+set(qglviewer_HEADERS
+    camera.h
+    config.h
+    constraint.h
+    domUtils.h
+    frame.h
+    ImageInterface.h
+    keyFrameInterpolator.h
+    manipulatedCameraFrame.h
+    manipulatedFrame.h
+    mouseGrabber.h
+    qglviewer.h
+    quaternion.h
+    vec.h
+    VRender/AxisAlignedBox.h
+    VRender/Exporter.h
+    VRender/gpc.h
+    VRender/NVector3.h
+    VRender/Optimizer.h
+    VRender/ParserGL.h
+    VRender/Primitive.h
+    VRender/PrimitivePositioning.h
+    VRender/SortMethod.h
+    VRender/Types.h
+    VRender/Vector2.h
+    VRender/Vector3.h
+    VRender/VRender.h
+    )
 
-# QGLViewer target.
-set(QGLViewer_SRC
-    "QGLViewer/VRender/BackFaceCullingOptimizer.cpp"
-    "QGLViewer/VRender/BSPSortMethod.cpp"
-    "QGLViewer/VRender/EPSExporter.cpp"
-    "QGLViewer/VRender/Exporter.cpp"
-    "QGLViewer/VRender/FIGExporter.cpp"
-    "QGLViewer/VRender/gpc.cpp"
-    "QGLViewer/VRender/NVector3.cpp"
-    "QGLViewer/VRender/ParserGL.cpp"
-    "QGLViewer/VRender/Primitive.cpp"
-    "QGLViewer/VRender/PrimitivePositioning.cpp"
-    "QGLViewer/VRender/TopologicalSortMethod.cpp"
-    "QGLViewer/VRender/Vector2.cpp"
-    "QGLViewer/VRender/Vector3.cpp"
-    "QGLViewer/VRender/VisibilityOptimizer.cpp"
-    "QGLViewer/VRender/VRender.cpp"
-    "QGLViewer/camera.cpp"
-    "QGLViewer/constraint.cpp"
-    "QGLViewer/frame.cpp"
-    "QGLViewer/keyFrameInterpolator.cpp"
-    "QGLViewer/manipulatedCameraFrame.cpp"
-    "QGLViewer/manipulatedFrame.cpp"
-    "QGLViewer/mouseGrabber.cpp"
-    "QGLViewer/qglviewer.cpp"
-    "QGLViewer/quaternion.cpp"
-    "QGLViewer/saveSnapshot.cpp"
-    "QGLViewer/vec.cpp")
+set(qglviewer_SOURCES
+    camera.cpp
+    constraint.cpp
+    frame.cpp
+    ImageInterface.cpp
+    keyFrameInterpolator.cpp
+    manipulatedCameraFrame.cpp
+    manipulatedFrame.cpp
+    mouseGrabber.cpp
+    qglviewer.cpp
+    quaternion.cpp
+    saveSnapshot.cpp
+    vec.cpp
+    VRender/BackFaceCullingOptimizer.cpp
+    VRender/BSPSortMethod.cpp
+    VRender/EPSExporter.cpp
+    VRender/Exporter.cpp
+    VRender/FIGExporter.cpp
+    VRender/gpc.cpp
+    VRender/NVector3.cpp
+    VRender/ParserGL.cpp
+    VRender/Primitive.cpp
+    VRender/PrimitivePositioning.cpp
+    VRender/TopologicalSortMethod.cpp
+    VRender/Vector2.cpp
+    VRender/Vector3.cpp
+    VRender/VisibilityOptimizer.cpp
+    VRender/VRender.cpp
+    )
 
-add_library(${PROJECT_NAME} STATIC ${QGLViewer_SRC})
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "3rd_party")
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${POLYFIT_INCLUDE_DIR})
-target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${QtLibs} OpenGL::GL OpenGL::GLU)
+add_library(${PROJECT_NAME} SHARED ${qglviewer_SOURCES} ${qglviewer_HEADERS})
+set_target_properties(${PROJECT_NAME} PROPERTIES
+                      FOLDER "3rd_party")
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC QGLVIEWER_STATIC)
 
-# get a clean windows
-if (WIN32 OR MSVC)
-  target_compile_definitions(${PROJECT_NAME} PUBLIC NOMINMAX)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${POLYFIT_qglviewer_DIR}/shared
+    ${POLYFIT_qglviewer_DIR}/bfp
+    ${POLYFIT_qglviewer_DIR}/bfp/bfp_LUSOL
+    ${POLYFIT_qglviewer_DIR}/bfp/bfp_LUSOL/LUSOL
+    ${POLYFIT_qglviewer_DIR}/colamd
+    )
+
+
+if (MSVC)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
+            _CRT_SECURE_NO_WARNINGS
+            _CRT_SECURE_NO_DEPRECATE
+            CREATE_QGLVIEWER_DLL
+        )
 endif()
+
+
+target_link_libraries( ${PROJECT_NAME} Qt5::Core )
+target_link_libraries( ${PROJECT_NAME} Qt5::Gui )
+target_link_libraries( ${PROJECT_NAME} Qt5::Widgets )
+target_link_libraries( ${PROJECT_NAME} Qt5::OpenGL )
+target_link_libraries( ${PROJECT_NAME} Qt5::Xml )
+
+
+set (OpenGL_GL_PREFERENCE GLVND)
+find_package(OpenGL REQUIRED)
+message(STATUS "OpenGL libraries: ${OPENGL_LIBRARIES}")
+target_link_libraries( ${PROJECT_NAME} ${OPENGL_LIBRARIES} )
+
+set_target_properties( ${PROJECT_NAME} PROPERTIES FOLDER "3rd_party")

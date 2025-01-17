@@ -1,8 +1,8 @@
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 project(${PROJECT_NAME})
 
-include(../cmake/UseQt.cmake)
-if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
+include(../cmake/UseQt5.cmake)
+if (NOT Qt5_FOUND)
     message(WARNING "${PROJECT_NAME} requires Qt (Qt6 or Qt5), but Qt was not found. You can set 'Qt*_DIR' to the "
             "directory containing 'Qt*Config.cmake' or 'qt*-config.cmake' (* is 5 or 6) to specify the location of Qt.")
     return()
@@ -72,8 +72,6 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE QT_DEPRECATED_WARNINGS)
 target_link_libraries(${PROJECT_NAME} ${QtLibs})
 
 target_link_libraries(${PROJECT_NAME} basic math pointset algo 3rd_QGLViewer 3rd_sift_gpu)
-
-set(CMAKE_CXX_FLAGS " -pthread ")
 
 set(GLEW_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/glew/include)
 target_include_directories(${PROJECT_NAME} PRIVATE ${GLEW_INCLUDE_DIR})
