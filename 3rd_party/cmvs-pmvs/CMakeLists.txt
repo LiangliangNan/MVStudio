@@ -9,10 +9,12 @@ ADD_LIBRARY(3rd_cmvs-pmvs STATIC
             ${3rd_cmvs-pmvs_SRC})
 
 TARGET_LINK_LIBRARIES(3rd_cmvs-pmvs
-            ${3rd_cmvs-pmvs_DEPS}
-            ${3rd_cmvs-pmvs_ADDITIONAL_DEPS}
-            ${SOLUTION_STATIC_LIB_DEPS}
-            ${SOLUTION_GENERAL_DEPS})
+        3rd_nlopt
+        3rd_graclus
+        3rd_tinycthread
+        3rd_jpeg
+        3rd_clapack
+)
 
 
 

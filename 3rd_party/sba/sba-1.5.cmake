@@ -10,9 +10,3 @@ SET(3rd_sba_SRC
     "sba_levmar.c"
     "sba_levmar_wrap.c"
    )
-
-SET(3rd_sba_DEPS
-        blas
-        f2c
-        clapack
-   )

@@ -6,7 +6,6 @@
 #include "../libs/pointset/point_set.h"
 #include "../libs/pointset/point_set_io.h"
 #include "../libs/pointset/point_set_render.h"
-#include "../libs/opengl/opengl_info.h"
 #include "../libs/algo/image_matching.h"
 #include "../libs/algo/sparse_reconstruction.h"
 #include "../libs/algo/dense_reconstruction.h"
@@ -132,7 +131,8 @@ void PaintCanvas::setLightPosition(const vec3d& pos) {
 	float p[] = {static_cast<float>(light_pos_.x), static_cast<float>(light_pos_.y), static_cast<float>(light_pos_.z), 0.0f };
 	glLightfv(GL_LIGHT0, GL_POSITION, p);
 	glPopMatrix();	
-	
+
+    doneCurrent();
 	update_graphics(); 
 }
 
@@ -155,19 +155,17 @@ void PaintCanvas::decreasePointSize() {
 
 void PaintCanvas::draw() {
     ogf_check_gl;
-	if (show_coord_sys_)  {
-		glEnable(GL_MULTISAMPLE);
-		drawCornerAxis();
-	}
-
-    ogf_check_gl;
 	if (point_set_) {
 		glDisable(GL_MULTISAMPLE);
 		render_->draw();
 	}
 
+    if (show_coord_sys_)  {
+        glEnable(GL_MULTISAMPLE);
+        drawCornerAxis();
+    }
+
     ogf_check_gl;
-	// drawCameras();
 }
 
 
@@ -316,7 +314,7 @@ void PaintCanvas::fitScreen() {
 
 
 void PaintCanvas::drawCornerAxis()  
-{	
+{
 	glEnable(GL_MULTISAMPLE);
 
 	// The viewport and the scissor are changed to fit the lower left
@@ -350,19 +348,7 @@ void PaintCanvas::drawCornerAxis()
 	glMultMatrixd(camera()->orientation().inverse().matrix());
 
 	float axis_size = 0.9f; // other 0.2 space for drawing the x, y, z labels
-	drawAxis(axis_size); 
-
-	// Draw text id
-	glColor3f(0, 0, 0);
-
-	// Liangliang: It seems the renderText() func disables multi-sample.
-	// Is this a bug in Qt ?
-	GLboolean anti_alias = glIsEnabled(GL_MULTISAMPLE);
-	const_cast<PaintCanvas*>(this)->renderText(axis_size, 0, 0, "X");
-	const_cast<PaintCanvas*>(this)->renderText(0, axis_size, 0, "Y");
-	const_cast<PaintCanvas*>(this)->renderText(0, 0, axis_size, "Z");
-	if (anti_alias)
-		glEnable(GL_MULTISAMPLE);
+	drawAxis(axis_size);
 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();

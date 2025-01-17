@@ -20,6 +20,3 @@ SET(3rd_image_png_SRC
     "pngwtran.c"
     "pngwutil.c"
    )
-
-SET(3rd_image_png_DEPS
-   )

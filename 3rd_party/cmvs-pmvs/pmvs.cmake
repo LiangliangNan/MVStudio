@@ -25,6 +25,3 @@ SET(3rd_cmvs-pmvs_SRC
     "pmvs/seed.cc"
    )
 
-SET(3rd_cmvs-pmvs_DEPS
-        nlopt
-   )

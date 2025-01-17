@@ -8,12 +8,6 @@ INCLUDE("graclus_1.2.cmake")
 ADD_LIBRARY(3rd_graclus STATIC
             ${3rd_graclus_SRC})
 
-TARGET_LINK_LIBRARIES(3rd_graclus
-            ${3rd_graclus_DEPS}
-            ${3rd_graclus_ADDITIONAL_DEPS}
-            ${SOLUTION_STATIC_LIB_DEPS}
-            ${SOLUTION_GENERAL_DEPS})
-
 set(METIS_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/graclus/metisLib)
 target_include_directories(3rd_graclus PRIVATE ${METIS_INCLUDE_DIR})
 

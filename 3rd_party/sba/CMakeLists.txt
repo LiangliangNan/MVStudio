@@ -9,9 +9,9 @@ ADD_LIBRARY(3rd_sba STATIC
             ${3rd_sba_SRC})
 
 TARGET_LINK_LIBRARIES(3rd_sba
-            ${3rd_sba_DEPS}
-            ${3rd_sba_ADDITIONAL_DEPS}
-            ${SOLUTION_STATIC_LIB_DEPS}
-            ${SOLUTION_GENERAL_DEPS})
+        3rd_blas
+        3rd_f2c
+        3rd_clapack
+)
 
 set_target_properties(3rd_sba PROPERTIES FOLDER "3rd_party")

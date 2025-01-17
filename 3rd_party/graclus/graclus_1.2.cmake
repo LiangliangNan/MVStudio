@@ -59,6 +59,3 @@ SET(3rd_graclus_SRC
     "multilevelLib/mlkkm.c"
     "multilevelLib/wkkm.c"
    )
-
-SET(3rd_graclus_DEPS
-   )

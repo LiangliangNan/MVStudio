@@ -70,6 +70,8 @@ int main(int argc, char **argv)
 #endif
     QSurfaceFormat::setDefaultFormat(format);
 
+    Application app(argc, argv);
+
 #ifndef _DEBUG
 	// splash screen
 	QPixmap pixmap(":/Resources/splash.png");
@@ -86,8 +88,6 @@ int main(int argc, char **argv)
 		QApplication::processEvents(); //to let the system breath!
 	}
 #endif
-
-    QApplication app(argc, argv);
 
 	MainWindow window;	
 	window.show();
