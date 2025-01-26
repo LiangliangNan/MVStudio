@@ -66,16 +66,6 @@ add_library(${PROJECT_NAME} SHARED ${qglviewer_SOURCES} ${qglviewer_HEADERS})
 set_target_properties(${PROJECT_NAME} PROPERTIES
                       FOLDER "3rd_party")
 
-
-target_include_directories(${PROJECT_NAME} PRIVATE
-    ${POLYFIT_qglviewer_DIR}/shared
-    ${POLYFIT_qglviewer_DIR}/bfp
-    ${POLYFIT_qglviewer_DIR}/bfp/bfp_LUSOL
-    ${POLYFIT_qglviewer_DIR}/bfp/bfp_LUSOL/LUSOL
-    ${POLYFIT_qglviewer_DIR}/colamd
-    )
-
-
 if (MSVC)
     target_compile_definitions(${PROJECT_NAME} PRIVATE
             _CRT_SECURE_NO_WARNINGS
@@ -83,7 +73,6 @@ if (MSVC)
             CREATE_QGLVIEWER_DLL
         )
 endif()
-
 
 target_link_libraries( ${PROJECT_NAME} Qt5::Core )
 target_link_libraries( ${PROJECT_NAME} Qt5::Gui )
