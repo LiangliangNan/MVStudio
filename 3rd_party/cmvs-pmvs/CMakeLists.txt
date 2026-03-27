@@ -13,7 +13,6 @@ TARGET_LINK_LIBRARIES(3rd_cmvs-pmvs
         3rd_graclus
         3rd_tinycthread
         3rd_jpeg
-        3rd_clapack
 )
 
 
@@ -32,6 +31,7 @@ target_include_directories(3rd_cmvs-pmvs PRIVATE
         ${MINIBOOST_INCLUDE_DIR}
         ${TINYCTHREAD_INCLUDE_DIR}
         ${NLOPT_INCLUDE_DIR}
+        ${MVSTUDIO_THIRD_PARTY}/eigen
         )
 
 set_target_properties(3rd_cmvs-pmvs PROPERTIES FOLDER "3rd_party")

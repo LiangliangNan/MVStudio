@@ -4,7 +4,7 @@
 #include <iostream>
 
 // Use Eigen library or LAPACK
-#define PMVS_USE_LAPACK
+// #define PMVS_USE_LAPACK
 
 
 #if defined(PMVS_USE_LAPACK)
@@ -108,8 +108,8 @@ void Cmylapack::hlls(const std::vector<std::vector<double> >& A,
 void Cmylapack::lls(const std::vector<std::vector<float> >& A,
                     const std::vector<float>& b,
                     std::vector<float>& ans) {
-	integer m = static_cast<integer>(A.size());
-	integer n = static_cast<integer>(A[0].size());
+	std::size_t m = A.size();
+	std::size_t n = A[0].size();
 
 #if defined(PMVS_USE_LAPACK)
   char trans = 'N';
