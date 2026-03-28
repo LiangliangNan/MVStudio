@@ -1,52 +1,11 @@
-/*
- This file is part of the VRender library.
- Copyright (C) 2005 Cyril Soler (Cyril.Soler@imag.fr)
- Version 1.0.0, released on June 27, 2005.
+#include <qglobal.h>
 
- http://artis.imag.fr/Members/Cyril.Soler/VRender
-
- VRender is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- VRender is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with VRender; if not, write to the Free Software Foundation, Inc.,
- 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
-
-/****************************************************************************
-
- Copyright (C) 2002-2014 Gilles Debunne. All rights reserved.
-
- This file is part of the QGLViewer library version 2.6.3.
-
- http://www.libqglviewer.com - contact@libqglviewer.com
-
- This file may be used under the terms of the GNU General Public License 
- versions 2.0 or 3.0 as published by the Free Software Foundation and
- appearing in the LICENSE file included in the packaging of this file.
- In addition, as a special exception, Gilles Debunne gives you certain 
- additional rights, described in the file GPL_EXCEPTION in this package.
-
- libQGLViewer uses dual licensing. Commercial/proprietary software must
- purchase a libQGLViewer Commercial License.
-
- This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-
-*****************************************************************************/
-
-#ifdef WIN32
+#ifdef Q_OS_WIN32
 # include <windows.h>
 #endif
 
-#ifdef __APPLE__
+#ifdef Q_OS_MAC
+# define GL_SILENCE_DEPRECATION
 # include <OpenGL/gl.h>
 #else
 # include <GL/gl.h>
@@ -68,9 +27,9 @@ using namespace std ;
 
 void vrender::VectorialRender(RenderCB render_callback, void *callback_params, VRenderParams& vparams)
 {
-	GLfloat *feedbackBuffer = NULL ;
-	SortMethod *sort_method = NULL ;
-	Exporter *exporter = NULL ;
+	GLfloat *feedbackBuffer = nullptr ;
+	SortMethod *sort_method = nullptr ;
+	Exporter *exporter = nullptr ;
 
 	try
 	{
@@ -84,12 +43,12 @@ void vrender::VectorialRender(RenderCB render_callback, void *callback_params, V
 
 		while(returned < 0)
 		{
-			if(feedbackBuffer != NULL)
+			if(feedbackBuffer != nullptr)
 				delete[] feedbackBuffer ;
 
 			feedbackBuffer = new GLfloat[vparams.size()] ;
 
-			if(feedbackBuffer == NULL)
+			if(feedbackBuffer == nullptr)
 				throw std::runtime_error("Out of memory during feedback buffer allocation.") ;
 
 			glFeedbackBuffer(vparams.size(), GL_3D_COLOR, feedbackBuffer);
@@ -127,10 +86,10 @@ void vrender::VectorialRender(RenderCB render_callback, void *callback_params, V
 		ParserGL parserGL ;
 		parserGL.parseFeedbackBuffer(feedbackBuffer,returned,primitive_tab,vparams) ;
 
-		if(feedbackBuffer != NULL)
+		if(feedbackBuffer != nullptr)
 		{
 			delete[] feedbackBuffer ;
-			feedbackBuffer = NULL ;
+			feedbackBuffer = nullptr ;
 		}
 
 		if(vparams.isEnabled(VRenderParams::OptimizeBackFaceCulling))
@@ -224,16 +183,16 @@ void vrender::VectorialRender(RenderCB render_callback, void *callback_params, V
 		for(unsigned int i=0;i<primitive_tab.size();++i)
 			delete primitive_tab[i] ;
 
-		if(exporter != NULL) delete exporter ;
-		if(sort_method != NULL) delete sort_method ;
+		if(exporter != nullptr) delete exporter ;
+		if(sort_method != nullptr) delete sort_method ;
 	}
 	catch(exception& e)
 	{
 		cout << "Render aborted: " << e.what() << endl ;
 
-		if(exporter != NULL) delete exporter ;
-		if(sort_method != NULL) delete sort_method ;
-		if(feedbackBuffer != NULL) delete[] feedbackBuffer ;
+		if(exporter != nullptr) delete exporter ;
+		if(sort_method != nullptr) delete sort_method ;
+		if(feedbackBuffer != nullptr) delete[] feedbackBuffer ;
 
 		throw e ;
 	}
@@ -244,7 +203,7 @@ VRenderParams::VRenderParams()
 	_options = 0 ;
 	_format = EPS ;
 	_filename = "" ;
-	_progress_function = NULL ;
+	_progress_function = nullptr ;
 	_sortMethod = BSPSort ;
 }
 
