@@ -5,7 +5,7 @@
 #include "ui_VRenderInterface.h"
 #endif
 
-#include "ui_ImageInterface.h"
+#include "ImageInterface.h"
 
 // Output format list
 #include <QImageWriter>
@@ -294,10 +294,10 @@ static int saveVectorialSnapshot(const QString &fileName, QOpenGLWidget *widget,
 }
 #endif // NO_VECTORIAL_RENDER
 
-class ImageInterface : public QDialog, public Ui::ImageInterface {
-public:
-  ImageInterface(QWidget *parent) : QDialog(parent) { setupUi(this); }
-};
+// class ImageInterface : public QDialog, public Ui::ImageInterface {
+// public:
+//   ImageInterface(QWidget *parent) : QDialog(parent) { setupUi(this); }
+// };
 
 // Pops-up an image settings dialog box and save to fileName.
 // Returns false in case of problem.
