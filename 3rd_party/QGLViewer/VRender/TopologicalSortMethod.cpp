@@ -1,47 +1,3 @@
-/*
- This file is part of the VRender library.
- Copyright (C) 2005 Cyril Soler (Cyril.Soler@imag.fr)
- Version 1.0.0, released on June 27, 2005.
-
- http://artis.imag.fr/Members/Cyril.Soler/VRender
-
- VRender is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- VRender is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with VRender; if not, write to the Free Software Foundation, Inc.,
- 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
-*/
-
-/****************************************************************************
-
- Copyright (C) 2002-2014 Gilles Debunne. All rights reserved.
-
- This file is part of the QGLViewer library version 2.6.3.
-
- http://www.libqglviewer.com - contact@libqglviewer.com
-
- This file may be used under the terms of the GNU General Public License 
- versions 2.0 or 3.0 as published by the Free Software Foundation and
- appearing in the LICENSE file included in the packaging of this file.
- In addition, as a special exception, Gilles Debunne gives you certain 
- additional rights, described in the file GPL_EXCEPTION in this package.
-
- libQGLViewer uses dual licensing. Commercial/proprietary software must
- purchase a libQGLViewer Commercial License.
-
- This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
- WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-
-*****************************************************************************/
-
 #include <assert.h>
 #include <climits>
 
@@ -499,12 +455,12 @@ void TopologicalSortUtils::recursTopologicalSort(	vector< vector<size_t> >& prec
 					bool prim_lower_prec_contains_ip1 = false ;
 					bool prim_upper_prec_contains_ip1 = false ;
 
-					Primitive *prim_upper = NULL ;
-					Primitive *prim_lower = NULL ;
+					Primitive *prim_upper = nullptr ;
+					Primitive *prim_lower = nullptr ;
 
 					PrimitivePositioning::splitPrimitive(primitive_tab[ancestors[i3]],normal,c,prim_upper,prim_lower) ;
 
-					if(prim_upper == NULL || prim_lower == NULL)
+					if(prim_upper == nullptr || prim_lower == nullptr)
 						continue ;
 #ifdef DEBUG_TS
 					cout << "Splitted primitive " << ancestors[i3] << endl ;
