@@ -66,14 +66,16 @@ add_library(${PROJECT_NAME} SHARED ${qglviewer_SOURCES} ${qglviewer_HEADERS})
 set_target_properties(${PROJECT_NAME} PROPERTIES
                       FOLDER "3rd_party")
 
-if (MSVC)
+if (WIN32 OR MSVC)
+    # define Windows-specific preprocessor definitions, and get a clean windows
     target_compile_definitions(${PROJECT_NAME} PRIVATE
-            _CRT_SECURE_NO_WARNINGS
-            _CRT_SECURE_NO_DEPRECATE
-            NOMINMAX
             CREATE_QGLVIEWER_DLL
-        )
-endif()
+            NOMINMAX
+            WIN32_LEAN_AND_MEAN
+            VC_EXTRALEAN
+            _CRT_SECURE_NO_WARNINGS
+            _CRT_SECURE_NO_DEPRECATE)
+endif ()
 
 target_link_libraries( ${PROJECT_NAME} Qt5::Core )
 target_link_libraries( ${PROJECT_NAME} Qt5::Gui )
