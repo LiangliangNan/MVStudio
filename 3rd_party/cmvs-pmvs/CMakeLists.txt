@@ -13,7 +13,6 @@ TARGET_LINK_LIBRARIES(3rd_cmvs-pmvs
         3rd_graclus
         3rd_tinycthread
         3rd_jpeg
-        3rd_clapack
 )
 
 

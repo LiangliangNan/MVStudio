@@ -41,10 +41,7 @@ add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_
 target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME}
-        3rd_clapack
-        3rd_blas
         3rd_sba
-        3rd_f2c
         basic
         math
         image

@@ -7,8 +7,6 @@
 #include <string.h>
 
 #include "../../3rd_party/cminpack/minpack.h"
-#include "../../3rd_party/clapack/include/f2c.h"
-#include "../../3rd_party/clapack/include/clapack.h"
 
 
 /* Fill a given matrix with an n x n identity matrix */
@@ -873,334 +871,243 @@ void lmdif_driver2(void *fcn, int m, int n, double *xvec, double tol) {
 
 
 
-/* Solve an n x n system */
-void dgesv_driver(int n, double *A, double *b, double *x) {
-	double *Atmp = malloc(sizeof(double) * n * n);
-	double *btmp = malloc(sizeof(double) * n);
-
-	int nrhs = 1;
-	int lda = n;
-	int ldb = n;
-	int *ipiv = calloc(sizeof(int), n);
-
-	int info;
-
-	int i, j;
-
-	/* Go from row- to column-major */
-	for (i = 0; i < n; i++)
-		for (j = 0; j < n; j++)
-			Atmp[j * n + i] = A[i * n + j];
-
-	for (i = 0; i < n; i++)
-		btmp[i] = b[i];
-
-	/* Make the FORTRAN call */
-	dgesv_(&n, &nrhs, Atmp, &lda, ipiv, btmp, &ldb, &info);
-
-	if (info != 0)
-		printf("Error [%d] in call to dgesv\n", info);
-
-	/* Go from column- to row-major */
-	for (i = 0; i < n; i++)
-		x[i] = btmp[i];
-
-	free(Atmp);
-	free(btmp);
-	free(ipiv);
-}
-
-
-/* Compute singular value decomposition of an m x n matrix A */
-int dgesvd_driver(int m, int n, double *A, double *U, double *S, double *VT) {
-    double *AT, *UT, *V;
-
-    char jobu = 'a';
-    char jobvt = 'a';
-
-    int lda = m;
-    int ldu = m;
-    int ldvt = n;
-
-	int lwork = 10 * max(3 * min(m, n) + max(m, n), 5 * min(m, n));
-    double *work;
-
-    int info;
-
-    /* Transpose A */
-    AT = (double *)malloc(sizeof(double) * m * n);
-    matrix_transpose(m, n, A, AT);
-
-    /* Create temporary matrices for output of dgesvd */
-    UT = (double *)malloc(sizeof(double) * m * m);
-    V = (double *)malloc(sizeof(double) * n * n);
-
-    work = malloc(sizeof(double) * lwork);
-
-    dgesvd_(&jobu, &jobvt, &m, &n, AT, &lda, S, UT, &ldu, V, &ldvt, work, &lwork, &info);
-
-    if (info != 0) {
-	printf("[dgesvd_driver] An error occurred\n");
-    }
-
-    matrix_transpose(m, m, UT, U);
-    matrix_transpose(n, n, V, VT);
-
-    free(AT);
-    free(UT);
-    free(V);
-    free(work);
-
-    if (info == 0)
-        return 1;
-    else
-        return 0;
-}
-
-
-/* Compute singular value decomposition of an m x n matrix A *
-* (only compute S and VT) */
-int dgesvd_driver_vt(int m, int n, double *A, double *S, double *VT) {
-	double *AT, *V;
-
-	char jobu = 'n';
-	char jobvt = 'a';
-
-	int lda = m;
-	int ldu = m;
-	int ldvt = n;
-
-	int lwork = 10 * max(3 * min(m, n) + max(m, n), 5 * min(m, n));
-	double *work;
-
-	int info;
-
-	/* Transpose A */
-	AT = (double *)malloc(sizeof(double) * m * n);
-	matrix_transpose(m, n, A, AT);
-
-	/* Create temporary matrices for output of dgesvd */
-	V = (double *)malloc(sizeof(double) * n * n);
-
-	work = malloc(sizeof(double) * lwork);
-
-	dgesvd_(&jobu, &jobvt, &m, &n, AT, &lda, S, NULL, &ldu, V, &ldvt, work, &lwork, &info);
-
-	if (info != 0) {
-		printf("[dgesvd_driver] An error occurred\n");
-	}
-
-	// matrix_transpose(m, m, UT, U);
-	matrix_transpose(n, n, V, VT);
-
-	free(AT);
-	free(V);
-	free(work);
-
-	if (info == 0)
-		return 1;
-	else
-		return 0;
-}
-
-
-
-/* Compute Cholesky decomposition of an nxn matrix */
-void dpotrf_driver(int n, double *A, double *U) {
-	double *AT;
-	char uplo = 'U';
-	int lda = n;
-	int info;
-
-	/* Transpose A */
-	AT = (double *)malloc(sizeof(double) * n * n);
-	matrix_transpose(n, n, A, AT);
-
-	/* Call lapack routine */
-	dpotrf_(&uplo, &n, AT, &lda, &info);
-
-	/* Transpose AT */
-	matrix_transpose(n, n, AT, U);
-
-	free(AT);
-}
-
-/* Compute a QR factorization of an m by n matrix A */
-void dgeqrf_driver(int m, int n, double *A, double *Q, double *R)
-{
-	double *AT;
-	int lda = m;
-	double *tau;
-	int tau_dim = min(m, n);
-	double *work;
-	int block_size = 64; /* Just a guess... */
-	int lwork = n * block_size;
-	int info;
-	double *H;
-	double *v, *vvT;
-	double *Qtmp;
-
-	int i, j;
-
-	/* Transpose A */
-	AT = (double *)malloc(sizeof(double) * m * n);
-	matrix_transpose(m, n, A, AT);
-
-	/* Call the LAPACK routine */
-	tau = (double *)malloc(sizeof(double) * tau_dim);
-	work = (double *)malloc(sizeof(double) * lwork);
-	dgeqrf_(&m, &n, AT, &lda, tau, work, &lwork, &info);
-
-	if (info < 0) {
-		printf("[dgeqrf_driver] An error occurred.\n");
-
-		free(AT);
-		free(work);
-		free(tau);
-
-		return;
-	}
-
-	/* Extract the R matrix */
-	for (i = 0; i < m; i++) {
-		for (j = 0; j < n; j++) {
-			if (j < i)
-				R[i * n + j] = 0.0;
-			else
-				R[i * n + j] = AT[j * m + i];
-		}
-	}
-
-
-	/* Now extract the Q matrix */
-	H = (double *)malloc(sizeof(double) * m * m);
-	v = (double *)malloc(sizeof(double) * m);
-	vvT = (double *)malloc(sizeof(double) * m * m);
-	Qtmp = (double *)malloc(sizeof(double) * m * m);
-
-	for (i = 0; i < tau_dim; i++) {
-		matrix_ident(m, H);
-
-		for (j = 0; j < m; j++) {
-			if (j < i)
-				v[j] = 0.0;
-			else if (j == i)
-				v[j] = 1.0;
-			else
-				v[j] = AT[i * m + j];
-		}
-
-		matrix_transpose_product2(m, 1, m, 1, v, v, vvT);
-		matrix_scale(m, m, vvT, tau[i], vvT);
-		matrix_diff(m, m, m, m, H, vvT, H);
-
-		if (i == 0) {
-			memcpy(Q, H, sizeof(double) * m * m);
-		}
-		else {
-			matrix_product(m, m, m, m, Q, H, Qtmp);
-			memcpy(Q, Qtmp, sizeof(double) * m * m);
-		}
-	}
-
-	free(H);
-	free(v);
-	free(vvT);
-	free(Qtmp);
-
-	free(tau);
-	free(work);
-	free(AT);
-}
-
-/* Compute an RQ factorization of an m by n matrix A */
-void dgerqf_driver(int m, int n, double *A, double *R, double *Q)
-{
-	double *AT;
-	int lda = m;
-	double *tau;
-	int tau_dim = min(m, n);
-	double *work;
-	int block_size = 64; /* Just a guess... */
-	int lwork = n * block_size;
-	int info;
-	double *H;
-	double *v, *vvT;
-	double *Qtmp;
-
-	int i, j;
-
-	/* Transpose A */
-	AT = (double *)malloc(sizeof(double) * m * n);
-	matrix_transpose(m, n, A, AT);
-
-	/* Call the LAPACK routine */
-	tau = (double *)malloc(sizeof(double) * tau_dim);
-	work = (double *)malloc(sizeof(double) * lwork);
-	dgerqf_(&m, &n, AT, &lda, tau, work, &lwork, &info);
-
-	if (info < 0) {
-		printf("[dgeqrf_driver] An error occurred.\n");
-
-		free(AT);
-		free(work);
-		free(tau);
-
-		return;
-	}
-
-	/* Extract the R matrix */
-	for (i = 0; i < m; i++) {
-		for (j = 0; j < n; j++) {
-			if (j < i)
-				R[i * n + j] = 0.0;
-			else
-				R[i * n + j] = AT[(n - m + j) * m + i];
-		}
-	}
-
-
-	/* Now extract the Q matrix */
-	H = (double *)malloc(sizeof(double) * n * n);
-	v = (double *)malloc(sizeof(double) * n);
-	vvT = (double *)malloc(sizeof(double) * n * n);
-	Qtmp = (double *)malloc(sizeof(double) * n * n);
-
-	for (i = 0; i < tau_dim; i++) {
-		matrix_ident(m, H);
-
-		for (j = 0; j < n; j++) {
-			if (j > n - tau_dim + i)
-				v[j] = 0.0;
-			else if (j == n - tau_dim + i)
-				v[j] = 1.0;
-			else
-				v[j] = AT[j * m + (m - tau_dim + i)];
-		}
-
-		matrix_transpose_product2(n, 1, n, 1, v, v, vvT);
-		matrix_scale(n, n, vvT, tau[i], vvT);
-		matrix_diff(n, n, n, n, H, vvT, H);
-
-		if (i == 0) {
-			memcpy(Q, H, sizeof(double) * n * n);
-		}
-		else {
-			matrix_product(n, n, n, n, Q, H, Qtmp);
-			memcpy(Q, Qtmp, sizeof(double) * n * n);
-		}
-	}
-
-	matrix_product(m, n, n, n, R, Q, H);
-
-	free(H);
-	free(v);
-	free(vvT);
-	free(Qtmp);
-
-	free(tau);
-	free(work);
-	free(AT);
-}
-
+// /* Solve an n x n system */
+// void dgesv_driver(int n, double *A, double *b, double *x) {
+// 	double *Atmp = malloc(sizeof(double) * n * n);
+// 	double *btmp = malloc(sizeof(double) * n);
+//
+// 	int nrhs = 1;
+// 	int lda = n;
+// 	int ldb = n;
+// 	int *ipiv = calloc(sizeof(int), n);
+//
+// 	int info;
+//
+// 	int i, j;
+//
+// 	/* Go from row- to column-major */
+// 	for (i = 0; i < n; i++)
+// 		for (j = 0; j < n; j++)
+// 			Atmp[j * n + i] = A[i * n + j];
+//
+// 	for (i = 0; i < n; i++)
+// 		btmp[i] = b[i];
+//
+// 	/* Make the FORTRAN call */
+// 	dgesv_(&n, &nrhs, Atmp, &lda, ipiv, btmp, &ldb, &info);
+//
+// 	if (info != 0)
+// 		printf("Error [%d] in call to dgesv\n", info);
+//
+// 	/* Go from column- to row-major */
+// 	for (i = 0; i < n; i++)
+// 		x[i] = btmp[i];
+//
+// 	free(Atmp);
+// 	free(btmp);
+// 	free(ipiv);
+// }
+
+
+// /* Compute singular value decomposition of an m x n matrix A */
+// int dgesvd_driver(int m, int n, double *A, double *U, double *S, double *VT) {
+//     double *AT, *UT, *V;
+//
+//     char jobu = 'a';
+//     char jobvt = 'a';
+//
+//     int lda = m;
+//     int ldu = m;
+//     int ldvt = n;
+//
+// 	int lwork = 10 * max(3 * min(m, n) + max(m, n), 5 * min(m, n));
+//     double *work;
+//
+//     int info;
+//
+//     /* Transpose A */
+//     AT = (double *)malloc(sizeof(double) * m * n);
+//     matrix_transpose(m, n, A, AT);
+//
+//     /* Create temporary matrices for output of dgesvd */
+//     UT = (double *)malloc(sizeof(double) * m * m);
+//     V = (double *)malloc(sizeof(double) * n * n);
+//
+//     work = malloc(sizeof(double) * lwork);
+//
+//     dgesvd_(&jobu, &jobvt, &m, &n, AT, &lda, S, UT, &ldu, V, &ldvt, work, &lwork, &info);
+//
+//     if (info != 0) {
+// 	printf("[dgesvd_driver] An error occurred\n");
+//     }
+//
+//     matrix_transpose(m, m, UT, U);
+//     matrix_transpose(n, n, V, VT);
+//
+//     free(AT);
+//     free(UT);
+//     free(V);
+//     free(work);
+//
+//     if (info == 0)
+//         return 1;
+//     else
+//         return 0;
+// }
+
+//
+// /* Compute singular value decomposition of an m x n matrix A *
+// * (only compute S and VT) */
+// int dgesvd_driver_vt(int m, int n, double *A, double *S, double *VT) {
+// 	double *AT, *V;
+//
+// 	char jobu = 'n';
+// 	char jobvt = 'a';
+//
+// 	int lda = m;
+// 	int ldu = m;
+// 	int ldvt = n;
+//
+// 	int lwork = 10 * max(3 * min(m, n) + max(m, n), 5 * min(m, n));
+// 	double *work;
+//
+// 	int info;
+//
+// 	/* Transpose A */
+// 	AT = (double *)malloc(sizeof(double) * m * n);
+// 	matrix_transpose(m, n, A, AT);
+//
+// 	/* Create temporary matrices for output of dgesvd */
+// 	V = (double *)malloc(sizeof(double) * n * n);
+//
+// 	work = malloc(sizeof(double) * lwork);
+//
+// 	dgesvd_(&jobu, &jobvt, &m, &n, AT, &lda, S, NULL, &ldu, V, &ldvt, work, &lwork, &info);
+//
+// 	if (info != 0) {
+// 		printf("[dgesvd_driver] An error occurred\n");
+// 	}
+//
+// 	// matrix_transpose(m, m, UT, U);
+// 	matrix_transpose(n, n, V, VT);
+//
+// 	free(AT);
+// 	free(V);
+// 	free(work);
+//
+// 	if (info == 0)
+// 		return 1;
+// 	else
+// 		return 0;
+// }
+
+
+//
+// /* Compute Cholesky decomposition of an nxn matrix */
+// void dpotrf_driver(int n, double *A, double *U) {
+// 	double *AT;
+// 	char uplo = 'U';
+// 	int lda = n;
+// 	int info;
+//
+// 	/* Transpose A */
+// 	AT = (double *)malloc(sizeof(double) * n * n);
+// 	matrix_transpose(n, n, A, AT);
+//
+// 	/* Call lapack routine */
+// 	dpotrf_(&uplo, &n, AT, &lda, &info);
+//
+// 	/* Transpose AT */
+// 	matrix_transpose(n, n, AT, U);
+//
+// 	free(AT);
+// }
+
+// /* Compute a QR factorization of an m by n matrix A */
+// void dgeqrf_driver(int m, int n, double *A, double *Q, double *R)
+// {
+// 	double *AT;
+// 	int lda = m;
+// 	double *tau;
+// 	int tau_dim = min(m, n);
+// 	double *work;
+// 	int block_size = 64; /* Just a guess... */
+// 	int lwork = n * block_size;
+// 	int info;
+// 	double *H;
+// 	double *v, *vvT;
+// 	double *Qtmp;
+//
+// 	int i, j;
+//
+// 	/* Transpose A */
+// 	AT = (double *)malloc(sizeof(double) * m * n);
+// 	matrix_transpose(m, n, A, AT);
+//
+// 	/* Call the LAPACK routine */
+// 	tau = (double *)malloc(sizeof(double) * tau_dim);
+// 	work = (double *)malloc(sizeof(double) * lwork);
+// 	dgeqrf_(&m, &n, AT, &lda, tau, work, &lwork, &info);
+//
+// 	if (info < 0) {
+// 		printf("[dgeqrf_driver] An error occurred.\n");
+//
+// 		free(AT);
+// 		free(work);
+// 		free(tau);
+//
+// 		return;
+// 	}
+//
+// 	/* Extract the R matrix */
+// 	for (i = 0; i < m; i++) {
+// 		for (j = 0; j < n; j++) {
+// 			if (j < i)
+// 				R[i * n + j] = 0.0;
+// 			else
+// 				R[i * n + j] = AT[j * m + i];
+// 		}
+// 	}
+//
+//
+// 	/* Now extract the Q matrix */
+// 	H = (double *)malloc(sizeof(double) * m * m);
+// 	v = (double *)malloc(sizeof(double) * m);
+// 	vvT = (double *)malloc(sizeof(double) * m * m);
+// 	Qtmp = (double *)malloc(sizeof(double) * m * m);
+//
+// 	for (i = 0; i < tau_dim; i++) {
+// 		matrix_ident(m, H);
+//
+// 		for (j = 0; j < m; j++) {
+// 			if (j < i)
+// 				v[j] = 0.0;
+// 			else if (j == i)
+// 				v[j] = 1.0;
+// 			else
+// 				v[j] = AT[i * m + j];
+// 		}
+//
+// 		matrix_transpose_product2(m, 1, m, 1, v, v, vvT);
+// 		matrix_scale(m, m, vvT, tau[i], vvT);
+// 		matrix_diff(m, m, m, m, H, vvT, H);
+//
+// 		if (i == 0) {
+// 			memcpy(Q, H, sizeof(double) * m * m);
+// 		}
+// 		else {
+// 			matrix_product(m, m, m, m, Q, H, Qtmp);
+// 			memcpy(Q, Qtmp, sizeof(double) * m * m);
+// 		}
+// 	}
+//
+// 	free(H);
+// 	free(v);
+// 	free(vvT);
+// 	free(Qtmp);
+//
+// 	free(tau);
+// 	free(work);
+// 	free(AT);
+// }
 

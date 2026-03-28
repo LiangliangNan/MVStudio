@@ -103,4 +103,129 @@ extern "C" {
     }
 
 
+    void dgerqf_driver(int m, int n, double *A, double *R, double *Q)
+    {
+        using namespace Eigen;
+
+        assert(A != nullptr);
+        assert(R != nullptr);
+        assert(Q != nullptr);
+
+        // Map 输入（row-major）
+        Map<Matrix<double, Dynamic, Dynamic, RowMajor>> matA(A, m, n);
+
+        // =========================
+        // Step 1: A^T 做 QR
+        // =========================
+        MatrixXd AT = matA.transpose();   // n x m
+
+        HouseholderQR<MatrixXd> qr(AT);
+
+        // Q_t (n x n)
+        MatrixXd Qt = qr.householderQ();
+
+        // R_t (n x m) —— 只取上三角
+        MatrixXd Rt = qr.matrixQR().topRows(n)
+                            .template triangularView<Upper>();
+
+        // =========================
+        // Step 2: 构造 R = Rt^T
+        // =========================
+        MatrixXd Rmat = Rt.transpose();   // m x n
+
+        // 强制成“右上三角”（完全对齐你原代码）
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (j < i)
+                    R[i * n + j] = 0.0;
+                else
+                    R[i * n + j] = Rmat(i, j);
+            }
+        }
+
+        // =========================
+        // Step 3: 构造 Q = Qt^T
+        // =========================
+        MatrixXd Qmat = Qt.transpose();   // n x n
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                Q[i * n + j] = Qmat(i, j);
+            }
+        }
+
+        // =========================
+        // （可选）数值验证（建议你调试时打开）
+        // =========================
+        /*
+        MatrixXd Rm = Map<Matrix<double, Dynamic, Dynamic, RowMajor>>(R, m, n);
+        MatrixXd Qm = Map<Matrix<double, Dynamic, Dynamic, RowMajor>>(Q, n, n);
+        double err = (Rm * Qm - matA).norm();
+        printf("RQ error = %e\n", err);
+        */
+    }
+
+
+    int dgesvd_driver(int m, int n, double *A, double *U, double *S, double *VT)
+    {
+        using namespace Eigen;
+
+        Map<Matrix<double, Dynamic, Dynamic, RowMajor>> matA(A, m, n);
+
+        JacobiSVD<MatrixXd> svd(matA, ComputeFullU | ComputeFullV);
+
+        VectorXd sing_vals = svd.singularValues();
+        MatrixXd Ue = svd.matrixU();  // m x m
+        MatrixXd Ve = svd.matrixV();  // n x n
+
+        int k = std::min(m, n);
+        for (int i = 0; i < k; i++) {
+            S[i] = sing_vals(i);
+        }
+
+        // ✅ 保持原接口语义（最安全版本）
+        // U = Ue
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < m; j++) {
+                U[i * m + j] = Ue(i, j);
+            }
+        }
+
+        // VT = V^T
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                VT[i * n + j] = Ve(j, i);
+            }
+        }
+
+        return 1;
+    }
+
+    void dgesv_driver(int n, double *A, double *b, double *x) {
+        assert(A && b && x);
+
+        // 将 row-major C 数组转换为 Eigen 矩阵
+        Eigen::MatrixXd matA(n, n);
+        Eigen::VectorXd vecb(n);
+
+        for (int i = 0; i < n; i++) {
+            vecb(i) = b[i];
+            for (int j = 0; j < n; j++) {
+                matA(i, j) = A[i * n + j];
+            }
+        }
+
+        // 求解线性系统 A x = b
+        Eigen::FullPivLU<Eigen::MatrixXd> lu(matA);
+        if (!lu.isInvertible()) {
+            printf("[dgesv_driver] Warning: matrix is singular or nearly singular\n");
+        }
+
+        Eigen::VectorXd vecx = lu.solve(vecb);
+
+        // 结果写回 C 数组
+        for (int i = 0; i < n; i++) {
+            x[i] = vecx(i);
+        }
+    }
 }
