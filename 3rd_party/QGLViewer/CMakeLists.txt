@@ -70,6 +70,7 @@ if (MSVC)
     target_compile_definitions(${PROJECT_NAME} PRIVATE
             _CRT_SECURE_NO_WARNINGS
             _CRT_SECURE_NO_DEPRECATE
+            NOMINMAX
             CREATE_QGLVIEWER_DLL
         )
 endif()

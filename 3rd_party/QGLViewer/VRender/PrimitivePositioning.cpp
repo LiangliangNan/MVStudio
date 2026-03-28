@@ -5,16 +5,7 @@
 #include <algorithm>
 #include "Vector2.h"
 
-
-#ifdef max
-#undef max
-#endif
-
-#ifdef min
-#undef min
-#endif
-
-
+#include <algorithm>
 
 using namespace vrender ;
 using namespace std ;
