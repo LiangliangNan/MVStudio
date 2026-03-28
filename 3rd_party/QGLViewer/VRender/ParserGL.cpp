@@ -1,3 +1,47 @@
+/*
+ This file is part of the VRender library.
+ Copyright (C) 2005 Cyril Soler (Cyril.Soler@imag.fr)
+ Version 1.0.0, released on June 27, 2005.
+
+ http://artis.imag.fr/Members/Cyril.Soler/VRender
+
+ VRender is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ VRender is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with VRender; if not, write to the Free Software Foundation, Inc.,
+ 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
+
+/****************************************************************************
+
+ Copyright (C) 2002-2014 Gilles Debunne. All rights reserved.
+
+ This file is part of the QGLViewer library version 2.6.3.
+
+ http://www.libqglviewer.com - contact@libqglviewer.com
+
+ This file may be used under the terms of the GNU General Public License 
+ versions 2.0 or 3.0 as published by the Free Software Foundation and
+ appearing in the LICENSE file included in the packaging of this file.
+ In addition, as a special exception, Gilles Debunne gives you certain 
+ additional rights, described in the file GPL_EXCEPTION in this package.
+
+ libQGLViewer uses dual licensing. Commercial/proprietary software must
+ purchase a libQGLViewer Commercial License.
+
+ This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+*****************************************************************************/
+
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
@@ -93,7 +137,7 @@ void ParserGL::parseFeedbackBuffer(	GLfloat *buffer,int size,
 
 					primitive_tab.push_back(ParserUtils::checkSegment(S)) ;
 
-					if(S == nullptr)
+					if(S == NULL)
 						nb_degenerated_lines++ ;
 
 					nb_lines++ ;
@@ -115,7 +159,7 @@ void ParserGL::parseFeedbackBuffer(	GLfloat *buffer,int size,
 
 					primitive_tab.push_back(ParserUtils::checkPolygon(P)) ;
 
-					if(P == nullptr)
+					if(P == NULL)
 						nb_degenerated_polys++ ;
 
 					nb_polys++ ;
@@ -128,7 +172,7 @@ void ParserGL::parseFeedbackBuffer(	GLfloat *buffer,int size,
 
 					primitive_tab.push_back(Pt);//ParserUtils::checkPoint(Pt)) ;
 
-					if(Pt == nullptr)
+					if(Pt == NULL)
 						nb_degenerated_points++ ;
 
 					nb_points++ ;
@@ -156,7 +200,7 @@ PtrPrimitive ParserUtils::checkSegment(Segment *& P)
 	{
 		Point *pp = new Point(P->sommet3DColor(0)) ;
 		delete P ;
-		P = nullptr ;
+		P = NULL ;
 
 		return checkPoint(pp) ;
 	}
@@ -170,7 +214,7 @@ PtrPrimitive ParserUtils::checkPolygon(Polygone *& P)
 	{
 		cout << "unexpected case: Polygon with " << P->nbVertices() << " vertices !" << endl ;
 		delete P ;
-		return nullptr ;
+		return NULL ;
 	}
 
 	if(P->FlatFactor() < FLAT_POLYGON_EPS)
@@ -184,14 +228,14 @@ PtrPrimitive ParserUtils::checkPolygon(Polygone *& P)
 			{
 				Segment *pp = new Segment(P->sommet3DColor((i+1)%n),P->sommet3DColor((i+2)%n)) ;
 				delete P ;
-				P = nullptr ;
+				P = NULL ;
 
 				return checkSegment(pp) ;
 			}
 
 		Point *pp = new Point(P->sommet3DColor(0)) ;
 		delete P ;
-		P = nullptr ;
+		P = NULL ;
 
 		return checkPoint(pp) ;
 	}

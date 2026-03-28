@@ -1,3 +1,47 @@
+/*
+ This file is part of the VRender library.
+ Copyright (C) 2005 Cyril Soler (Cyril.Soler@imag.fr)
+ Version 1.0.0, released on June 27, 2005.
+
+ http://artis.imag.fr/Members/Cyril.Soler/VRender
+
+ VRender is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ VRender is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with VRender; if not, write to the Free Software Foundation, Inc.,
+ 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+*/
+
+/****************************************************************************
+
+ Copyright (C) 2002-2014 Gilles Debunne. All rights reserved.
+
+ This file is part of the QGLViewer library version 2.6.3.
+
+ http://www.libqglviewer.com - contact@libqglviewer.com
+
+ This file may be used under the terms of the GNU General Public License 
+ versions 2.0 or 3.0 as published by the Free Software Foundation and
+ appearing in the LICENSE file included in the packaging of this file.
+ In addition, as a special exception, Gilles Debunne gives you certain 
+ additional rights, described in the file GPL_EXCEPTION in this package.
+
+ libQGLViewer uses dual licensing. Commercial/proprietary software must
+ purchase a libQGLViewer Commercial License.
+
+ This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+*****************************************************************************/
+
 #include <vector>
 #include "VRender.h"
 #include "Optimizer.h"
@@ -53,12 +97,12 @@ void VisibilityOptimizer::optimize(vector<PtrPrimitive>& primitives,VRenderParam
 
         gpc_polygon cumulated_union ;
         cumulated_union.num_contours = 0 ;
-        cumulated_union.hole = nullptr ;
-        cumulated_union.contour = nullptr ;
+        cumulated_union.hole = NULL ;
+        cumulated_union.contour = NULL ;
         size_t nboptimised = 0 ;
 
         for(size_t pindex = primitives.size() - 1; long(pindex) >= 0;--pindex,++nboptimised)
-                if(primitives[pindex] != nullptr)
+                if(primitives[pindex] != NULL)
                 {
 #ifdef A_FAIRE
                         percentage_finished = pindex / (float)primitives.size() ;
@@ -87,11 +131,11 @@ void VisibilityOptimizer::optimize(vector<PtrPrimitive>& primitives,VRenderParam
                                         gpc_polygon new_poly ;
                                         gpc_polygon new_poly_reduced ;
                                         new_poly.num_contours = 0 ;
-                                        new_poly.hole = nullptr ;
-                                        new_poly.contour = nullptr ;
+                                        new_poly.hole = NULL ;
+                                        new_poly.contour = NULL ;
                                         new_poly_reduced.num_contours = 0 ;
-                                        new_poly_reduced.hole = nullptr ;
-                                        new_poly_reduced.contour = nullptr ;
+                                        new_poly_reduced.hole = NULL ;
+                                        new_poly_reduced.contour = NULL ;
 
                                         // 1 - creates a gpc_polygon corresponding to the current primitive
 
@@ -171,7 +215,7 @@ void VisibilityOptimizer::optimize(vector<PtrPrimitive>& primitives,VRenderParam
                                         {
                                                 ++nb_culled ;
                                                 delete p ;
-                                                primitives[pindex] = nullptr ;
+                                                primitives[pindex] = NULL ;
                                                 continue ;
                                         }
 
@@ -182,8 +226,8 @@ void VisibilityOptimizer::optimize(vector<PtrPrimitive>& primitives,VRenderParam
                                         {
                                                 gpc_polygon cumulated_union_tmp ;
                                                 cumulated_union_tmp.num_contours = 0 ;
-                                                cumulated_union_tmp.hole = nullptr ;
-                                                cumulated_union_tmp.contour = nullptr ;
+                                                cumulated_union_tmp.hole = NULL ;
+                                                cumulated_union_tmp.contour = NULL ;
 
                                                 gpc_polygon_clip(GPC_UNION,&new_poly,&cumulated_union,&cumulated_union_tmp) ;
 

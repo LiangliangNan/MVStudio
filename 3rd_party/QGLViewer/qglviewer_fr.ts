@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>%1Hz</source>
-        <comment>Frames per seconds, in Hertz</comment>
+        <comment>Frames per sec, in Hertz</comment>
         <translation>%1Hz</translation>
     </message>
     <message>
