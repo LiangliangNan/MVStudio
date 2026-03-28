@@ -3602,16 +3602,16 @@ void QGLViewer::drawAxis(qreal length) {
   glDisable(GL_COLOR_MATERIAL);
 
   float color[4];
-  color[0] = 0.7f;
-  color[1] = 0.7f;
+  color[0] = 0.0f;
+  color[1] = 0.0f;
   color[2] = 1.0f;
   color[3] = 1.0f;
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
   QGLViewer::drawArrow(length, 0.01 * length);
 
   color[0] = 1.0f;
-  color[1] = 0.7f;
-  color[2] = 0.7f;
+  color[1] = 0.0f;
+  color[2] = 0.0f;
   color[3] = 1.0f;
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
   glPushMatrix();
@@ -3619,9 +3619,9 @@ void QGLViewer::drawAxis(qreal length) {
   QGLViewer::drawArrow(length, 0.01 * length);
   glPopMatrix();
 
-  color[0] = 0.7f;
+  color[0] = 0.0f;
   color[1] = 1.0f;
-  color[2] = 0.7f;
+  color[2] = 0.0f;
   color[3] = 1.0f;
   glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, color);
   glPushMatrix();
