@@ -62,12 +62,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "MVStudio")
 # deprecated API in order to know how to port your code away from it.
 target_compile_definitions(${PROJECT_NAME} PRIVATE QT_DEPRECATED_WARNINGS)
 
-
 target_link_libraries(${PROJECT_NAME} ${QtLibs})
 
-target_link_libraries(${PROJECT_NAME} basic math pointset algo 3rd_QGLViewer 3rd_sift_gpu)
-
-set(GLEW_INCLUDE_DIR ${MVSTUDIO_THIRD_PARTY}/glew/include)
-target_include_directories(${PROJECT_NAME} PRIVATE ${GLEW_INCLUDE_DIR})
-target_link_libraries(${PROJECT_NAME} 3rd_glew)
-target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)
+target_link_libraries(${PROJECT_NAME} pointset algo 3rd_QGLViewer)

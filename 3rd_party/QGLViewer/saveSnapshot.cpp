@@ -113,7 +113,7 @@ void QGLViewer::initializeSnapshotFormats()
 	// Check that the interesting formats are available and add them in "formats"
 	// Unused formats: XPM XBM PBM PGM
 	QStringList QtText, MenuText, Ext;
-	QtText += "PNG";	MenuText += "PNG (*.png)";      Ext += "png";
+	// QtText += "PNG";	MenuText += "PNG (*.png)";      Ext += "png";
 	QStringList::iterator itText = QtText.begin();
 	QStringList::iterator itMenu = MenuText.begin();
 	QStringList::iterator itExt  = Ext.begin();

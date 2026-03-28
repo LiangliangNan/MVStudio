@@ -24,6 +24,7 @@ set(${PROJECT_NAME}_SOURCES
         factor.cpp
         math_types.cpp
         matrix_driver.c
+        matrix_driver.cpp
         quaternion.cpp
         svd.cpp
         vectord.cpp
@@ -32,6 +33,6 @@ set(${PROJECT_NAME}_SOURCES
 
 add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SOURCES} ${${PROJECT_NAME}_HEADERS} )
 
-target_link_libraries(${PROJECT_NAME} basic 3rd_cminpack 3rd_f2c 3rd_blas 3rd_clapack)
-
+target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_THIRD_PARTY}/eigen)
+target_link_libraries(${PROJECT_NAME} basic 3rd_cminpack)
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "libs")

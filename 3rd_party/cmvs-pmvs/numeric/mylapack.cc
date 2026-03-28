@@ -1,20 +1,7 @@
 
 #include "mylapack.h"
-#include <cstdlib>
 #include <iostream>
-
-// Use Eigen library or LAPACK
-// #define PMVS_USE_LAPACK
-
-
-#if defined(PMVS_USE_LAPACK)
-extern "C" {
-#include "../clapack/include/f2c.h"
-#include "../clapack/include/clapack.h"
-};
-#else
 #include <Eigen/Dense>
-#endif
 
 using namespace std;
 
@@ -108,37 +95,9 @@ void Cmylapack::hlls(const std::vector<std::vector<double> >& A,
 void Cmylapack::lls(const std::vector<std::vector<float> >& A,
                     const std::vector<float>& b,
                     std::vector<float>& ans) {
-	std::size_t m = A.size();
-	std::size_t n = A[0].size();
+  int m = static_cast<int>(A.size());
+	int n = static_cast<int>(A[0].size());
 
-#if defined(PMVS_USE_LAPACK)
-  char trans = 'N';
-  integer nrhs = 1;
-  vector<float> a;
-  a.resize(m * n);
-
-  int count = 0;
-  for (int x = 0; x < n; ++x)
-    for (int y = 0; y < m; ++y)
-      a[count++] = A[y][x];
-  integer lda = m;
-  vector<float> b2;
-  b2.resize(m);
-  for (int i = 0; i < m; ++i)
-    b2[i] = b[i];
-  
-  integer ldb = m;
-  integer lwork = n + m;
-  vector<float> work;
-  work.resize(lwork);
-  integer info;
-  sgels_(&trans, &m, &n, &nrhs, &a[0], &lda, &b2[0], &ldb, &work[0],
-         &lwork, &info);
-
-  ans.resize(n);
-  for (int i = 0; i < n; ++i)
-    ans[i] = b2[i];
-#else
   // Eigen implementation
   Eigen::MatrixXd matA(m, n);
   Eigen::VectorXd vecb(m);
@@ -151,7 +110,6 @@ void Cmylapack::lls(const std::vector<std::vector<float> >& A,
 
   for (int i = 0; i < n; ++i)
     ans[i] = static_cast<float>(vecx(i));
-#endif
 }
 /*
 void Cmylapack::lls(const std::vector<std::vector<double> >& A,

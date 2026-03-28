@@ -3,16 +3,12 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <float.h>
 #include <math.h>
 #include <string.h>
 
 #include "../../3rd_party/cminpack/minpack.h"
 #include "../../3rd_party/clapack/include/f2c.h"
 #include "../../3rd_party/clapack/include/clapack.h"
-
-
-#define NO_CBLAS
 
 
 /* Fill a given matrix with an n x n identity matrix */
@@ -100,20 +96,13 @@ void matrix_product(int Am, int An, int Bm, int Bn,
 	int r = Am;
 	int c = Bn;
 	int m = An;
-
-#if defined(WIN32) || defined(NO_CBLAS)
 	int i, j, k;
-#endif
-
 	if (An != Bm) {
 		printf("[matrix_product] Error: the number of columns of A and the "
 			"number of rows of B must be equal\n");
 		return;
 	}
 
-#if !defined(WIN32) && !defined(NO_CBLAS)
-	cblas_dgemm_driver(r, m, c, (double *)A, (double *)B, R);
-#else
 	for (i = 0; i < r; i++) {
 		for (j = 0; j < c; j++) {
 			R[i * c + j] = 0.0;
@@ -122,7 +111,6 @@ void matrix_product(int Am, int An, int Bm, int Bn,
 			}
 		}
 	}
-#endif
 }
 
 
@@ -131,20 +119,13 @@ void matrix_transpose_product(int Am, int An, int Bm, int Bn, double *A, double 
 	int r = An;
 	int c = Bn;
 	int m = Am;
-
-#if defined(WIN32) || defined(NO_CBLAS)
 	int i, j, k;
-#endif
-
 	if (Am != Bm) {
 		printf("Error: the number of rows of A and the "
 			"number of rows of B must be equal\n");
 		return;
 	}
 
-#if !defined(WIN32) && !defined(NO_CBLAS)
-	cblas_dgemm_driver_transpose(r, m, c, A, B, R);
-#else
 	for (i = 0; i < r; i++) {
 		for (j = 0; j < c; j++) {
 			R[i * c + j] = 0.0;
@@ -153,7 +134,6 @@ void matrix_transpose_product(int Am, int An, int Bm, int Bn, double *A, double 
 			}
 		}
 	}
-#endif
 }
 
 /* Compute the matrix product R = A B^T */
@@ -161,20 +141,13 @@ void matrix_transpose_product2(int Am, int An, int Bm, int Bn, double *A, double
 	int r = Am;
 	int c = Bm;
 	int m = An;
-
-#if defined(WIN32) || defined(NO_CBLAS)
 	int i, j, k;
-#endif
-
 	if (An != Bn) {
 		printf("Error: the number of columns of A and the "
 			"number of columns of B must be equal\n");
 		return;
 	}
 
-#if !defined(WIN32) && !defined(NO_CBLAS)
-	cblas_dgemm_driver_transpose2(r, m, c, A, B, R);
-#else
 	for (i = 0; i < r; i++) {
 		for (j = 0; j < c; j++) {
 			R[i * c + j] = 0.0;
@@ -183,7 +156,6 @@ void matrix_transpose_product2(int Am, int An, int Bm, int Bn, double *A, double
 			}
 		}
 	}
-#endif
 }
 
 
@@ -315,16 +287,6 @@ void matrix_diff(int Am, int An, int Bm, int Bn, double *A, double *B, double *R
 /* Compute the determinant of a 3x3 matrix */
 double matrix_determinant3(double *A)
 {
-#if 0
-	double *Q = (double *)malloc(sizeof(double) * n * n);
-	double *R = (double *)malloc(sizeof(double) * n * n);
-	dgeqrf_driver(n, n, A, Q, R);
-#endif
-
-	/* 0 1 2
-	* 3 4 5
-	* 6 7 8 */
-
 	return
 		A[0] * (A[4] * A[8] - A[5] * A[7]) -
 		A[1] * (A[3] * A[8] - A[5] * A[6]) +
@@ -395,167 +357,129 @@ void matrix_write_file(int m, int n, double *matrix, char *fname) {
 
 
 /* Compute (transpose of) LU decomposition of A */
-void matrix_lu(int n, double *A, double *LU, int *ipiv)
-{
-	double *At = malloc(sizeof(double) * n * n);
-	int m = n;
-	int lda = n;
-	int info;
-	int i, j;
-
-	/* Transpose A info At like FORTRAN likes */
-	for (i = 0; i < n; i++)
-		for (j = 0; j < n; j++)
-			At[i * n + j] = A[j * n + i];
-
-	/* Make calls to FORTRAN routines */
-	dgetrf_(&m, &n, At, &lda, ipiv, &info);
-	memcpy(LU, At, sizeof(double) * n * n);
-
-	if (info != 0)
-		printf("[matrix_lu] dgetrf_ exited with error code %d\n", info);
-
-	free(At);
-}
+// void matrix_lu(int n, double *A, double *LU, int *ipiv)
+// {
+// 	double *At = malloc(sizeof(double) * n * n);
+// 	int m = n;
+// 	int lda = n;
+// 	int info;
+// 	int i, j;
+//
+// 	/* Transpose A info At like FORTRAN likes */
+// 	for (i = 0; i < n; i++)
+// 		for (j = 0; j < n; j++)
+// 			At[i * n + j] = A[j * n + i];
+//
+// 	/* Make calls to FORTRAN routines */
+// 	dgetrf_(&m, &n, At, &lda, ipiv, &info);
+// 	memcpy(LU, At, sizeof(double) * n * n);
+//
+// 	if (info != 0)
+// 		printf("[matrix_lu] dgetrf_ exited with error code %d\n", info);
+//
+// 	free(At);
+// }
 
 /* Compute (transpose of) LU decomposition of A */
-void matrix_lu_no_transpose(int n, double *A, double *LU, int *ipiv)
-{
-	double *Atmp = malloc(sizeof(double) * n * n);
-	int m = n;
-	int lda = n;
-	int info;
-
-	/* Transpose A info At like FORTRAN likes */
-	memcpy(Atmp, A, sizeof(double) * n * n);
-
-	/* Make calls to FORTRAN routines */
-	dgetrf_(&m, &n, Atmp, &lda, ipiv, &info);
-	memcpy(LU, Atmp, sizeof(double) * n * n);
-
-	if (info != 0)
-		printf("[matrix_lu_no_transpose] "
-		"dgetrf_ exited with error code %d\n", info);
-
-	free(Atmp);
-}
+// void matrix_lu_no_transpose(int n, double *A, double *LU, int *ipiv)
+// {
+// 	double *Atmp = malloc(sizeof(double) * n * n);
+// 	int m = n;
+// 	int lda = n;
+// 	int info;
+//
+// 	/* Transpose A info At like FORTRAN likes */
+// 	memcpy(Atmp, A, sizeof(double) * n * n);
+//
+// 	/* Make calls to FORTRAN routines */
+// 	dgetrf_(&m, &n, Atmp, &lda, ipiv, &info);
+// 	memcpy(LU, Atmp, sizeof(double) * n * n);
+//
+// 	if (info != 0)
+// 		printf("[matrix_lu_no_transpose] "
+// 		"dgetrf_ exited with error code %d\n", info);
+//
+// 	free(Atmp);
+// }
 
 /* Solve a system of equations using a precomputed LU decomposition */
-void matrix_solve_lu(int n, double *LU, int *ipiv, double *b, double *x)
-{
-	double *btmp = malloc(sizeof(double) * n);
-	char trans = 'N';
-	int nrhs = 1;
-	int lda = n, ldb = n;
-	int i;
-	int info;
+// void matrix_solve_lu(int n, double *LU, int *ipiv, double *b, double *x)
+// {
+// 	double *btmp = malloc(sizeof(double) * n);
+// 	char trans = 'N';
+// 	int nrhs = 1;
+// 	int lda = n, ldb = n;
+// 	int i;
+// 	int info;
+//
+// 	for (i = 0; i < n; i++)
+// 		btmp[i] = b[i];
+//
+// 	dgetrs_(&trans, &n, &nrhs, LU, &lda, ipiv, btmp, &ldb, &info);
+//
+// 	if (info != 0) {
+// 		printf("[matrix_solve_lu] dgetrs_ exited with error %d\n", info);
+// 	}
+//
+// 	memcpy(x, btmp, sizeof(double) * n);
+//
+// 	free(btmp);
+// }
 
-	for (i = 0; i < n; i++)
-		btmp[i] = b[i];
 
-	dgetrs_(&trans, &n, &nrhs, LU, &lda, ipiv, btmp, &ldb, &info);
-
-	if (info != 0) {
-		printf("[matrix_solve_lu] dgetrs_ exited with error %d\n", info);
-	}
-
-	memcpy(x, btmp, sizeof(double) * n);
-
-	free(btmp);
-}
-
-
-void matrix_invert(int n, double *A, double *Ainv) {
-	double *At = malloc(sizeof(double) * n * n);
-	int m = n;
-	int lda = n;
-	int info;
-	int *ipiv = malloc(sizeof(int) * n);
-	int lwork = n * 512;
-	int i, j;
-	double *work = malloc(sizeof(double) * lwork);
-
-	assert(At != NULL);
-	assert(ipiv != NULL);
-	assert(work != NULL);
-
-	/* Transpose A info At like FORTRAN likes */
-	for (i = 0; i < n; i++)
-		for (j = 0; j < n; j++)
-			At[i * n + j] = A[j * n + i];
-
-	/* Make calls to FORTRAN routines */
-	dgetrf_(&m, &n, At, &lda, ipiv, &info);
-	if (info != 0)
-		printf("[matrix_invert] Error[dgetrf]: %d\n", info);
-
-	dgetri_(&n, At, &lda, ipiv, work, &lwork, &info);
-	if (info != 0)
-		printf("[matrix_invert] Error[dgetri]: %d\n", info);
-
-	/* Transpose back into Ainv */
-	for (i = 0; i < n; i++)
-		for (j = 0; j < n; j++)
-			Ainv[i * n + j] = At[j * n + i];
-
-	free(At);
-	free(ipiv);
-	free(work);
-}
-
-void matrix_invert_inplace(int n, double *A) {
-	int m = n;
-	int lda = n;
-	int info;
-	int *ipiv = malloc(sizeof(int) * n);
-	int lwork = n * 512;
-	double *work = malloc(sizeof(double) * lwork);
-
-	/* Make calls to FORTRAN routines */
-	dgetrf_(&m, &n, A, &lda, ipiv, &info);
-	dgetri_(&n, A, &lda, ipiv, work, &lwork, &info);
-
-	free(ipiv);
-	free(work);
-}
+// void matrix_invert_inplace(int n, double *A) {
+// 	int m = n;
+// 	int lda = n;
+// 	int info;
+// 	int *ipiv = malloc(sizeof(int) * n);
+// 	int lwork = n * 512;
+// 	double *work = malloc(sizeof(double) * lwork);
+//
+// 	/* Make calls to FORTRAN routines */
+// 	dgetrf_(&m, &n, A, &lda, ipiv, &info);
+// 	dgetri_(&n, A, &lda, ipiv, work, &lwork, &info);
+//
+// 	free(ipiv);
+// 	free(work);
+// }
 
 
 /* Find the unit vector that minimizes ||Ax|| */
-void matrix_minimum_unit_norm_solution(int m, int n, double *A, double *x)
-{
-	/* Do an SVD */
-	double *S, *VT;
-	int num_svs = min(m, n);
-	int i, min_idx = -1;
-	double min_sv = DBL_MAX;
-
-	// U = (double *) malloc(sizeof(double) * m * m);
-	VT = (double *)malloc(sizeof(double) * n * n);
-	S = (double *)malloc(sizeof(double) * sizeof(num_svs));
-
-	dgesvd_driver_vt(m, n, A, S, VT);
-
-	// matrix_print(n, n, VT);
-	// matrix_print(1, num_svs, S);
-
-	/* Return the column of V associated with the smallest singular
-	* value */
-
-	for (i = 0; i < num_svs; i++) {
-		if (S[i] < min_sv) {
-			min_sv = S[i];
-			min_idx = i;
-		}
-	}
-
-	for (i = 0; i < n; i++) {
-		x[i] = VT[min_idx * n + i];
-	}
-
-	// free(U);
-	free(VT);
-	free(S);
-}
+// void matrix_minimum_unit_norm_solution(int m, int n, double *A, double *x)
+// {
+// 	/* Do an SVD */
+// 	double *S, *VT;
+// 	int num_svs = min(m, n);
+// 	int i, min_idx = -1;
+// 	double min_sv = DBL_MAX;
+//
+// 	// U = (double *) malloc(sizeof(double) * m * m);
+// 	VT = (double *)malloc(sizeof(double) * n * n);
+// 	S = (double *)malloc(sizeof(double) * sizeof(num_svs));
+//
+// 	dgesvd_driver_vt(m, n, A, S, VT);
+//
+// 	// matrix_print(n, n, VT);
+// 	// matrix_print(1, num_svs, S);
+//
+// 	/* Return the column of V associated with the smallest singular
+// 	* value */
+//
+// 	for (i = 0; i < num_svs; i++) {
+// 		if (S[i] < min_sv) {
+// 			min_sv = S[i];
+// 			min_idx = i;
+// 		}
+// 	}
+//
+// 	for (i = 0; i < n; i++) {
+// 		x[i] = VT[min_idx * n + i];
+// 	}
+//
+// 	// free(U);
+// 	free(VT);
+// 	free(S);
+// }
 
 
 /* Convert a rotation matrix to axis and angle representation */
@@ -851,157 +775,101 @@ void lmdif_driver2(void *fcn, int m, int n, double *xvec, double tol) {
 	free(wa4);
 }
 
-/* Driver for the lapack function dgelss, which finds x to minimize
-* norm(b - A * x) */
-void dgelss_driver(double *A, double *b, double *x, int m, int n, int nrhs) {
-	if (m < n) {
-		printf("Error: driver now only works when m >= n\n");
-		return;
-	}
-	else {
-		double *Atmp = malloc(sizeof(double) * m * n);
-		double *btmp = malloc(sizeof(double) * m * nrhs);
-		int lda = m;
-		int ldb = m;
-		double *s = malloc(sizeof(double) * n); /* Output array */
-		double rcond = -1.0;
-		int rank; /* Output */
-		int lwork = 16 * (3 * min(m, n) + max(max(2 * min(m, n), max(m, n)), nrhs));
-		double *work = malloc(sizeof(double) * lwork);
-		int info;
-
-		int i, j;
-
-		/* Go from row- to column-major */
-		for (i = 0; i < m; i++)
-			for (j = 0; j < n; j++)
-				Atmp[j * m + i] = A[i * n + j];
-
-		for (i = 0; i < m; i++)
-			for (j = 0; j < nrhs; j++)
-				btmp[j * m + i] = b[i * nrhs + j];
-
-		/* Make the FORTRAN call */
-		dgelss_(&m, &n, &nrhs, Atmp, &lda, btmp, &ldb,
-			s, &rcond, &rank, work, &lwork, &info);
-
-		/* Go from column- to row-major */
-		for (i = 0; i < n; i++)
-			for (j = 0; j < nrhs; j++)
-				x[i * nrhs + j] = btmp[j * m + i];
-
-		free(Atmp);
-		free(btmp);
-		free(s);
-		free(work);
-	}
-}
-
-void dgelsy_driver(double *A, double *b, double *x, int m, int n, int nrhs) {
-	if (m < n) {
-		printf("Error: driver now only works when m >= n\n");
-		return;
-	}
-	else {
-		double *Atmp = malloc(sizeof(double) * m * n);
-		double *btmp = malloc(sizeof(double) * m * nrhs);
-		int lda = m;
-		int ldb = m;
-		int *jpvt = calloc(sizeof(int), n);
-		double rcond = -1.0;
-		int rank; /* Output */
-		int lwork = -1;
-		double *work = malloc(sizeof(double) * 1);
-		int info;
-
-		int i, j;
-
-		/* Go from row- to column-major */
-		for (i = 0; i < m; i++)
-			for (j = 0; j < n; j++)
-				Atmp[j * m + i] = A[i * n + j];
-
-		for (i = 0; i < m; i++)
-			for (j = 0; j < nrhs; j++)
-				btmp[j * m + i] = b[i * nrhs + j];
-
-		/* Query to find a good size for the work array */
-		dgelsy_(&m, &n, &nrhs, Atmp, &lda, btmp, &ldb, jpvt,
-			&rcond, &rank, work, &lwork, &info);
-
-		lwork = (int)work[0];
-		/* printf("Work size: %d\n", lwork); */
-		free(work);
-		work = malloc(sizeof(double) * lwork);
-
-		/* Make the FORTRAN call */
-		dgelsy_(&m, &n, &nrhs, Atmp, &lda, btmp, &ldb, jpvt,
-			&rcond, &rank, work, &lwork, &info);
-
-		if (info != 0)
-			printf("Error [%d] in call to dgelsy\n", info);
-
-		/* Go from column- to row-major */
-		for (i = 0; i < n; i++)
-			for (j = 0; j < nrhs; j++)
-				x[i * nrhs + j] = btmp[j * m + i];
-
-		free(Atmp);
-		free(btmp);
-		free(work);
-		free(jpvt);
-	}
-}
-
-
-void dgelsy_driver_transpose(double *A, double *b, double *x,
-	int m, int n, int nrhs)
-{
-	if (m < n) {
-		printf("Error: driver now only works when m >= n\n");
-		return;
-	}
-	else {
-		double *btmp = malloc(sizeof(double) * m * nrhs);
-		int lda = m;
-		int ldb = m;
-		int *jpvt = calloc(sizeof(int), n);
-		double rcond = -1.0;
-		int rank; /* Output */
-		int lwork = -1;
-		double *work = malloc(sizeof(double) * 1);
-		int info;
-
-		int i, j;
-
-		memcpy(btmp, b, sizeof(double) * m);
-
-		/* Query to find a good size for the work array */
-		dgelsy_(&m, &n, &nrhs, A, &lda, btmp, &ldb, jpvt,
-			&rcond, &rank, work, &lwork, &info);
-
-		lwork = (int)work[0];
-		/* printf("Work size: %d\n", lwork); */
-		free(work);
-		work = malloc(sizeof(double) * lwork);
-
-		/* Make the FORTRAN call */
-		dgelsy_(&m, &n, &nrhs, A, &lda, btmp, &ldb, jpvt,
-			&rcond, &rank, work, &lwork, &info);
-
-		if (info != 0)
-			printf("Error in call to dgelsy\n");
-
-		/* Go from column- to row-major */
-		for (i = 0; i < n; i++)
-			for (j = 0; j < nrhs; j++)
-				x[i * nrhs + j] = btmp[j * m + i];
-
-		free(btmp);
-		free(work);
-		free(jpvt);
-	}
-}
+// /* Driver for the lapack function dgelss, which finds x to minimize
+// * norm(b - A * x) */
+// void dgelss_driver(double *A, double *b, double *x, int m, int n, int nrhs) {
+// 	if (m < n) {
+// 		printf("Error: driver now only works when m >= n\n");
+// 		return;
+// 	}
+// 	else {
+// 		double *Atmp = malloc(sizeof(double) * m * n);
+// 		double *btmp = malloc(sizeof(double) * m * nrhs);
+// 		int lda = m;
+// 		int ldb = m;
+// 		double *s = malloc(sizeof(double) * n); /* Output array */
+// 		double rcond = -1.0;
+// 		int rank; /* Output */
+// 		int lwork = 16 * (3 * min(m, n) + max(max(2 * min(m, n), max(m, n)), nrhs));
+// 		double *work = malloc(sizeof(double) * lwork);
+// 		int info;
+//
+// 		int i, j;
+//
+// 		/* Go from row- to column-major */
+// 		for (i = 0; i < m; i++)
+// 			for (j = 0; j < n; j++)
+// 				Atmp[j * m + i] = A[i * n + j];
+//
+// 		for (i = 0; i < m; i++)
+// 			for (j = 0; j < nrhs; j++)
+// 				btmp[j * m + i] = b[i * nrhs + j];
+//
+// 		/* Make the FORTRAN call */
+// 		dgelss_(&m, &n, &nrhs, Atmp, &lda, btmp, &ldb,
+// 			s, &rcond, &rank, work, &lwork, &info);
+//
+// 		/* Go from column- to row-major */
+// 		for (i = 0; i < n; i++)
+// 			for (j = 0; j < nrhs; j++)
+// 				x[i * nrhs + j] = btmp[j * m + i];
+//
+// 		free(Atmp);
+// 		free(btmp);
+// 		free(s);
+// 		free(work);
+// 	}
+// }
+//
+//
+// void dgelsy_driver_transpose(double *A, double *b, double *x,
+// 	int m, int n, int nrhs)
+// {
+// 	if (m < n) {
+// 		printf("Error: driver now only works when m >= n\n");
+// 		return;
+// 	}
+// 	else {
+// 		double *btmp = malloc(sizeof(double) * m * nrhs);
+// 		int lda = m;
+// 		int ldb = m;
+// 		int *jpvt = calloc(sizeof(int), n);
+// 		double rcond = -1.0;
+// 		int rank; /* Output */
+// 		int lwork = -1;
+// 		double *work = malloc(sizeof(double) * 1);
+// 		int info;
+//
+// 		int i, j;
+//
+// 		memcpy(btmp, b, sizeof(double) * m);
+//
+// 		/* Query to find a good size for the work array */
+// 		dgelsy_(&m, &n, &nrhs, A, &lda, btmp, &ldb, jpvt,
+// 			&rcond, &rank, work, &lwork, &info);
+//
+// 		lwork = (int)work[0];
+// 		/* printf("Work size: %d\n", lwork); */
+// 		free(work);
+// 		work = malloc(sizeof(double) * lwork);
+//
+// 		/* Make the FORTRAN call */
+// 		dgelsy_(&m, &n, &nrhs, A, &lda, btmp, &ldb, jpvt,
+// 			&rcond, &rank, work, &lwork, &info);
+//
+// 		if (info != 0)
+// 			printf("Error in call to dgelsy\n");
+//
+// 		/* Go from column- to row-major */
+// 		for (i = 0; i < n; i++)
+// 			for (j = 0; j < nrhs; j++)
+// 				x[i * nrhs + j] = btmp[j * m + i];
+//
+// 		free(btmp);
+// 		free(work);
+// 		free(jpvt);
+// 	}
+// }
 
 
 
@@ -1043,90 +911,10 @@ void dgesv_driver(int n, double *A, double *b, double *x) {
 }
 
 
-/* n: the order of matrix A
- * A: matrix for which the eigenvectors/values are to be computed
- * evec: output array containing the eigenvectors
- * eval: output array containing the eigenvalues
- *
- * Note: Assumes the results are real! */
-int dgeev_driver(int n, double *A, double *evec, double *eval) {
-    char jobvl = 'N';  /* Don't compute left eigenvectors */
-    char jobvr = 'V';  /* Do compute right eigenvectors */
-    int lda = n;
-    double *Atmp = malloc(sizeof(double) * n * n);
-    double *wr = malloc(sizeof(double) * n);
-    double *wi = malloc(sizeof(double) * n);
-    double *vl = NULL;
-    int ldvl = 1;
-    double *vr = malloc(sizeof(double) * n * n);
-    int ldvr = n;
-    int lwork;
-    double *work, work_query[1];
-    int info;
-
-    int i, j, count = 0;
-
-    /* Transpose the matrix for FORTRAN */
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            if (A[i * n + j] != A[i * n + j]) {
-                printf("[dgeev_driver] Error: nan encountered\n");
-
-                free(Atmp);
-                free(wr);
-                free(wi);
-                free(vr);
-
-                return 0;
-            }
-
-            Atmp[j * n + i] = A[i * n + j];
-        }
-    }
-
-    /* Query dgeev for the optimal value of lwork */
-    lwork = -1;
-    dgeev_(&jobvl, &jobvr, &n, Atmp, &lda, wr, wi, vl, &ldvl, vr, &ldvr, work_query, &lwork, &info);
-    lwork = (int) work_query[0];
-    work = malloc(sizeof(double) * lwork);
-
-    /* Make the call to dgeev */
-    dgeev_(&jobvl, &jobvr, &n, Atmp, &lda, wr, wi, vl, &ldvl, vr, &ldvr, work, &lwork, &info);
-    
-    if (info < 0)
-        printf("Error in call to dgeev (argument %d was invalid\n", -info);
-    else if (info > 0)
-        printf("Error: not all eigenvalues have converged\n");
-    
-    /* Check that all eigenvalues are real */
-    for (i = 0; i < n; i++) {
-        if (wi[i] != 0.0) {
-            // printf("[dgeev] Eigenvalue has non-zero imaginary part\n");
-        } else {
-            eval[count] = wr[i];
-
-            for (j = 0; j < n; j++)
-                evec[count * n + j] = vr[i * n + j];
-            
-            count++;
-        }
-    }
-
-    /* Clean up */
-    free(work);
-    free(Atmp);
-    free(wr);
-    free(wi);
-    free(vr);
-
-    return count;
-}
-
-
 /* Compute singular value decomposition of an m x n matrix A */
 int dgesvd_driver(int m, int n, double *A, double *U, double *S, double *VT) {
     double *AT, *UT, *V;
-    
+
     char jobu = 'a';
     char jobvt = 'a';
 
@@ -1140,7 +928,7 @@ int dgesvd_driver(int m, int n, double *A, double *U, double *S, double *VT) {
     int info;
 
     /* Transpose A */
-    AT = (double *)malloc(sizeof(double) * m * n);    
+    AT = (double *)malloc(sizeof(double) * m * n);
     matrix_transpose(m, n, A, AT);
 
     /* Create temporary matrices for output of dgesvd */
@@ -1150,7 +938,7 @@ int dgesvd_driver(int m, int n, double *A, double *U, double *S, double *VT) {
     work = malloc(sizeof(double) * lwork);
 
     dgesvd_(&jobu, &jobvt, &m, &n, AT, &lda, S, UT, &ldu, V, &ldvt, work, &lwork, &info);
-    
+
     if (info != 0) {
 	printf("[dgesvd_driver] An error occurred\n");
     }
@@ -1159,7 +947,7 @@ int dgesvd_driver(int m, int n, double *A, double *U, double *S, double *VT) {
     matrix_transpose(n, n, V, VT);
 
     free(AT);
-    free(UT); 
+    free(UT);
     free(V);
     free(work);
 

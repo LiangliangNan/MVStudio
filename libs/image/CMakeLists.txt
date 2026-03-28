@@ -9,7 +9,6 @@ set(${PROJECT_NAME}_HEADERS
         image_serializer.h
         image_serializer_bmp.h
         image_serializer_jpeg.h
-        image_serializer_png.h
         image_store.h
         )
 
@@ -19,7 +18,6 @@ set(${PROJECT_NAME}_SOURCES
         image_serializer.cpp
         image_serializer_bmp.cpp
         image_serializer_jpeg.cpp
-        image_serializer_png.cpp
         image_store.cpp
         )
 
@@ -30,8 +28,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${MVSTUDIO_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME}
         3rd_jpeg
-        3rd_png
-        3rd_zlib
         basic
         )
 
