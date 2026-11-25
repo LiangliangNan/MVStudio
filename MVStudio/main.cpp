@@ -59,7 +59,12 @@ int main(int argc, char **argv)
     //       that resource sharing between contexts stays functional as all internal
     //       contexts are created using the correct version and profile.
     QSurfaceFormat format = QSurfaceFormat::defaultFormat();
-    format.setVersion(4, 1);
+    // SiftGPU (and the bundled QGLViewer) rely on legacy OpenGL fixed-function
+    // immediate-mode rendering (glBegin/glEnd, glOrtho/glMultMatrixd) and GLSL
+    // 1.20 shaders, so the context must stay in a legacy-compatible profile.
+    // Requesting a modern version here made the Qt6 (QOpenGLWidget) context end
+    // up unusable for SiftGPU, which resulted in zero detected key points.
+    format.setVersion(2, 1);
     format.setProfile(QSurfaceFormat::CompatibilityProfile);
     format.setDepthBufferSize(24);
     format.setStencilBufferSize(8);
