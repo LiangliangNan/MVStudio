@@ -406,12 +406,17 @@ void SiftMatchGL::LoadSiftMatchShadersGLSL()
 int  SiftMatchGL::GetGuidedSiftMatch(int max_match, int match_buffer[][2], float H[3][3], float F[3][3],
 									 float distmax, float ratiomax, float hdistmax, float fdistmax, int mbm)
 {
-
 	int dw = _num_sift[1];
 	int dh = _num_sift[0]; 
 	if(_initialized ==0) return 0;
 	if(dw <= 0 || dh <=0) return 0;
 	if(_have_loc[0] == 0 || _have_loc[1] == 0) return 0;
+
+	// The GL context may be shared with a Qt widget whose painting (or the
+	// progress dialog between feature extraction and matching) leaves
+	// fixed-function state such as GL_BLEND enabled. That corrupts the FBO
+	// compute passes below, so normalize the state before every match.
+	GlobalUtil::SetGLParam();
 
 	FrameBufferObject fbo;
 	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
@@ -498,7 +503,9 @@ int SiftMatchGL::GetBestMatch(int max_match, int match_buffer[][2], float distma
 	for(int i = 0; i < _num_sift[0] && nmatch < max_match; ++i)
 	{
 		j = int(buffer1[i]);
-		if( j>= 0 && (!mbm ||int(buffer2[j]) == i))
+		// Guard against corrupt GPU readback (e.g. leftover GL state): j must be
+		// a valid descriptor index before indexing the column-maximum buffer.
+		if( j>= 0 && j < _num_sift[1] && (!mbm ||int(buffer2[j]) == i))
 		{
 			match_buffer[nmatch][0] = i;
 			match_buffer[nmatch][1] = j;
@@ -514,6 +521,9 @@ int  SiftMatchGL::GetSiftMatch(int max_match, int match_buffer[][2], float distm
 	int dh =  _num_sift[0]; 
 	if(_initialized ==0) return 0;
 	if(dw <= 0 || dh <=0) return 0;
+
+	// See GetGuidedSiftMatch: reset GL state before the compute passes.
+	GlobalUtil::SetGLParam();
 
 	// Liangliang: SiftGPU used the existing OpenGL context and may change the viewport.
 	int viewport[4];

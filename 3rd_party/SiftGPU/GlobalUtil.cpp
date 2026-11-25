@@ -239,16 +239,15 @@ void GlobalUtil::SetTextureParameterUS() {
 
 
 void GlobalUtil::FitViewPort(int width, int height) {
-    GLint port[4];
-    glGetIntegerv(GL_VIEWPORT, port);
-    if (port[2] != width || port[3] != height) {
-        glViewport(0, 0, width, height);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(0, width, 0, height, 0, 1);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-    }
+    // Always (re)establish the orthographic projection used for the texture
+    // rendering passes. Do not skip when the current viewport happens to match,
+    // because the current matrix stack may hold an unrelated camera/projection.
+    glViewport(0, 0, width, height);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, width, 0, height, 0, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
 
@@ -350,6 +349,30 @@ void GlobalUtil::SetGLParam() {
     else if (GlobalUtil::_UseOpenCL) return;
     glEnable(GlobalUtil::_texTarget);
     glActiveTexture(GL_TEXTURE0);
+
+    // SiftGPU renders its compute passes into FBOs whose attachments are the
+    // same textures the shaders sample, so the fixed-function fragment
+    // pipeline has to be in its default state. When the GL context is shared
+    // with a Qt widget (QGLViewer/QOpenGLWidget), state left over from the
+    // widget's own painting (blending in particular) silently corrupts the
+    // compute results: e.g. the orientation pass then writes blended values
+    // instead of the shader output, which makes every keypoint disappear.
+    // This is harmless for a dedicated context and works with Qt5 and Qt6.
+    glDisable(GL_BLEND);
+    glDisable(GL_ALPHA_TEST);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_STENCIL_TEST);
+    glDisable(GL_SCISSOR_TEST);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_COLOR_LOGIC_OP);
+    glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+    glDepthMask(GL_TRUE);
+
+    // The shaders read gl_TexCoord[], which is the vertex texture coordinate
+    // multiplied by the active texture matrix. Reset it to identity as well.
+    glMatrixMode(GL_TEXTURE);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void GlobalUtil::InitGLParam(int NotTargetGL) {
@@ -434,7 +457,7 @@ void GlobalUtil::InitGLParam(int NotTargetGL) {
         glPolygonMode(GL_FRONT, GL_FILL);
 
         GlobalUtil::SetTextureParameter();
-
+        GlobalUtil::SetGLParam();
     }
 }
 
