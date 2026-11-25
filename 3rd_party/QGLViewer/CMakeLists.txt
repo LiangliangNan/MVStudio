@@ -77,11 +77,7 @@ if (WIN32 OR MSVC)
             _CRT_SECURE_NO_DEPRECATE)
 endif ()
 
-target_link_libraries( ${PROJECT_NAME} Qt5::Core )
-target_link_libraries( ${PROJECT_NAME} Qt5::Gui )
-target_link_libraries( ${PROJECT_NAME} Qt5::Widgets )
-target_link_libraries( ${PROJECT_NAME} Qt5::OpenGL )
-target_link_libraries( ${PROJECT_NAME} Qt5::Xml )
+target_link_libraries( ${PROJECT_NAME} ${QtLibs})
 
 
 set (OpenGL_GL_PREFERENCE GLVND)

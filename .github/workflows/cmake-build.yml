@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [windows-latest, ubuntu-latest, macos-latest]
+        platform: [windows-2022, ubuntu-latest, macos-latest]
         build_type: [Debug, Release]
     runs-on: ${{ matrix.platform }}
 
@@ -73,14 +73,12 @@ jobs:
 
       - name: Configure (Windows)
         if: runner.os == 'Windows'
-        shell: bash -l {0}
+        shell: pwsh
         run: |
-          # Set CMAKE_PREFIX_PATH to the Conda environment's Qt5 installation
-          export CMAKE_PREFIX_PATH="$CONDA_PREFIX/Library"
-          cmake -S . -B build/${{ matrix.build_type }} \
-                -G "Visual Studio 17 2022" \
-                -A x64 \
-                -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH"
+          cmake -S . -B build/${{ matrix.build_type }} `
+                -G "Visual Studio 17 2022" `
+                -A x64 `
+                -DCMAKE_PREFIX_PATH="$env:CONDA_PREFIX/Library"
 
       # Build the project
       - name: Build (Linux & macOS)
@@ -89,5 +87,6 @@ jobs:
 
       - name: Build (Windows)
         if: runner.os == 'Windows'
-        shell: bash -l {0}
-        run: cmake --build build/${{ matrix.build_type }} --config ${{ matrix.build_type }}
+        shell: pwsh
+        run: |
+          cmake --build build/${{ matrix.build_type }} --config ${{ matrix.build_type }} --parallel

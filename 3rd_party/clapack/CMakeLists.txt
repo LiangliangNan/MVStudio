@@ -1,4 +1,13 @@
 project(CLAPACK C)
+
+# The f2c-generated sources use old-style function pointer declarations such as
+# `typedef logical (*L_fp)();`. C23 interprets `()` as a zero-argument prototype,
+# so recent GCC/Clang releases reject calls through those pointers. Keep this
+# bundled third-party code on C11, where `()` still means unspecified arguments.
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS ON)
+
 #enable_testing()
 #include(CTest)
 

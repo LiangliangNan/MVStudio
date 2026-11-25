@@ -26,18 +26,22 @@
 
 
 # ------------------------------------------------------------------------------
-# This file sets up Qt5 for CMake. When Qt5 was setup successfuly, QT5_FOUND
-# will be set.
+# This file sets up Qt for CMake. When Qt6 was setup successfully, 'Qt6_FOUND'
+# will be set. If Qt6 is not found, it will try to find Qt5. If Qt5 is found,
+# 'Qt5_FOUND' will be set. If both Qt6 and Qt5 are not found, it will stop the
+# configuration and show an error message.
+# If either Qt6 or Qt5 is found, it will set QtLibs to the corresponding Qt
+# libraries, e.g., Qt5Core, Qt5Gui, Qt5Widgets, Qt5OpenGL, Qt5Xml, etc.
 #
-# To use QT5_FOUND, you only need to include this file and specifying Qt libraries
-# to link against, e.g.,
+# To use Qt in your program, you only need to include this file and specifying
+# Qt libraries to link against, e.g.,
 #       ------------------------------------------------------------------------
 #           project(${PROJECT_NAME})
-#           include( ../../cmake/UseQt5.cmake )
+#           include( cmake/UseQt.cmake )
 #           add_executable(${PROJECT_NAME}, main.cpp)
-#           target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui Qt5::Widgets Qt5::OpenGL)
+#           target_link_libraries(${PROJECT_NAME} ${QtLibs})
 #       ------------------------------------------------------------------------
-# NOTE: 'UseQt5.cmake' must be included after you define your project but before
+# NOTE: 'UseQt.cmake' must be included after you define your project but before
 #       'add_executable()' or 'add_library()'.
 #
 #   The recommended way to specify libraries and headers with CMake is to use the
@@ -46,54 +50,30 @@
 #   and links to the qtmain.lib library on Windows.
 # ------------------------------------------------------------------------------
 
-
-# we will use cmake autouic/automoc/autorcc features
+# Find includes in corresponding build directories
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# Instruct CMake to run moc automatically when needed.
+set(CMAKE_AUTOMOC ON)
+# Instruct CMake to run uic automatically when needed.
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)  # Tell CMake to run moc when necessary
+# Instruct CMake to run rcc automatically when needed.
 set(CMAKE_AUTORCC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON) # As moc files are generated in the binary dir, tell CMake to always look for includes there
 
-set(QT5_ROOT_PATH CACHE PATH "Qt5 root directory (i.e. where the 'bin' folder lies)")
-if (QT5_ROOT_PATH)
-list(APPEND CMAKE_PREFIX_PATH ${QT5_ROOT_PATH})
-endif ()
-
-# find qt5 components
-find_package(Qt5 COMPONENTS Core Gui OpenGL Widgets Xml)
-# or
-# find_package(Qt5Core QUIET)
-# find_package(Qt5Gui QUIET)
-# find_package(Qt5OpenGL QUIET)
-# find_package(Qt5Widgets QUIET)
-
-# In the case no Qt5Config.cmake file could be found, cmake will explicitly ask the user for the QT5_DIR containing it!
-
-if (Qt5Core_FOUND AND Qt5Gui_FOUND AND Qt5OpenGL_FOUND AND Qt5Widgets_FOUND)
-set(QT5_FOUND TRUE)
-endif ()
-
-if (QT5_FOUND)
-# Starting with the QtCore lib, find the bin and root directories
-get_target_property(QT5_LIB_LOCATION Qt5::Core LOCATION_${CMAKE_BUILD_TYPE})
-get_filename_component(QT_BINARY_DIR ${QT5_LIB_LOCATION} DIRECTORY)
-
-if (APPLE)
-# Apple uses frameworks - move up until we get to the base directory to set the bin directory properly
-get_filename_component(QT_BINARY_DIR ${QT_BINARY_DIR} DIRECTORY)
-set(QT_BINARY_DIR ${QT_BINARY_DIR}/bin)
-set(MACDEPLOYQT ${QT_BINARY_DIR}/macdeployqt)
-message(STATUS "macdeployqt: ${MACDEPLOYQT}")
-elseif(WIN32)
-set(WINDEPLOYQT ${QT_BINARY_DIR}/windeployqt.exe)
-message(STATUS "windeployqt: ${WINDEPLOYQT}")
-endif ()
-
-# set QT5_ROOT_PATH if it wasn't set by the user
-if (NOT QT5_ROOT_PATH)
-get_filename_component(QT5_ROOT_PATH ${QT_BINARY_DIR} DIRECTORY)
-endif ()
-
-# turn on QStringBuilder for more efficient string construction
-#	see https://doc.qt.io/qt-5/qstring.html#more-efficient-string-construction
-add_definitions(-DQT_USE_QSTRINGBUILDER)
-endif ()
+# This will find the Qt files.
+find_package(Qt6 COMPONENTS Core Widgets OpenGL OpenGLWidgets Xml QUIET)
+if (Qt6_FOUND)
+    message(STATUS "Found Qt6 version: ${Qt6Core_VERSION}")
+    message(STATUS "Qt6 directory: ${Qt6_DIR}")
+    set(QtLibs Qt::Core Qt::Widgets Qt::OpenGL Qt::OpenGLWidgets Qt::Xml)
+else()
+    find_package(Qt5 COMPONENTS Core Widgets OpenGL Xml QUIET)
+    if (Qt5_FOUND)
+        message(STATUS "Found Qt5 version: ${Qt5Core_VERSION}")
+        message(STATUS "Qt5 directory: ${Qt5_DIR}")
+        set(QtLibs Qt5::Core Qt5::Widgets Qt5::OpenGL Qt5::Xml)
+    else()
+        message(FATAL_ERROR "Qt is required, either Qt6 or Qt5, but both not found. You can set 'Qt*_DIR' to the "
+                "directory containing 'Qt*Config.cmake' or 'qt*-config.cmake' (* is 5 or 6) to specify the location of Qt.")
+        return()
+    endif()
+endif()
