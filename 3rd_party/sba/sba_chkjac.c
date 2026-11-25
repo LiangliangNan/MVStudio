@@ -38,7 +38,7 @@ void *ptr;
 
   ptr=(void *)malloc(sz);
   if(ptr==NULL){
-    fprintf(stderr, "SBA: memory allocation request for %u bytes failed in file %s, line %d, exiting", sz, file, line);
+    fprintf(stderr, "SBA: memory allocation request for %zu bytes failed in file %s, line %d, exiting", sz, file, line);
     exit(1);
   }
 

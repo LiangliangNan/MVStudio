@@ -1076,7 +1076,10 @@ double *a, *work;
     double tmp;
 
     work_sz=-1; // workspace query; optimal size is returned in tmp
-    F77_FUNC(dsytrf)("L", (int *)&m, A, (int *)&m, A, (double *)&tmp, (int *)&work_sz, (int *)&info);
+    // Workspace queries must not pass a real matrix/pivot array here: newer
+    // C compilers reject the double* -> int* mismatch, and LAPACK ignores
+    // these pointers when LWORK == -1.
+    F77_FUNC(dsytrf)("L", (int *)&m, NULL, (int *)&m, NULL, (double *)&tmp, (int *)&work_sz, (int *)&info);
     nb=((int)tmp)/m; // optimal worksize is m*nb
 #else
     nb=-1; // min worksize is 1
